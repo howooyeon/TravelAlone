@@ -1,48 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Home_Activity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/recycler_view"
-        android:layout_above="@+id/bottom_layout"/>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_alignParentBottom="true"
-        android:padding="8dp"
-        android:id="@+id/bottom_layout">
-
-        <EditText
-            android:id="@+id/et_msg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginRight="11dp"
-            android:layout_toLeftOf="@+id/btn_send"
-            android:background="@drawable/rounded_corner"
-            android:hint="   트래봇에게 물어보세요"
-            android:padding="16dp" />
-
-        <ImageButton
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:id="@+id/btn_send"
-            android:layout_alignParentEnd="true"
-            android:layout_centerInParent="true"
-            android:layout_marginStart="10dp"
-            android:padding="8dp"
-            android:src="@drawable/ic_send"
-            android:background="?attr/selectableItemBackgroundBorderless" />
-
-    </RelativeLayout>
-        <ImageView
+    <ImageView
         android:id="@+id/imageView3"
         android:layout_width="428dp"
         android:layout_height="83dp"
@@ -83,7 +48,7 @@
         android:minHeight="48dp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView3"
         app:layout_constraintStart_toStartOf="@+id/imageView3"
-        app:srcCompat="@drawable/nav_travbot_size"
+        app:srcCompat="@drawable/nav_travbot_blue_size"
         tools:ignore="SpeakableTextPresentCheck" />
 
     <ImageButton
@@ -128,8 +93,6 @@
         android:minHeight="48dp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView3"
         app:layout_constraintEnd_toEndOf="@+id/imageView3"
-        app:srcCompat="@drawable/nav_commu_size" />
+        app:srcCompat="@drawable/nav_commu_size"
+        tools:ignore="SpeakableTextPresentCheck" />
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-</RelativeLayout>
-
