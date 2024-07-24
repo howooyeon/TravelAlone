@@ -92,7 +92,7 @@
         android:minHeight="48dp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView3"
         app:layout_constraintEnd_toEndOf="@+id/imageView3"
-        app:srcCompat="@drawable/nav_commu_size"
+        app:srcCompat="@drawable/nav_commu_blue_size"
         tools:ignore="SpeakableTextPresentCheck"
         android:importantForAccessibility="no"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

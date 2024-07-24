@@ -1,17 +1,15 @@
 package com.guru.travelalone
 
 import android.content.Intent
-import android.media.Image
 import android.os.Bundle
-import android.widget.Button
 import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
+class Locate_Activity : AppCompatActivity() {
 
-class MainActivity : AppCompatActivity() {
     lateinit var homeButton: ImageButton
     lateinit var locateButton: ImageButton
     lateinit var travbotButton: ImageButton
@@ -21,13 +19,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_locate)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
         homeButton = findViewById(R.id.homeButton)
         locateButton = findViewById(R.id.locateButton)
         travbotButton = findViewById(R.id.travbotButton)
@@ -36,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         locateButton.setOnClickListener {
             val intent = Intent(
-                this@MainActivity,
+                this@Locate_Activity,
                 Locate_Activity::class.java
             )
             startActivity(intent)
@@ -44,7 +41,7 @@ class MainActivity : AppCompatActivity() {
 
         travbotButton.setOnClickListener {
             val intent = Intent(
-                this@MainActivity,
+                this@Locate_Activity,
                 Travbot_activity::class.java
             )
             startActivity(intent)
@@ -52,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
         homeButton.setOnClickListener {
             val intent = Intent(
-                this@MainActivity,
+                this@Locate_Activity,
                 Home_Activity::class.java
             )
             startActivity(intent)
@@ -60,7 +57,7 @@ class MainActivity : AppCompatActivity() {
 
         communityButton.setOnClickListener {
             val intent = Intent(
-                this@MainActivity,
+                this@Locate_Activity,
                 Community_Activity::class.java
             )
             startActivity(intent)
@@ -68,7 +65,7 @@ class MainActivity : AppCompatActivity() {
 
         mypageButton.setOnClickListener {
             val intent = Intent(
-                this@MainActivity,
+                this@Locate_Activity,
                 Mypage_Activity::class.java
             )
             startActivity(intent)

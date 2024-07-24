@@ -11,13 +11,13 @@
         android:id="@+id/imageView3"
         android:layout_width="428dp"
         android:layout_height="83dp"
+        android:importantForAccessibility="no"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.529"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/nav_background"
-        tools:ignore="SpeakableTextPresentCheck"
-        android:importantForAccessibility="no"/>
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <ImageButton
         android:id="@+id/locateButton"
@@ -26,15 +26,15 @@
         android:layout_marginStart="32dp"
         android:layout_marginBottom="4dp"
         android:background="@android:color/transparent"
+        android:importantForAccessibility="no"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView3"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toEndOf="@+id/imageView3"
         app:layout_constraintStart_toStartOf="@+id/imageView3"
         app:srcCompat="@drawable/nav_locate_size"
-        tools:ignore="SpeakableTextPresentCheck"
-        android:minWidth="48dp"
-        android:minHeight="48dp"
-        android:importantForAccessibility="no"/>
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <ImageButton
         android:id="@+id/travbotButton"
@@ -43,13 +43,13 @@
         android:layout_marginStart="112dp"
         android:layout_marginBottom="4dp"
         android:background="@android:color/transparent"
+        android:importantForAccessibility="no"
         android:minWidth="48dp"
         android:minHeight="48dp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView3"
         app:layout_constraintStart_toStartOf="@+id/imageView3"
         app:srcCompat="@drawable/nav_travbot_size"
-        tools:ignore="SpeakableTextPresentCheck"
-        android:importantForAccessibility="no"/>
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <ImageButton
         android:id="@+id/homeButton"
@@ -58,13 +58,13 @@
         android:layout_marginStart="192dp"
         android:layout_marginBottom="4dp"
         android:background="@android:color/transparent"
+        android:importantForAccessibility="no"
         android:minWidth="48dp"
         android:minHeight="48dp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView3"
         app:layout_constraintStart_toStartOf="@+id/imageView3"
         app:srcCompat="@drawable/nav_home_size"
-        tools:ignore="SpeakableTextPresentCheck"
-        android:importantForAccessibility="no"/>
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <ImageButton
         android:id="@+id/mypageButton"
@@ -73,13 +73,13 @@
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="4dp"
         android:background="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-        app:layout_constraintEnd_toEndOf="@+id/imageView3"
-        app:srcCompat="@drawable/nav_mypage_size"
-        tools:ignore="SpeakableTextPresentCheck"
+        android:importantForAccessibility="no"
         android:minWidth="48dp"
         android:minHeight="48dp"
-        android:importantForAccessibility="no"/>
+        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+        app:srcCompat="@drawable/nav_mypage_blue_size"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <ImageButton
         android:id="@+id/commuButton"
@@ -88,11 +88,11 @@
         android:layout_marginEnd="112dp"
         android:layout_marginBottom="4dp"
         android:background="@android:color/transparent"
+        android:importantForAccessibility="no"
         android:minWidth="48dp"
         android:minHeight="48dp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView3"
         app:layout_constraintEnd_toEndOf="@+id/imageView3"
         app:srcCompat="@drawable/nav_commu_size"
-        tools:ignore="SpeakableTextPresentCheck"
-        android:importantForAccessibility="no"/>
+        tools:ignore="SpeakableTextPresentCheck" />
 </androidx.constraintlayout.widget.ConstraintLayout>

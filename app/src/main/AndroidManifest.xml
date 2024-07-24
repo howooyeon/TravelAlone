@@ -13,6 +13,21 @@
         android:theme="@style/Theme.TravelAlone"
         tools:targetApi="31">
         <activity
+            android:name=".Mypage_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Community_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Locate_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Travbot_activity"
+            android:exported="false" />
+        <activity
+            android:name=".Home_Activity"
+            android:exported="false" />
+        <activity
             android:name=".layout_activity"
             android:exported="false" />
         <activity
