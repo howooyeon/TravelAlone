@@ -12,11 +12,14 @@ import androidx.core.view.WindowInsetsCompat
 
 
 class MainActivity : AppCompatActivity() {
+
+    //하단바 ----------
     lateinit var homeButton: ImageButton
     lateinit var locateButton: ImageButton
     lateinit var travbotButton: ImageButton
     lateinit var mypageButton: ImageButton
     lateinit var communityButton: ImageButton
+    //하단바 ----------
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +31,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        //하단바 ----------
         homeButton = findViewById(R.id.homeButton)
         locateButton = findViewById(R.id.locateButton)
         travbotButton = findViewById(R.id.travbotButton)
