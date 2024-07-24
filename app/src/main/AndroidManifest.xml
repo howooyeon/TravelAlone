@@ -13,6 +13,9 @@
         android:theme="@style/Theme.TravelAlone"
         tools:targetApi="31">
         <activity
+            android:name=".Login_Activity"
+            android:exported="false" />
+        <activity
             android:name=".Mypage_Activity"
             android:exported="false" />
         <activity
@@ -37,6 +40,20 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="oauth"
+                    android:scheme="kakao8927ab60df185eb138638d879a9ce3a5" />
             </intent-filter>
         </activity>
     </application>

@@ -1,14 +1,17 @@
 package com.guru.travelalone
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.media.Image
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.kakao.sdk.common.util.Utility
 
 
 class MainActivity : AppCompatActivity() {
@@ -29,7 +32,9 @@ class MainActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+
         }
+       // Log.d(TAG, "keyhash : ${Utility.getKeyHash(this)}")
 
         //하단바 ----------
         homeButton = findViewById(R.id.homeButton)
