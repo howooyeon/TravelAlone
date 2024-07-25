@@ -1,21 +1,25 @@
 package com.guru.travelalone
 
 import android.content.ActivityNotFoundException
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.KakaoMapReadyCallback
 import com.kakao.vectormap.MapLifeCycleCallback
 import com.kakao.vectormap.MapView
+import android.Manifest
 
 
 class Locate_Activity : AppCompatActivity() {
@@ -23,14 +27,16 @@ class Locate_Activity : AppCompatActivity() {
     lateinit var mapView: MapView
     lateinit var kakaoMap: KakaoMap
 
-    //onRequestPermissionsResult에서 권한 요청 결과를 받기 위한 request code입니다.
-    private val PERMISSION_REQUEST_CODE = 1001
+    companion object {
+        //onRequestPermissionsResult에서 권한 요청 결과를 받기 위한 request code
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 1
 
-    //요청할 위치 권한 목록입니다.
-    private val locationPermissions = arrayOf<String>(
-        Manifest.permission.ACCESS_COARSE_LOCATION,
-        Manifest.permission.ACCESS_FINE_LOCATION
-    )
+        //요청할 위치 권한 목록
+        private val locationPermissions = arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+    }
 
     //하단바 ----------
     lateinit var homeButton: ImageButton
@@ -97,6 +103,15 @@ class Locate_Activity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // Check and request location permissions
+        if (ContextCompat.checkSelfPermission(this, locationPermissions[0]) == PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(this, locationPermissions[1]) == PackageManager.PERMISSION_GRANTED) {
+            // Permissions are already granted
+            getCurLocation()
+        } else {
+            // Request location permissions
+            ActivityCompat.requestPermissions(this, locationPermissions, LOCATION_PERMISSION_REQUEST_CODE)
+        }
 
         //kakao map api
         mapView = findViewById(R.id.map_view)
@@ -123,53 +138,46 @@ class Locate_Activity : AppCompatActivity() {
 //    }
     }
 
-    // 사용자가 권한 요청 다이얼로그에 응답하면 이 메소드가 실행됩니다.
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String?>,
-        grantResults: IntArray
-    ) {
+    // 사용자가 권한 요청 다이얼로그에 응답하면 이 메소드가 실행
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         // 위치 권한 요청에 대한 응답일 경우
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // 사용자가 위치 권한을 허가했을 경우입니다. 여기서 원하는 작업을 진행하면 됩니다.
-                getCurLocation() // 현재 위치 가져오는 메서드 - 4번 항목 참고
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                // 사용자가 위치 권한을 허가했을 경우
+                getCurLocation() // 현재 위치 가져오는 메서드
             } else {
-                // 위치 권한이 거부되었을 경우, 다이얼로그를 띄워서 사용자에게 앱을 종료할지, 권한 설정 화면으로 이동할지 선택하게 합니다.
+                // 위치 권한이 거부되었을 경우, 다이얼로그를 띄워서 사용자에게 앱을 종료할지, 권한 설정 화면으로 이동할지 선택
                 showPermissionDeniedDialog()
             }
         }
     }
 
-    private fun showPermissionDeniedDialog() {
-        val builder: AlertDialog.Builder = Builder(this)
-        builder.setMessage("위치 권한 거부시 앱을 사용할 수 없습니다.")
-            .setPositiveButton("권한 설정하러 가기",
-                DialogInterface.OnClickListener { dialogInterface, i ->
+    private fun getCurLocation() {
+        TODO("Not yet implemented")
+    }
 
-                    // 권한 설정하러 가기 버튼 클릭시 해당 앱의 상세 설정 화면으로 이동합니다.
-                    try {
-                        val intent: Intent =
-                            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(
-                                Uri.parse(
-                                    "package:$packageName"
-                                )
-                            )
-                        startActivity(intent)
-                    } catch (e: ActivityNotFoundException) {
-                        e.printStackTrace()
-                        val intent: Intent = Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS)
-                        startActivity(intent)
-                    } finally {
-                        finish()
-                    }
-                })
-            .setNegativeButton("앱 종료하기",
-                DialogInterface.OnClickListener { dialogInterface, i ->
-                    // 앱 종료하기 버튼 클릭시 앱을 종료합니다.
+    // Show a dialog when location permissions are denied
+    private fun showPermissionDeniedDialog() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setMessage("위치 권한 거부시 앱을 사용할 수 없습니다.")
+            .setPositiveButton("권한 설정하러 가기") { dialogInterface, i ->
+                // 권한 설정하러 가기 버튼 클릭시 해당 앱의 상세 설정 화면으로 이동
+                try {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(Uri.parse("package:$packageName"))
+                    startActivity(intent)
+                } catch (e: ActivityNotFoundException) {
+                    e.printStackTrace()
+                    val intent = Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS)
+                    startActivity(intent)
+                } finally {
                     finish()
-                })
+                }
+            }
+            .setNegativeButton("앱 종료하기") { dialogInterface, i ->
+                // 앱 종료하기 버튼 클릭시 앱을 종료
+                finish()
+            }
             .setCancelable(false)
             .show()
     }
