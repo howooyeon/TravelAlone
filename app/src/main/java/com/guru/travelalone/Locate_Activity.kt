@@ -1,25 +1,37 @@
 package com.guru.travelalone
 
+import android.Manifest
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.LocationRequest
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.view.View
 import android.widget.ImageButton
+import android.widget.ProgressBar
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
 import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.KakaoMapReadyCallback
+import com.kakao.vectormap.LatLng
 import com.kakao.vectormap.MapLifeCycleCallback
 import com.kakao.vectormap.MapView
-import android.Manifest
+import com.kakao.vectormap.label.Label
+import com.kakao.vectormap.label.LabelLayer
+import com.kakao.vectormap.label.LabelOptions
+import com.kakao.vectormap.label.LabelStyle
+import com.kakao.vectormap.label.TrackingManager
 
 
 class Locate_Activity : AppCompatActivity() {
@@ -37,6 +49,14 @@ class Locate_Activity : AppCompatActivity() {
             Manifest.permission.ACCESS_COARSE_LOCATION
         )
     }
+
+    private val fusedLocationClient: FusedLocationProviderClient? = null
+    private val startPosition: LatLng? = null
+    private val progressBar: ProgressBar? = null
+    private var centerLabel: Label? = null
+    private val requestingLocationUpdates = false
+    private val locationRequest: LocationRequest? = null
+    private val locationCallback: LocationCallback? = null
 
     //하단바 ----------
     lateinit var homeButton: ImageButton
