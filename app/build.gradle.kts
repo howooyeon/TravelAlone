@@ -3,6 +3,8 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    // 구글 서비스 플러그인
+    id("com.google.gms.google-services")
 }
 
 val properties = Properties().apply {
@@ -46,7 +48,12 @@ android {
 }
 
 dependencies {
+    // 챗봇관련 의존성
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
+    // 파이어베이스 의존성
+    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
+    implementation("com.google.firebase:firebase-analytics")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
