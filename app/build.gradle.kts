@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    //alias(libs.plugins.kotlin.kapt) // 추가
+    id("org.jetbrains.kotlin.kapt")
 
 }
 
@@ -52,5 +54,8 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    kapt("com.github.bumptech.glide:compiler:4.16.0") // 추가
 
+    implementation("androidx.room:room-runtime:2.5.0")
+    kapt("androidx.room:room-compiler:2.5.0") // annotationProcessor 대신 kapt 사용
 }
