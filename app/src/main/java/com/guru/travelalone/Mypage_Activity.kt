@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
-class MainActivity : AppCompatActivity() {
+class Mypage_Activity : AppCompatActivity() {
 
     //하단바 ----------
     lateinit var homeButton: ImageButton
@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_mypage)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
         locateButton.setOnClickListener {
             val intent = Intent(
-                this@MainActivity,
+                this@Mypage_Activity,
                 Locate_Activity::class.java
             )
             startActivity(intent)
@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
 
         travbotButton.setOnClickListener {
             val intent = Intent(
-                this@MainActivity,
+                this@Mypage_Activity,
                 Travbot_activity::class.java
             )
             startActivity(intent)
@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
 
         homeButton.setOnClickListener {
             val intent = Intent(
-                this@MainActivity,
+                this@Mypage_Activity,
                 Home_Activity::class.java
             )
             startActivity(intent)
@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
 
         communityButton.setOnClickListener {
             val intent = Intent(
-                this@MainActivity,
+                this@Mypage_Activity,
                 Community_Activity::class.java
             )
             startActivity(intent)
@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
 
         mypageButton.setOnClickListener {
             val intent = Intent(
-                this@MainActivity,
+                this@Mypage_Activity,
                 Mypage_Activity::class.java
             )
             startActivity(intent)
