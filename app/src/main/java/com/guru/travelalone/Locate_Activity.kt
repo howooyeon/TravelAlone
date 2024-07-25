@@ -1,19 +1,21 @@
 package com.guru.travelalone
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Location
 import android.location.LocationRequest
 import android.net.Uri
 import android.os.Bundle
+import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import androidx.activity.enableEdgeToEdge
-import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -22,16 +24,17 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.Priority
+import com.google.android.gms.tasks.OnSuccessListener
 import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.KakaoMapReadyCallback
 import com.kakao.vectormap.LatLng
 import com.kakao.vectormap.MapLifeCycleCallback
 import com.kakao.vectormap.MapView
 import com.kakao.vectormap.label.Label
-import com.kakao.vectormap.label.LabelLayer
 import com.kakao.vectormap.label.LabelOptions
 import com.kakao.vectormap.label.LabelStyle
-import com.kakao.vectormap.label.TrackingManager
 
 
 class Locate_Activity : AppCompatActivity() {
@@ -51,12 +54,37 @@ class Locate_Activity : AppCompatActivity() {
     }
 
     private val fusedLocationClient: FusedLocationProviderClient? = null
-    private val startPosition: LatLng? = null
+    private var startPosition: LatLng? = null
     private val progressBar: ProgressBar? = null
     private var centerLabel: Label? = null
-    private val requestingLocationUpdates = false
-    private val locationRequest: LocationRequest? = null
-    private val locationCallback: LocationCallback? = null
+    private var requestingLocationUpdates = false
+    private var locationRequest: LocationRequest? = null
+    private var locationCallback: LocationCallback? = null
+
+    private val readyCallback: KakaoMapReadyCallback = object : KakaoMapReadyCallback() {
+        override fun onMapReady(kakaoMap: KakaoMap) {
+            progressBar!!.visibility = View.GONE
+            val layer = kakaoMap.labelManager!!.layer
+            centerLabel = layer!!.addLabel(
+                LabelOptions.from("centerLabel", startPosition)
+                    .setStyles(
+                        LabelStyle.from(R.drawable.red_dot_marker).setAnchorPoint(0.5f, 0.5f)
+                    )
+                    .setRank(1)
+            )
+            val trackingManager = kakaoMap.trackingManager
+            trackingManager!!.startTracking(centerLabel)
+            startLocationUpdates()
+        }
+
+        override fun getPosition(): LatLng {
+            return startPosition!!
+        }
+
+        override fun getZoomLevel(): Int {
+            return 17
+        }
+    }
 
     //하단바 ----------
     lateinit var homeButton: ImageButton
@@ -66,6 +94,7 @@ class Locate_Activity : AppCompatActivity() {
     lateinit var communityButton: ImageButton
     //하단바 ----------
 
+   @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -158,6 +187,42 @@ class Locate_Activity : AppCompatActivity() {
 //    }
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (requestingLocationUpdates) {
+            startLocationUpdates()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        fusedLocationClient!!.removeLocationUpdates(locationCallback!!)
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun getCurLocation() {
+        fusedLocationClient?.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
+            ?.addOnSuccessListener(
+                this,
+                OnSuccessListener<Location> { location: Location? ->
+                    if (location != null) {
+                        startPosition =
+                            LatLng.from(location.latitude, location.longitude)
+                        mapView.start(readyCallback)
+                    }
+                })
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun startLocationUpdates() {
+        requestingLocationUpdates = true
+        fusedLocationClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            Looper.myLooper()
+        )
+    }
+
     // 사용자가 권한 요청 다이얼로그에 응답하면 이 메소드가 실행
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -173,9 +238,9 @@ class Locate_Activity : AppCompatActivity() {
         }
     }
 
-    private fun getCurLocation() {
-        TODO("Not yet implemented")
-    }
+//    private fun getCurLocation() {
+//        TODO("Not yet implemented")
+//    }
 
     // Show a dialog when location permissions are denied
     private fun showPermissionDeniedDialog() {
