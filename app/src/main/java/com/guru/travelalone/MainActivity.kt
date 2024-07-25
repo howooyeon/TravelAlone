@@ -11,6 +11,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.kakao.sdk.common.Constants
+import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.util.Utility
 
 
@@ -34,8 +36,8 @@ class MainActivity : AppCompatActivity() {
             insets
 
         }
-       // Log.d(TAG, "keyhash : ${Utility.getKeyHash(this)}")
-
+       Log.d(TAG, "keyhash : ${Utility.getKeyHash(this)}")
+        //KakaoSdk.init(this, Constants.APP_KEY)
         //하단바 ----------
         homeButton = findViewById(R.id.homeButton)
         locateButton = findViewById(R.id.locateButton)
@@ -83,4 +85,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
+
 }
