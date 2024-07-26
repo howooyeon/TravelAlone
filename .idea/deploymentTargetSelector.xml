@@ -4,7 +4,11 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
+<<<<<<< HEAD
         <DropdownSelection timestamp="2024-07-25T14:16:29.442210700Z">
+=======
+        <DropdownSelection timestamp="2024-07-25T01:53:08.248161800Z">
+>>>>>>> e1792f426855719d6276e785a3ba1e42beb21a6e
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="PhysicalDevice" identifier="serial=1c5851cca20d7ece" />
@@ -23,15 +27,21 @@
       </SelectionState>
       <SelectionState runConfigName="MainActivity">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-07-24T06:07:22.951580800Z">
+        <DropdownSelection timestamp="2024-07-24T14:28:12.816687300Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="PhysicalDevice" identifier="serial=1c5851cca20d7ece" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\amu66\.android\avd\Pixel_2_API_33.avd" />
             </handle>
           </Target>
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
+<<<<<<< HEAD
+=======
+      <SelectionState runConfigName="Travbot_activity">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+>>>>>>> e1792f426855719d6276e785a3ba1e42beb21a6e
     </selectionStates>
   </component>
 </project>
