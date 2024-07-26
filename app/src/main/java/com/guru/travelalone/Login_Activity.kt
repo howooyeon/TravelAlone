@@ -5,16 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.guru.travelalone.databinding.ActivityLoginBinding
 import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.common.Constants
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -23,10 +19,7 @@ import com.kakao.sdk.user.UserApiClient
 
 class Login_Activity : AppCompatActivity() {
 
-    //lateinit var kakaoLogin = findViewById<ImageButton>(R.id.kakoLogin)
-
     private val binding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
-
 
     private val mCallback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
         if (error != null) {
@@ -68,12 +61,16 @@ class Login_Activity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_login)
+        setContentView(binding.root)
 
+        // Load the Kakao API Key from BuildConfig
+        val kakaoApiKey = BuildConfig.KAKAO_API_KEY
 
         Log.d(TAG, "keyhash : ${Utility.getKeyHash(this)}")
 
-        KakaoSdk.init(this, "8927ab60df185eb138638d879a9ce3a5")
+        // Initialize Kakao SDK
+        KakaoSdk.init(this, kakaoApiKey)
+
         if (AuthApiClient.instance.hasToken()) {
             UserApiClient.instance.accessTokenInfo { _, error ->
                 if (error == null) {
@@ -82,10 +79,7 @@ class Login_Activity : AppCompatActivity() {
             }
         }
 
-        setContentView(binding.root)
-
         binding.btnLogin.setOnClickListener(onClickListener)
-
     }
 
     private fun nextMainActivity() {

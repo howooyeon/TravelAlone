@@ -6,14 +6,10 @@ import android.util.Log
 import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.guru.travelalone.databinding.ActivityProEditBinding
 import com.kakao.sdk.user.Constants
 import com.kakao.sdk.user.UserApiClient
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class ProEdit_Activity : AppCompatActivity() {
 
@@ -46,17 +42,17 @@ class ProEdit_Activity : AppCompatActivity() {
                             .into(binding.kakaoPro)
                     }
 
-                    binding.saveButton.setOnClickListener {
-                        Log.d(Constants.TAG, "Save button clicked")
-                        val introduceText = introduce.text.toString()
-                        val member = Member(
-                            nickname = nickname,
-                            profileImageUrl = profileImageUrl,
-                            introduce = introduceText
-                        )
-                        Log.d(Constants.TAG, "Member to save: $member")
-                        saveMemberToDatabase(member)
-                    }
+//                    binding.saveButton.setOnClickListener {
+//                        Log.d(Constants.TAG, "Save button clicked")
+//                        val introduceText = introduce.text.toString()
+//                        val member = Member(
+//                            nickname = nickname,
+//                            profileImageUrl = profileImageUrl,
+//                            introduce = introduceText
+//                        )
+//                        Log.d(Constants.TAG, "Member to save: $member")
+//                        // saveMemberToDatabase(member) // 데이터베이스 관련 코드 제거
+//                    }
                 }
             }
         } catch (e: Exception) {
@@ -80,41 +76,6 @@ class ProEdit_Activity : AppCompatActivity() {
                 }
             } catch (e: Exception) {
                 Log.e(Constants.TAG, "로그아웃 중 예외 발생", e)
-            }
-        }
-
-        // 데이터베이스에 저장된 모든 멤버를 로그로 출력
-        binding.viewMembersButton.setOnClickListener {
-            viewAllMembers()
-        }
-    }
-
-    private fun saveMemberToDatabase(member: Member) {
-        Log.d(Constants.TAG, "saveMemberToDatabase called with member: $member")
-        val memberDao = MemberDatabase.getDatabase(applicationContext).memberDao()
-        lifecycleScope.launch(Dispatchers.IO) { // Dispatchers.IO를 사용하여 IO 스레드에서 실행되도록 지정
-            try {
-                Log.d(Constants.TAG, "Attempting to insert member into database")
-                memberDao.insert(member)
-                Log.i(Constants.TAG, "Member 저장 성공: $member")
-            } catch (e: Exception) {
-                Log.e(Constants.TAG, "Member 저장 중 예외 발생", e)
-            }
-        }
-    }
-
-    private fun viewAllMembers() {
-        val memberDao = MemberDatabase.getDatabase(applicationContext).memberDao()
-        lifecycleScope.launch(Dispatchers.IO) {
-            try {
-                val members = memberDao.getAllMembers()
-                withContext(Dispatchers.Main) {
-                    members.forEach { member ->
-                        Log.d(Constants.TAG, "Member: $member")
-                    }
-                }
-            } catch (e: Exception) {
-                Log.e(Constants.TAG, "멤버 조회 중 예외 발생", e)
             }
         }
     }
