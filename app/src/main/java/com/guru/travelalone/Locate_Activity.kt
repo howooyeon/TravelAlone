@@ -153,6 +153,18 @@ class Locate_Activity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (requestingLocationUpdates) {
+            startLocationUpdates()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        fusedLocationClient.removeLocationUpdates(locationCallback)
+    }
+
     @SuppressLint("MissingPermission")
     private fun getStartLocation() {
         fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
@@ -174,15 +186,22 @@ class Locate_Activity : AppCompatActivity() {
                             val layer = kakaoMap.labelManager.getLayer()
                             centerLabel = layer.addLabel(
                                 LabelOptions.from("centerLabel", startPosition)
-                                    .setStyles(LabelStyle.from(R.drawable.red_dot_marker).setAnchorPoint(0.5f, 0.5f))
-                                    .setRank(1))
+                                    .setStyles(
+                                        LabelStyle.from(R.drawable.red_dot_marker)
+                                            .setAnchorPoint(0.5f, 0.5f)
+                                    )
+                                    .setRank(1)
+                            )
                             val trackingManager = kakaoMap.trackingManager
                             trackingManager.startTracking(centerLabel)
                             startLocationUpdates()
                         }
 
                         override fun getPosition(): LatLng {
-                            return startPosition ?: LatLng.from(37.5665, 126.9780)  // Default to Seoul if no location
+                            return startPosition ?: LatLng.from(
+                                37.5665,
+                                126.9780
+                            )  // Default to Seoul if no location
                         }
 
                         override fun getZoomLevel(): Int {
@@ -191,42 +210,42 @@ class Locate_Activity : AppCompatActivity() {
                     })
                 }
             }
-        @SuppressLint("MissingPermission")
-        fun startLocationUpdates() {
-            requestingLocationUpdates = true
-            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())
-        }
+    }
+    @SuppressLint("MissingPermission")
+    fun startLocationUpdates() {
+        requestingLocationUpdates = true
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())
+    }
 
-        fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-            if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getStartLocation()
-                } else {
-                    showPermissionDeniedDialog()
-                }
+    fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getStartLocation()
+            } else {
+                showPermissionDeniedDialog()
             }
         }
+    }
 
-        fun showPermissionDeniedDialog() {
-            AlertDialog.Builder(this)
-                .setMessage("위치 권한 거부시 앱을 사용할 수 없습니다.")
-                .setPositiveButton("권한 설정하러 가기") { dialogInterface, i ->
-                    try {
-                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                            .setData(Uri.parse("package:$packageName"))
-                        startActivity(intent)
-                    } catch (e: ActivityNotFoundException) {
-                        e.printStackTrace()
-                        val intent = Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS)
-                        startActivity(intent)
-                    } finally {
-                        finish()
-                    }
+    fun showPermissionDeniedDialog() {
+        AlertDialog.Builder(this)
+            .setMessage("위치 권한 거부시 앱을 사용할 수 없습니다.")
+            .setPositiveButton("권한 설정하러 가기") { dialogInterface, i ->
+                try {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                        .setData(Uri.parse("package:$packageName"))
+                    startActivity(intent)
+                } catch (e: ActivityNotFoundException) {
+                    e.printStackTrace()
+                    val intent = Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS)
+                    startActivity(intent)
+                } finally {
+                    finish()
                 }
-                .setNegativeButton("앱 종료하기") { dialogInterface, i -> finish() }
-                .setCancelable(false)
-                .show()
-        }
+            }
+            .setNegativeButton("앱 종료하기") { dialogInterface, i -> finish() }
+            .setCancelable(false)
+            .show()
     }
 }
