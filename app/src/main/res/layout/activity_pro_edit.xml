@@ -106,4 +106,10 @@
         android:layout_height="wrap_content"
         android:text="로그아웃"
         android:layout_marginTop="20dp"/>
+    <Button
+        android:id="@+id/viewMembersButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View All Members" />
+
 </LinearLayout>

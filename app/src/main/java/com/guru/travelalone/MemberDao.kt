@@ -8,12 +8,11 @@ import androidx.room.RewriteQueriesToDropUnusedColumns
 @RewriteQueriesToDropUnusedColumns
 interface MemberDao {
     @Insert
-    suspend fun insert(member: Member)
+    fun insert(member: Member)
 
     @Query("SELECT * FROM members")
-    suspend fun getAllMembers(): List<Member>
+    fun getAllMembers(): List<Member> // 반환 타입을 List<Member>로 설정
 
     @Query("SELECT * FROM members WHERE id = :id")
-    suspend fun getMemberById(id: Int): Member? // 반환 타입을 Member로 설정
+    fun getMemberById(id: Int): Member? // 반환 타입을 Member로 설정
 }
-
