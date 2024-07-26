@@ -122,7 +122,7 @@ class Locate_Activity : AppCompatActivity() {
         //kakao map api
         // Kakao map api
         mapView = findViewById(R.id.map_view)
-        progressBar = findViewById(R.id.progressBar)
+        // progressBar = findViewById(R.id.progressBar)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 2000L).build()
@@ -217,7 +217,7 @@ class Locate_Activity : AppCompatActivity() {
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())
     }
 
-    fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -228,7 +228,7 @@ class Locate_Activity : AppCompatActivity() {
         }
     }
 
-    fun showPermissionDeniedDialog() {
+    private fun showPermissionDeniedDialog() {
         AlertDialog.Builder(this)
             .setMessage("위치 권한 거부시 앱을 사용할 수 없습니다.")
             .setPositiveButton("권한 설정하러 가기") { dialogInterface, i ->
