@@ -1,5 +1,6 @@
 package com.guru.travelalone
 
+
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.media.Image
@@ -38,6 +39,53 @@ class MainActivity : AppCompatActivity() {
         }
        Log.d(TAG, "keyhash : ${Utility.getKeyHash(this)}")
         //KakaoSdk.init(this, Constants.APP_KEY)
+        //하단바 ----------
+        homeButton = findViewById(R.id.homeButton)
+        locateButton = findViewById(R.id.locateButton)
+        travbotButton = findViewById(R.id.travbotButton)
+        mypageButton = findViewById(R.id.mypageButton)
+        communityButton = findViewById(R.id.commuButton)
+
+        locateButton.setOnClickListener {
+            val intent = Intent(
+                this@MainActivity,
+                Locate_Activity::class.java
+            )
+            startActivity(intent)
+        }
+
+        travbotButton.setOnClickListener {
+            val intent = Intent(
+                this@MainActivity,
+                Travbot_activity::class.java
+            )
+            startActivity(intent)
+        }
+
+        homeButton.setOnClickListener {
+            val intent = Intent(
+                this@MainActivity,
+                Home_Activity::class.java
+            )
+            startActivity(intent)
+        }
+
+        communityButton.setOnClickListener {
+            val intent = Intent(
+                this@MainActivity,
+                Community_Activity::class.java
+            )
+            startActivity(intent)
+        }
+
+        mypageButton.setOnClickListener {
+            val intent = Intent(
+                this@MainActivity,
+                Mypage_Activity::class.java
+            )
+            startActivity(intent)
+        }
+
         //하단바 ----------
         homeButton = findViewById(R.id.homeButton)
         locateButton = findViewById(R.id.locateButton)
