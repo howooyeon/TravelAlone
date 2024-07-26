@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
+import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import android.view.View
@@ -183,17 +184,18 @@ class Locate_Activity : AppCompatActivity() {
                         override fun onMapReady(map: KakaoMap) {
                             kakaoMap = map
                             progressBar.visibility = View.GONE
-                            val layer = kakaoMap.labelManager.getLayer()
-                            centerLabel = layer.addLabel(
-                                LabelOptions.from("centerLabel", startPosition)
-                                    .setStyles(
-                                        LabelStyle.from(R.drawable.red_dot_marker)
-                                            .setAnchorPoint(0.5f, 0.5f)
-                                    )
-                                    .setRank(1)
-                            )
-                            val trackingManager = kakaoMap.trackingManager
-                            trackingManager.startTracking(centerLabel)
+                            val layer = kakaoMap.labelManager?.layer
+                            if (layer != null) {
+                                centerLabel = layer.addLabel(
+                                    LabelOptions.from("centerLabel", startPosition)
+                                        .setStyles(
+                                            LabelStyle.from(R.drawable.red_dot_marker)
+                                                .setAnchorPoint(0.5f, 0.5f)
+                                        )
+                                        .setRank(1)
+                                )
+                            }
+                            kakaoMap.trackingManager?.startTracking(centerLabel)
                             startLocationUpdates()
                         }
 
