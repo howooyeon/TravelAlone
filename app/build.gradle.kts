@@ -12,9 +12,6 @@ val properties = Properties().apply {
     load(project.rootProject.file("local.properties").inputStream())
 }
 
-val properties = Properties().apply {
-    load(project.rootProject.file("local.properties").inputStream())
-}
 
 android {
     namespace = "com.guru.travelalone"

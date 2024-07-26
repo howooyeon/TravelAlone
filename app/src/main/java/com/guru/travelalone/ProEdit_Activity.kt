@@ -16,6 +16,7 @@ class ProEdit_Activity : AppCompatActivity() {
     private val binding by lazy { ActivityProEditBinding.inflate(layoutInflater) }
     lateinit var introduce: EditText
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -41,18 +42,6 @@ class ProEdit_Activity : AppCompatActivity() {
                             .load(profileImageUrl)
                             .into(binding.kakaoPro)
                     }
-
-//                    binding.saveButton.setOnClickListener {
-//                        Log.d(Constants.TAG, "Save button clicked")
-//                        val introduceText = introduce.text.toString()
-//                        val member = Member(
-//                            nickname = nickname,
-//                            profileImageUrl = profileImageUrl,
-//                            introduce = introduceText
-//                        )
-//                        Log.d(Constants.TAG, "Member to save: $member")
-//                        // saveMemberToDatabase(member) // 데이터베이스 관련 코드 제거
-//                    }
                 }
             }
         } catch (e: Exception) {
@@ -77,6 +66,12 @@ class ProEdit_Activity : AppCompatActivity() {
             } catch (e: Exception) {
                 Log.e(Constants.TAG, "로그아웃 중 예외 발생", e)
             }
+        }
+
+        // viewMembersButton 클릭 리스너 설정
+        binding.viewMembersButton.setOnClickListener {
+            val intent = Intent(this@ProEdit_Activity, MainActivity::class.java)
+            startActivity(intent)
         }
     }
 }
