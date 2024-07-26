@@ -1,7 +1,6 @@
 import java.io.FileInputStream
 import java.util.Properties
 
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -24,14 +23,13 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+        // BuildConfig fields
+        buildConfigField("String", "KAKAO_API_KEY", "\"${properties.getProperty("KAKAO_API_KEY")}\"")
+       // buildConfigField("String", "KAKAO_REDIRECT_URI", "\"${properties.getProperty("KAKAO_REDIRECT_URI")}\"")
 
-            // BuildConfig fields
-            buildConfigField("String", "KAKAO_API_KEY", "\"${properties.getProperty("KAKAO_API_KEY")}\"")
-
-            // Manifest placeholders
-            manifestPlaceholders["KAKAO_API_KEY"] = properties.getProperty("KAKAO_API_KEY") ?: "default_api_key"
-        }
-
+        // Manifest placeholders
+       manifestPlaceholders["KAKAO_API_KEY"] = properties.getProperty("KAKAO_API_KEY") ?: "default_api_key"
+    }
 
     buildTypes {
         release {

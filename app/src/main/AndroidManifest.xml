@@ -13,8 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TravelAlone"
-
         tools:targetApi="31">
+
         <activity
             android:name=".ProEdit_Activity"
             android:exported="false" />
@@ -57,7 +57,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
                     android:host="oauth"
-                    android:scheme="kakao8927ab60df185eb138638d879a9ce3a5" />
+                    android:scheme="kakao${KAKAO_API_KEY}" />
             </intent-filter>
         </activity>
     </application>
