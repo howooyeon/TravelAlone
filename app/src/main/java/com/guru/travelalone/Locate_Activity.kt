@@ -16,6 +16,7 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -64,6 +65,10 @@ class Locate_Activity : AppCompatActivity() {
     private lateinit var centerLabel: Label
     private var requestingLocationUpdates = false
 
+    private lateinit var addressTextView: TextView
+    private lateinit var latitudeTextView: TextView
+    private lateinit var longitudeTextView: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -73,6 +78,11 @@ class Locate_Activity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        // Initialize TextViews
+        addressTextView = findViewById(R.id.addressTextView)
+        latitudeTextView = findViewById(R.id.latitudeTextView)
+        longitudeTextView = findViewById(R.id.longitudeTextView)
 
         // 하단바 ----------
         homeButton = findViewById(R.id.homeButton)
@@ -136,7 +146,9 @@ class Locate_Activity : AppCompatActivity() {
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 for (location in locationResult.locations) {
-                    centerLabel.moveTo(LatLng.from(location.latitude, location.longitude))
+                    val latLng = LatLng.from(location.latitude, location.longitude)
+                    centerLabel.moveTo(latLng)
+                    updateLocationInfo(location)  // Update location info
                 }
             }
         }
@@ -158,6 +170,21 @@ class Locate_Activity : AppCompatActivity() {
                 LOCATION_PERMISSION_REQUEST_CODE
             )
         }
+    }
+
+    private fun updateLocationInfo(location: Location) {
+        val latitude = location.latitude
+        val longitude = location.longitude
+        // Use a Geocoder to get the address (requires additional permissions)
+        // Example:
+        // val geocoder = Geocoder(this, Locale.getDefault())
+        // val addressList = geocoder.getFromLocation(latitude, longitude, 1)
+        // val address = addressList?.firstOrNull()?.getAddressLine(0) ?: "Address not found"
+        val address = "Address not available" // Placeholder
+
+        addressTextView.text = "Address: $address"
+        latitudeTextView.text = "Latitude: $latitude"
+        longitudeTextView.text = "Longitude: $longitude"
     }
 
     override fun onResume() {
