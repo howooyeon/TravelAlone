@@ -181,9 +181,12 @@ class Locate_Activity : AppCompatActivity() {
         // Geocoder를 사용하여 주소를 가져오기
         val geocoder = Geocoder(this, Locale.getDefault())
         val addressList = geocoder.getFromLocation(latitude, longitude, 1)
-        val address = addressList?.firstOrNull()?.getAddressLine(0) ?: "주소를 찾을 수 없습니다."
+        var address = addressList?.firstOrNull()?.getAddressLine(0) ?: "주소를 찾을 수 없습니다."
 
-        addressTextView.text = "$address"
+        // "대한민국" 제거하기
+        address = address.replace("대한민국", "").trim()
+
+        addressTextView.text = address
         latitudeTextView.text = "위도: $latitude"
         longitudeTextView.text = "경도: $longitude"
     }
