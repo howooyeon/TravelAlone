@@ -120,13 +120,13 @@ class Locate_Activity : AppCompatActivity() {
         }
 
 
-        //kakao map api
         // Kakao map api
         mapView = findViewById(R.id.map_view)
-        // progressBar = findViewById(R.id.progressBar)
+        progressBar = findViewById(R.id.progressBar)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 2000L).build()
+
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 for (location in locationResult.locations) {
@@ -213,6 +213,7 @@ class Locate_Activity : AppCompatActivity() {
                 }
             }
     }
+
     @SuppressLint("MissingPermission")
     fun startLocationUpdates() {
         requestingLocationUpdates = true
