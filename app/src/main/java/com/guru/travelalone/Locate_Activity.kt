@@ -5,6 +5,8 @@ import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
@@ -185,17 +187,29 @@ class Locate_Activity : AppCompatActivity() {
                             Log.e("KakaoMap", "onMapError: ", error)
                         }
                     }, object : KakaoMapReadyCallback() {
+
+                        private fun getScaledBitmap(drawableResId: Int, scaleFactor: Float): Bitmap {
+                            val originalBitmap = BitmapFactory.decodeResource(resources, drawableResId)
+                            val width = (originalBitmap.width * scaleFactor).toInt()
+                            val height = (originalBitmap.height * scaleFactor).toInt()
+                            return Bitmap.createScaledBitmap(originalBitmap, width, height, true)
+                        }
+
                         override fun onMapReady(map: KakaoMap) {
                             kakaoMap = map
                             progressBar.visibility = View.GONE  // 지도 로드가 완료되면 progressBar 숨기기
+
                             val layer = kakaoMap.labelManager?.layer
                             if (layer != null) {
+
+                                // 마커 스케일링
+                                val scaledBitmap = getScaledBitmap(R.drawable.red_dot_marker, 0.8f)
+                                val customLabelStyle = LabelStyle.from(scaledBitmap)
+                                    .setAnchorPoint(0.5f, 0.5f)
+
                                 centerLabel = layer.addLabel(
                                     LabelOptions.from("centerLabel", startPosition)
-                                        .setStyles(
-                                            LabelStyle.from(R.drawable.red_dot_marker)
-                                                .setAnchorPoint(0.5f, 0.5f)
-                                        )
+                                        .setStyles(customLabelStyle)
                                         .setRank(1)
                                 )
                             }
