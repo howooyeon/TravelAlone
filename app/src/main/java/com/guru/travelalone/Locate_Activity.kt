@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.location.Geocoder
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
@@ -38,6 +39,7 @@ import com.kakao.vectormap.MapView
 import com.kakao.vectormap.label.Label
 import com.kakao.vectormap.label.LabelOptions
 import com.kakao.vectormap.label.LabelStyle
+import java.util.Locale
 
 class Locate_Activity : AppCompatActivity() {
 
@@ -175,7 +177,11 @@ class Locate_Activity : AppCompatActivity() {
     private fun updateLocationInfo(location: Location) {
         val latitude = location.latitude
         val longitude = location.longitude
-        val address = "주소를 찾을 수 없습니다." // Placeholder
+
+        // Geocoder를 사용하여 주소를 가져오기
+        val geocoder = Geocoder(this, Locale.getDefault())
+        val addressList = geocoder.getFromLocation(latitude, longitude, 1)
+        val address = addressList?.firstOrNull()?.getAddressLine(0) ?: "주소를 찾을 수 없습니다."
 
         addressTextView.text = "$address"
         latitudeTextView.text = "위도: $latitude"
