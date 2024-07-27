@@ -1,6 +1,6 @@
 package com.guru.travelalone
 
-import android.Manifest;
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
@@ -41,13 +41,13 @@ class Locate_Activity : AppCompatActivity() {
     lateinit var mapView: MapView
     lateinit var kakaoMap: KakaoMap
 
-    //하단바 ----------
+    // 하단바 ----------
     lateinit var homeButton: ImageButton
     lateinit var locateButton: ImageButton
     lateinit var travbotButton: ImageButton
     lateinit var mypageButton: ImageButton
     lateinit var communityButton: ImageButton
-    //하단바 ----------
+    // 하단바 ----------
 
     private val LOCATION_PERMISSION_REQUEST_CODE = 1001
     private val locationPermissions = arrayOf(
@@ -72,7 +72,7 @@ class Locate_Activity : AppCompatActivity() {
             insets
         }
 
-        //하단바 ----------
+        // 하단바 ----------
         homeButton = findViewById(R.id.homeButton)
         locateButton = findViewById(R.id.locateButton)
         travbotButton = findViewById(R.id.travbotButton)
@@ -119,14 +119,18 @@ class Locate_Activity : AppCompatActivity() {
             startActivity(intent)
         }
 
-
         // Kakao map api
         mapView = findViewById(R.id.map_view)
+
+        // progressBar 초기화 - 수정된 부분
         progressBar = findViewById(R.id.progressBar)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 2000L).build()
 
+        // 현재 위치가 너무 자주 업데이트되는 관계로, 30초마다 업데이트 되도록 설정
+        locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 30000L).build()  // 30초 간격으로 위치 업데이트
+
+        // LocationCallback 내에서 Label 이동 및 초기화 - 수정된 부분
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 for (location in locationResult.locations) {
@@ -183,7 +187,7 @@ class Locate_Activity : AppCompatActivity() {
                     }, object : KakaoMapReadyCallback() {
                         override fun onMapReady(map: KakaoMap) {
                             kakaoMap = map
-                            progressBar.visibility = View.GONE
+                            progressBar.visibility = View.GONE  // 지도 로드가 완료되면 progressBar 숨기기
                             val layer = kakaoMap.labelManager?.layer
                             if (layer != null) {
                                 centerLabel = layer.addLabel(
