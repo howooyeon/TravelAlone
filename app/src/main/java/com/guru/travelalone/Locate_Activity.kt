@@ -203,7 +203,7 @@ class Locate_Activity : AppCompatActivity() {
                             if (layer != null) {
 
                                 // 마커 스케일링
-                                val scaledBitmap = getScaledBitmap(R.drawable.red_dot_marker, 0.8f)
+                                val scaledBitmap = getScaledBitmap(R.drawable.red_dot_marker, 0.6f)
                                 val customLabelStyle = LabelStyle.from(scaledBitmap)
                                     .setAnchorPoint(0.5f, 0.5f)
 
