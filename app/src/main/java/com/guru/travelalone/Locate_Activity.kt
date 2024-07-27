@@ -175,16 +175,11 @@ class Locate_Activity : AppCompatActivity() {
     private fun updateLocationInfo(location: Location) {
         val latitude = location.latitude
         val longitude = location.longitude
-        // Use a Geocoder to get the address (requires additional permissions)
-        // Example:
-        // val geocoder = Geocoder(this, Locale.getDefault())
-        // val addressList = geocoder.getFromLocation(latitude, longitude, 1)
-        // val address = addressList?.firstOrNull()?.getAddressLine(0) ?: "Address not found"
-        val address = "Address not available" // Placeholder
+        val address = "주소를 찾을 수 없습니다." // Placeholder
 
-        addressTextView.text = "Address: $address"
-        latitudeTextView.text = "Latitude: $latitude"
-        longitudeTextView.text = "Longitude: $longitude"
+        addressTextView.text = "$address"
+        latitudeTextView.text = "위도: $latitude"
+        longitudeTextView.text = "경도: $longitude"
     }
 
     override fun onResume() {
