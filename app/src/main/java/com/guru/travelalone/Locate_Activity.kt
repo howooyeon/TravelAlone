@@ -186,9 +186,27 @@ class Locate_Activity : AppCompatActivity() {
         // "대한민국" 제거하기
         address = address.replace("대한민국", "").trim()
 
+        // 주소에서 중복된 단어 제거하기
+        address = removeDuplicateWords(address)
+
         addressTextView.text = address
         latitudeTextView.text = "위도: $latitude"
         longitudeTextView.text = "경도: $longitude"
+    }
+
+    // 주소에서 중복된 단어를 제거하는 함수
+    private fun removeDuplicateWords(address: String): String {
+        val words = address.split(" ")
+        val uniqueWords = mutableSetOf<String>()
+        val resultWords = mutableListOf<String>()
+
+        for (word in words) {
+            if (uniqueWords.add(word)) {
+                resultWords.add(word)
+            }
+        }
+
+        return resultWords.joinToString(" ")
     }
 
     override fun onResume() {
