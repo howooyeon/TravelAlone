@@ -189,24 +189,20 @@ class Locate_Activity : AppCompatActivity() {
         // 주소에서 중복된 단어 제거하기
         address = removeDuplicateWords(address)
 
+        // 문자 다음에 숫자가 오는 경우에 띄어쓰기를 추가하기
+        address = address.replace(Regex("([가-힣a-zA-Z])([0-9])"), "$1 $2")
+
         addressTextView.text = address
         latitudeTextView.text = "위도: $latitude"
         longitudeTextView.text = "경도: $longitude"
     }
 
-    // 주소에서 중복된 단어를 제거하는 함수
-    private fun removeDuplicateWords(address: String): String {
-        val words = address.split(" ")
-        val uniqueWords = mutableSetOf<String>()
-        val resultWords = mutableListOf<String>()
-
-        for (word in words) {
-            if (uniqueWords.add(word)) {
-                resultWords.add(word)
-            }
-        }
-
-        return resultWords.joinToString(" ")
+    // 중복된 단어 제거 함수
+    private fun removeDuplicateWords(input: String): String {
+        val words = input.split(" ")
+        val uniqueWords = linkedSetOf<String>()
+        words.forEach { uniqueWords.add(it) }
+        return uniqueWords.joinToString(" ")
     }
 
     override fun onResume() {
