@@ -33,7 +33,6 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.kakao.sdk.common.KakaoSdk
-import com.kakao.sdk.common.util.KakaoCustomTabsClient
 import com.kakao.sdk.talk.TalkApiClient
 import com.kakao.sdk.template.model.Content
 import com.kakao.sdk.template.model.FeedTemplate
@@ -79,6 +78,7 @@ class Locate_Activity : AppCompatActivity() {
     private lateinit var longitudeTextView: TextView
 
     private lateinit var kakaoButton: ImageButton
+    private lateinit var messageButton: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,9 +96,14 @@ class Locate_Activity : AppCompatActivity() {
         longitudeTextView = findViewById(R.id.longitudeTextView)
 
         kakaoButton = findViewById(R.id.kakaoButton)
+        messageButton = findViewById(R.id.messageButton)
 
         kakaoButton.setOnClickListener {
             shareLocationViaKakao()
+        }
+
+        messageButton.setOnClickListener {
+            shareLocationViaMessage()
         }
 
         // 하단바 ----------
@@ -200,7 +205,7 @@ class Locate_Activity : AppCompatActivity() {
         val message = "$address\n위도: $latitude\n경도: $longitude"
         // 나중에 이런식으로 바꿔도 될 듯
         // val message = "User의 위치를 확인해보세요! 또는 User는 지금 $address\n(위도: $latitude\n경도: $longitude)에서 여행 중~이에요"
-        
+
         try {
             val intent = Intent(Intent.ACTION_SEND)
             intent.type = "text/plain"
@@ -209,6 +214,23 @@ class Locate_Activity : AppCompatActivity() {
             startActivity(Intent.createChooser(intent, "카카오톡으로 공유"))
         } catch (e: ActivityNotFoundException) {
             Toast.makeText(this, "카카오톡이 설치되어 있지 않습니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun shareLocationViaMessage() {
+        val address = addressTextView.text.toString()
+        val latitude = latitudeTextView.text.toString().split(":")[1].trim()
+        val longitude = longitudeTextView.text.toString().split(":")[1].trim()
+
+        val message = "$address\n위도: $latitude\n경도: $longitude"
+
+        try {
+            val intent = Intent(Intent.ACTION_SENDTO)
+            intent.data = Uri.parse("smsto:") // This ensures only SMS apps respond
+            intent.putExtra("sms_body", message)
+            startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            Toast.makeText(this, "메시지 앱을 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
         }
     }
 
