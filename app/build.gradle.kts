@@ -47,4 +47,6 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation("com.kakao.maps.open:android:2.6.0")
     implementation("com.google.android.gms:play-services-location:21.1.0")
+    implementation("com.kakao.sdk:v2-common:2.7.0")
+    implementation("com.kakao.sdk:v2-talk:2.7.0")
 }

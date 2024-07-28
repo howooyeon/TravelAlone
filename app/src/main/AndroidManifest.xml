@@ -48,6 +48,10 @@
         <meta-data
             android:name="com.kakao.vectormap.APP_KEY"
             android:value="2aa5c5c42c65ba832facba91310228c7"/>
+
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="2aa5c5c42c65ba832facba91310228c7"/>
     </application>
 
 </manifest>

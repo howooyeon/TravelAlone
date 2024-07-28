@@ -18,6 +18,7 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -31,6 +32,12 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
+import com.kakao.sdk.common.KakaoSdk
+import com.kakao.sdk.common.util.KakaoCustomTabsClient
+import com.kakao.sdk.talk.TalkApiClient
+import com.kakao.sdk.template.model.Content
+import com.kakao.sdk.template.model.FeedTemplate
+import com.kakao.sdk.template.model.Link
 import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.KakaoMapReadyCallback
 import com.kakao.vectormap.LatLng
@@ -71,6 +78,8 @@ class Locate_Activity : AppCompatActivity() {
     private lateinit var latitudeTextView: TextView
     private lateinit var longitudeTextView: TextView
 
+    private lateinit var kakaoButton: ImageButton
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -85,6 +94,12 @@ class Locate_Activity : AppCompatActivity() {
         addressTextView = findViewById(R.id.addressTextView)
         latitudeTextView = findViewById(R.id.latitudeTextView)
         longitudeTextView = findViewById(R.id.longitudeTextView)
+
+        kakaoButton = findViewById(R.id.kakaoButton)
+
+        kakaoButton.setOnClickListener {
+            shareLocationViaKakao()
+        }
 
         // 하단바 ----------
         homeButton = findViewById(R.id.homeButton)
@@ -171,6 +186,27 @@ class Locate_Activity : AppCompatActivity() {
                 locationPermissions,
                 LOCATION_PERMISSION_REQUEST_CODE
             )
+        }
+
+        // Initialize Kakao SDK
+        KakaoSdk.init(this, "2aa5c5c42c65ba832facba91310228c7")
+    }
+
+    private fun shareLocationViaKakao() {
+        val address = addressTextView.text.toString()
+        val latitude = latitudeTextView.text.toString().split(":")[1].trim()
+        val longitude = longitudeTextView.text.toString().split(":")[1].trim()
+
+        val message = "주소: $address\n위도: $latitude\n경도: $longitude"
+
+        try {
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.type = "text/plain"
+            intent.setPackage("com.kakao.talk")
+            intent.putExtra(Intent.EXTRA_TEXT, message)
+            startActivity(Intent.createChooser(intent, "카카오톡으로 공유"))
+        } catch (e: ActivityNotFoundException) {
+            Toast.makeText(this, "카카오톡이 설치되어 있지 않습니다.", Toast.LENGTH_SHORT).show()
         }
     }
 
