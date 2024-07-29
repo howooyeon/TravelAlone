@@ -23,7 +23,7 @@
             android:exported="false" />
         <activity
             android:name=".Community_Activity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Locate_Activity"
             android:exported="true" />
