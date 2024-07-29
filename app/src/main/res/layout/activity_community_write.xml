@@ -23,16 +23,48 @@
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
-            <!-- 밑에서 부터 LinearLayout 추가해서 코드 작성하시면 됩니다 -->
-            <Spinner
-                android:id="@+id/region"
-                android:layout_width="wrap_content"
+            <!-- Existing region spinner -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/category_region"
-                android:minWidth="80dp"
-                android:minHeight="25dp"
-                android:padding="8dp" />
+                android:gravity="center_vertical">
+
+                <Spinner
+                    android:id="@+id/region"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/category_region"
+                    android:minWidth="80dp"
+                    android:minHeight="25dp"
+                    android:padding="8dp" />
+
+                <!-- Start date spinner -->
+                <Spinner
+                    android:id="@+id/start_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/category_region"
+                    android:minWidth="80dp"
+                    android:minHeight="25dp"
+                    android:padding="8dp" />
+
+                <!-- End date spinner -->
+                <Spinner
+                    android:id="@+id/end_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/category_region"
+                    android:minWidth="80dp"
+                    android:minHeight="25dp"
+                    android:padding="8dp" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
