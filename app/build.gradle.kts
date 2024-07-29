@@ -1,17 +1,14 @@
-
 import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    // 구글 서비스 플러그인
     id("com.google.gms.google-services")
 }
 
 val properties = Properties().apply {
     load(project.rootProject.file("local.properties").inputStream())
 }
-
 
 android {
     namespace = "com.guru.travelalone"
@@ -26,24 +23,32 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-
         buildConfigField("String", "OPENAI_API", "\"${properties.getProperty("OPENAI_KEY")}\"")
-        buildConfigField(
-            "String",
-            "CHATGPT_MODEL",
-            "\"${properties.getProperty("CHATGPT_MODEL")}\""
-        )
-
-     
+        buildConfigField("String", "CHATGPT_MODEL", "\"${properties.getProperty("CHATGPT_MODEL")}\"")
         buildConfigField("String", "KAKAO_API_KEY", "\"${properties.getProperty("KAKAO_API_KEY")}\"")
 
-       manifestPlaceholders["KAKAO_API_KEY"] = properties.getProperty("KAKAO_API_KEY") ?: "default_api_key"
-      
+        manifestPlaceholders["KAKAO_API_KEY"] = properties.getProperty("KAKAO_API_KEY") ?: "default_api_key"
+    }
 
+    signingConfigs {
+        create("release") {
+            keyAlias = properties.getProperty("KEY_ALIAS")
+            keyPassword = properties.getProperty("KEY_PASSWORD")
+            storeFile = file(properties.getProperty("STORE_FILE"))
+            storePassword = properties.getProperty("STORE_PASSWORD")
+        }
+    }
 
+    buildTypes {
+        getByName("release") {
+            signingConfig = signingConfigs.getByName("release")
+            isMinifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
     }
 
     buildFeatures {
+        viewBinding = true
         buildConfig = true
     }
 
@@ -55,30 +60,25 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-
-    buildFeatures {
-        viewBinding = true
-        buildConfig = true
-    }
 }
 
 dependencies {
-    // 챗봇관련 의존성
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
-    // 파이어베이스 의존성
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
     implementation("com.google.firebase:firebase-analytics")
-    //카카오 의존성
+    implementation("com.google.firebase:firebase-firestore")
     implementation(libs.kakao.sdk)
-    //글라이들 의존성
     implementation("com.github.bumptech.glide:glide:4.16.0")
+
+    //원형 이미지 뷰 종속성
+    implementation("de.hdodenhof:circleimageview:2.2.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.firebase.storage)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    
 }

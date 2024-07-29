@@ -9,6 +9,8 @@ appcompat = "1.7.0"
 material = "1.12.0"
 activity = "1.9.0"
 constraintlayout = "2.1.4"
+googleGmsGoogleServices = "4.4.2"
+firebaseStorage = "21.0.0"
 
 
 [libraries]
@@ -23,8 +25,10 @@ androidx_constraintlayout = { group = "androidx.constraintlayout", name = "const
 
 kakao_sdk = { group = "com.kakao.sdk", name = "v2-user", version = "2.20.3" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version = "4.12.0" }
+firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
 
 
 [plugins]
 android_application = { id = "com.android.application", version.ref = "agp" }
 jetbrains_kotlin_android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
