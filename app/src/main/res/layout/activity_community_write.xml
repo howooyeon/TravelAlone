@@ -41,26 +41,32 @@
                     android:minHeight="25dp"
                     android:padding="8dp" />
 
-                <!-- Start date spinner -->
-                <Spinner
+                <!-- Start date EditText -->
+                <EditText
                     android:id="@+id/start_date"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
                     android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    android:hint="Start Date"
                     android:background="@drawable/category_region"
+                    android:focusable="false"
+                    android:clickable="true"
                     android:minWidth="80dp"
                     android:minHeight="25dp"
                     android:padding="8dp" />
 
-                <!-- End date spinner -->
-                <Spinner
+                <!-- End date EditText -->
+                <EditText
                     android:id="@+id/end_date"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
                     android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    android:hint="End Date"
                     android:background="@drawable/category_region"
+                    android:focusable="false"
+                    android:clickable="true"
                     android:minWidth="80dp"
                     android:minHeight="25dp"
                     android:padding="8dp" />

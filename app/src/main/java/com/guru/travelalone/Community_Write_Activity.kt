@@ -1,6 +1,8 @@
 package com.guru.travelalone
 
+import android.app.DatePickerDialog
 import android.os.Bundle
+import android.widget.EditText
 import android.widget.Spinner
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -14,9 +16,9 @@ import java.util.Locale
 class Community_Write_Activity : AppCompatActivity() {
 
     // Spinner 추가
-    lateinit var regionSpinner: Spinner
-    private lateinit var startDateSpinner: Spinner
-    private lateinit var endDateSpinner: Spinner
+    private lateinit var regionSpinner: Spinner
+    private lateinit var startDateEditText: EditText
+    private lateinit var endDateEditText: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,8 +32,8 @@ class Community_Write_Activity : AppCompatActivity() {
 
         // Spinner 초기화
         regionSpinner = findViewById(R.id.region)
-        startDateSpinner = findViewById(R.id.start_date)
-        endDateSpinner = findViewById(R.id.end_date)
+        startDateEditText = findViewById(R.id.start_date)
+        endDateEditText = findViewById(R.id.end_date)
 
         // Spinner에 어댑터 설정
         val adapter = ArrayAdapter.createFromResource(
@@ -42,28 +44,26 @@ class Community_Write_Activity : AppCompatActivity() {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         regionSpinner.adapter = adapter
 
-        // Generate date lists
-        val dates = generateDateList()
-
-        // Create ArrayAdapter for the start and end date Spinners
-        val dateAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, dates)
-        dateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        // Set the adapters to the Spinners
-        startDateSpinner.adapter = dateAdapter
-        endDateSpinner.adapter = dateAdapter
+        // Set up date pickers
+        setUpDatePicker(startDateEditText)
+        setUpDatePicker(endDateEditText)
     }
 
-    private fun generateDateList(): List<String> {
-        val dates = mutableListOf<String>()
-        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val calendar = Calendar.getInstance()
+    private fun setUpDatePicker(editText: EditText) {
+        editText.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            val year = calendar.get(Calendar.YEAR)
+            val month = calendar.get(Calendar.MONTH)
+            val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        for (i in 0..364) {
-            dates.add(sdf.format(calendar.time))
-            calendar.add(Calendar.DAY_OF_YEAR, 1)
+            val datePickerDialog = DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
+                val selectedDate = Calendar.getInstance()
+                selectedDate.set(selectedYear, selectedMonth, selectedDay)
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                editText.setText(dateFormat.format(selectedDate.time))
+            }, year, month, day)
+
+            datePickerDialog.show()
         }
-
-        return dates
     }
 }
