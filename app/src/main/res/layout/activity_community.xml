@@ -23,7 +23,6 @@
                 android:textColor="@color/black" />
 
             <!-- 밑에서 부터 LinearLayout 추가해서 코드 작성하시면 됩니다 -->
-
             <Spinner
                 android:id="@+id/region"
                 android:layout_width="wrap_content"
@@ -38,8 +37,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
-
-                <!-- region <Spinner>: Touch target size too small 이슈로 minWidth, minHeight 48 이상에 패딩까지 설정.. -->
             </LinearLayout>
 
         </LinearLayout>
