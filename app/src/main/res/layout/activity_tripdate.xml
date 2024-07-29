@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="20sp">
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal">
+           <ImageButton
+               android:id="@+id/back"
+               android:layout_marginTop="3dp"
+               android:scaleType="fitCenter"
+               android:layout_width="12dp"
+               android:layout_height="24dp"
+               android:src="@drawable/btn_back"
+               android:background="#00ff0000"/>
+           <TextView
+               android:layout_marginLeft="14dp"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="여행 일정 생성"
+               android:fontFamily="@font/inter_medium"
+               android:textColor="@color/black"
+               android:textSize="20sp" />
+       </LinearLayout>
+        <EditText
+            android:id="@+id/et_title"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/rectangle_design"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:hint="여행 제목"
+            android:textSize="15dp"
+            android:textColorHint="@color/black"/>
+        <Spinner
+            android:layout_marginTop="15dp"
+            android:id="@+id/location_spinner"
+            android:layout_width="match_parent"
+            android:entries="@array/location_array"
+            android:layout_height="55dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/spinner_design"
+            android:spinnerMode="dropdown"
+            android:paddingStart="8dp"/>
+
+        <TextView
+            android:id="@+id/rangeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="날짜를 선택해주세요"
+            android:textColor="@color/black"
+            android:padding="15dp"
+            android:hint="여행 제목"
+            android:textSize="16dp"
+            android:layout_marginTop="16dp"/>
+
+        <CalendarView
+            android:id="@+id/calendarView"
+            android:background="@drawable/rectangle_design"
+            android:layout_width="match_parent"
+            android:layout_height="330dp"
+            android:layout_centerInParent="true" />
+
+
+
+<!--        <com.applikeysolutions.cosmocalendar.view.CalendarView-->
+<!--            android:id="@+id/calendar_view"-->
+<!--            android:layout_marginTop="25sp"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:calendarBackgroundColor="#FEF7FF"-->
+<!--            app:currentDayTextColor="#1D5D9B"-->
+<!--            app:dayTextColor="@color/black"-->
+<!--            app:firstDayOfTheWeek="sunday"-->
+<!--            app:monthTextColor="@color/black"-->
+<!--            app:orientation="horizontal"-->
+<!--            app:selectedDayBackgroundColor="#00ff0000"-->
+<!--            app:selectedDayBackgroundEndColor="#EEEEEE"-->
+<!--            app:selectedDayBackgroundStartColor="#EEEEEE"-->
+<!--            app:selectedDayTextColor="#1D5D9B"-->
+<!--            app:selectionType="range"-->
+<!--            app:weekendDayTextColor="#ef4550" />-->
+
+    </LinearLayout>
+
+    <android.widget.Button
+        android:id="@+id/bt_reg"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:background="@drawable/btn_round_main"
+        android:text="여행 일정 등록하기"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

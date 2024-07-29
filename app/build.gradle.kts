@@ -33,10 +33,13 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
 }
+
 
 dependencies {
 
+    implementation(libs.okhttp.v4100)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -45,4 +48,11 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // 날씨 api 의존성 추가
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.logging.interceptor)
+    // 달력
+    implementation(libs.cosmocalendar)
 }

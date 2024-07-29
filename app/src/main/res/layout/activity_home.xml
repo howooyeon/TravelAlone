@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Home_Activity">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,21 +16,565 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_margin="20sp">
+            android:layout_marginTop="20sp">
+
+            <ImageView
+                android:layout_marginLeft="20sp"
+                android:layout_width="140sp"
+                android:layout_height="40sp"
+                app:srcCompat="@drawable/logo_home"
+                android:layout_marginBottom="20sp" />
+
             <TextView
+                android:layout_marginLeft="20sp"
+                android:fontFamily="@font/inter_medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="홈"
+                android:id="@+id/weather_text"
+                android:text="날씨를 불러오는 중입니다"
+                android:lineSpacingExtra="-3dp"
                 android:textSize="20sp"
                 android:textColor="@color/black" />
             <!-- 밑에서 부터 LinearLayout 추가해서 코드 작성하시면 됩니다 -->
+            <HorizontalScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fillViewport="true"
+                android:scrollbars="none">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+                    <FrameLayout
+                        android:layout_marginLeft="20sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="140dp"
+                            android:layout_height="175dp"
+                            app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="16dp"
+                            app:cardElevation="2dp"
+                            app:cardPreventCornerOverlap="true"
+                            app:cardUseCompatPadding="true"
+                            android:layout_marginLeft="-8dp">
+
+                            <ImageView
+                                android:id="@+id/image_1"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"
+                                android:src="@color/white"
+                                app:tint="#40000000"
+                                android:tintMode="src_atop"/>
+
+                            <TextView
+                                android:fontFamily="@font/inter_bold"
+                                android:id="@+id/title_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="105dp"
+
+                                android:textColor="@color/white"
+                                android:textSize="13dp" />
+
+                            <TextView
+                                android:fontFamily="@font/inter_medium"
+                                android:id="@+id/sub_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="125dp"
+                                android:textColor="@color/white"
+                                android:textSize="8dp" />
+                        </androidx.cardview.widget.CardView>
+
+                    </FrameLayout>
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="140dp"
+                            android:layout_height="175dp"
+                            app:cardBackgroundColor="@color/white"
+                            app:cardPreventCornerOverlap="true"
+                            app:cardUseCompatPadding="true"
+                            app:cardElevation="2dp"
+                            app:cardCornerRadius="16dp">
+                            <ImageView
+                                android:id="@+id/image_2"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"
+                                android:src="@color/white"
+                                app:tint="#40000000"
+                                android:tintMode="src_atop"/>
+
+                            <TextView
+                                android:fontFamily="@font/inter_bold"
+                                android:id="@+id/title_2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="105dp"
+                                android:textColor="@color/white"
+                                android:textSize="13dp" />
+
+                            <TextView
+                                android:fontFamily="@font/inter_medium"
+                                android:id="@+id/sub_2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="125dp"
+                                android:textColor="@color/white"
+                                android:textSize="8dp" />
+                        </androidx.cardview.widget.CardView>
+
+                    </FrameLayout>
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="140dp"
+                            android:layout_height="175dp"
+                            app:cardBackgroundColor="@color/white"
+                            app:cardPreventCornerOverlap="true"
+                            app:cardUseCompatPadding="true"
+                            app:cardElevation="2dp"
+                            app:cardCornerRadius="16dp">
+
+                            <ImageView
+                                android:id="@+id/image_3"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"
+                                android:src="@color/white"
+                                app:tint="#40000000"
+                                android:tintMode="src_atop"/>
+
+                            <TextView
+                                android:fontFamily="@font/inter_bold"
+                                android:id="@+id/title_3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="105dp"
+                                android:textColor="@color/white"
+                                android:textSize="13dp" />
+
+                            <TextView
+                                android:fontFamily="@font/inter_medium"
+                                android:id="@+id/sub_3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="125dp"
+                                android:textColor="@color/white"
+                                android:textSize="8dp" />
+                        </androidx.cardview.widget.CardView>
+
+                    </FrameLayout>
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="140dp"
+                            android:layout_height="175dp"
+                            app:cardBackgroundColor="@color/white"
+                            app:cardPreventCornerOverlap="true"
+                            app:cardUseCompatPadding="true"
+                            app:cardElevation="2dp"
+                            app:cardCornerRadius="16dp">
+                            <ImageView
+                                android:id="@+id/image_4"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"
+                                android:src="@color/white"
+                                app:tint="#40000000"
+                                android:tintMode="src_atop"/>
+
+                            <TextView
+                                android:fontFamily="@font/inter_bold"
+                                android:id="@+id/title_4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="105dp"
+                                android:textColor="@color/white"
+                                android:textSize="13dp" />
+
+                            <TextView
+                                android:fontFamily="@font/inter_medium"
+                                android:id="@+id/sub_4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="125dp"
+                                android:textColor="@color/white"
+                                android:textSize="8dp" />
+                        </androidx.cardview.widget.CardView>
+
+                    </FrameLayout>
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="140dp"
+                            android:layout_height="175dp"
+                            app:cardBackgroundColor="@color/white"
+                            app:cardPreventCornerOverlap="true"
+                            app:cardUseCompatPadding="true"
+                            app:cardElevation="2dp"
+                            app:cardCornerRadius="16dp"
+                            android:layout_marginRight="15sp">
+                            <ImageView
+                                android:id="@+id/image_5"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"
+                                android:src="@color/white"
+                                app:tint="#40000000"
+                                android:tintMode="src_atop"/>
+
+                            <TextView
+                                android:fontFamily="@font/inter_bold"
+                                android:id="@+id/title_5"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="105dp"
+                                android:textColor="@color/white"
+                                android:textSize="13dp" />
+
+                            <TextView
+                                android:fontFamily="@font/inter_medium"
+                                android:id="@+id/sub_5"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="125dp"
+                                android:textColor="@color/white"
+                                android:textSize="8dp" />
+                        </androidx.cardview.widget.CardView>
+
+                    </FrameLayout>
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_marginLeft="20sp"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="153dp"
+                app:cardBackgroundColor="@color/black"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                android:layout_marginRight="20sp">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/banner_1"
+                    android:scaleType="centerCrop"
+                    android:tintMode="src_atop"/>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_marginLeft="20sp"
+                android:fontFamily="@font/inter_medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:id="@+id/ad_1"
+                android:text="혼자 여행하기 좋은 명소"
+                android:lineSpacingExtra="-3dp"
+                android:textSize="20sp"
+                android:textColor="@color/black" />
+
+            <HorizontalScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fillViewport="true"
+                android:scrollbars="none"
+                android:layout_marginBottom="100dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginLeft="20sp"
+                        android:layout_marginBottom="10sp">
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="300dp"
+                            android:layout_height="180dp"
+                            app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="16dp"
+                            app:cardElevation="0dp"
+                            app:cardPreventCornerOverlap="true"
+                            app:cardUseCompatPadding="true"
+                            android:layout_marginLeft="-8dp">
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/m_busan" />
+
+                            <TextView
+                                android:fontFamily="@font/inter_bold"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginTop="15dp"
+                                android:text="부산"
+                                android:textColor="@color/white"
+                                android:textSize="18dp" />
+
+                            <TextView
+                                android:fontFamily="@font/inter_medium"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginTop="40dp"
+                                android:text="광안리 해변 · 감천 문화마을"
+                                android:textColor="@color/white"
+                                android:textSize="12dp" />
+                        </androidx.cardview.widget.CardView>
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="300dp"
+                            android:layout_height="180dp"
+                            app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="16dp"
+                            app:cardElevation="0dp"
+                            app:cardPreventCornerOverlap="true"
+                            app:cardUseCompatPadding="true">
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/m_gyeongju" />
+
+                            <TextView
+                                android:fontFamily="@font/inter_bold"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginTop="15dp"
+                                android:text="경주"
+                                android:textColor="@color/white"
+                                android:textSize="18dp" />
+
+                            <TextView
+                                android:fontFamily="@font/inter_medium"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginTop="40dp"
+                                android:text="동궁  · 첨성대"
+                                android:textColor="@color/white"
+                                android:textSize="12dp" />
+                        </androidx.cardview.widget.CardView>
+
+                    </FrameLayout>
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="300dp"
+                            android:layout_height="180dp"
+                            app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="16dp"
+                            app:cardElevation="0dp"
+                            app:cardPreventCornerOverlap="true"
+                            app:cardUseCompatPadding="true">
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/m_jeju"
+                                app:tint="#40000000"
+                                android:tintMode="src_atop"/>
+
+                            <TextView
+                                android:fontFamily="@font/inter_bold"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginTop="15dp"
+                                android:text="제주"
+                                android:textColor="@color/white"
+                                android:textSize="18dp" />
+
+                            <TextView
+                                android:fontFamily="@font/inter_medium"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginTop="40dp"
+                                android:text="금오름 · 협재해변"
+                                android:textColor="@color/white"
+                                android:textSize="12dp" />
+                        </androidx.cardview.widget.CardView>
+
+                    </FrameLayout>
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="300dp"
+                            android:layout_height="180dp"
+                            app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="16dp"
+                            app:cardElevation="0dp"
+                            app:cardPreventCornerOverlap="true"
+                            app:cardUseCompatPadding="true"
+                            android:layout_marginRight="15sp">
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/m_yeosu"
+                                app:tint="#40000000"
+                                android:tintMode="src_atop"/>
+
+                            <TextView
+                                android:fontFamily="@font/inter_bold"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginTop="15dp"
+                                android:text="여수"
+                                android:textColor="@color/white"
+                                android:textSize="18dp" />
+
+                            <TextView
+                                android:fontFamily="@font/inter_medium"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginTop="40dp"
+                                android:text="하멜등대 · 돌산대교"
+                                android:textColor="@color/white"
+                                android:textSize="12dp" />
+                        </androidx.cardview.widget.CardView>
+
+                    </FrameLayout>
+
+
+
+                </LinearLayout>
+            </HorizontalScrollView>
         </LinearLayout>
     </ScrollView>
+
+
+
     <!-- 하단 네비게이션 바 -->
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/nav"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+         <!--FAB-->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="90sp"
+            android:backgroundTint="#1D5D9B"
+            android:src="@drawable/fab"
+            app:layout_constraintBottom_toBottomOf="@id/nav"
+            app:layout_constraintEnd_toEndOf="@id/nav"
+            app:tint="@null"
+            tools:ignore="MissingConstraints" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cd_trip"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            app:cardBackgroundColor="#1D5D9B"
+            app:cardCornerRadius="16dp"
+            android:layout_marginLeft="20sp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20sp"
+            android:layout_marginBottom="90sp"
+            app:layout_constraintBottom_toBottomOf="@id/nav"
+            app:layout_constraintEnd_toEndOf="@id/nav"
+            tools:ignore="MissingConstraints">
+            <Button
+                android:id="@+id/bt_trip"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#00ff0000">
+            </Button>
+            <LinearLayout
+                android:layout_marginTop="3dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp"
+                android:padding="10dp">
+                <TextView
+                    android:id="@+id/trip_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="나혼자 제주도 여행"
+                    android:textColor="@color/white"
+                    android:textSize="16dp"
+                    android:layout_marginBottom="3dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/trip_date"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:text="8.19(월) - 8.22(목)"
+                        android:textSize="12dp"
+                        android:textColor="@color/white"/>
+                    <TextView
+                        android:gravity="right"
+                        android:id="@+id/trip_location"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="110dp"
+                        android:layout_marginRight="5dp"
+                        android:text="통영/거제/남해"
+                        android:textSize="12dp"
+                        android:textColor="@color/white"/>
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+        <!-- FAB -->
         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="428dp"
@@ -119,5 +664,6 @@
             tools:ignore="SpeakableTextPresentCheck"
             android:importantForAccessibility="no"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </RelativeLayout>
