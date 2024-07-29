@@ -29,7 +29,7 @@
                 android:entries="@array/location_array"
                 android:layout_height="45dp"
                 android:layout_gravity="center_vertical"
-                android:background="@drawable/spinner_design_2"
+                android:background="@drawable/spinner_design_yellow"
                 android:spinnerMode="dropdown"
                 android:paddingStart="8dp" />
 

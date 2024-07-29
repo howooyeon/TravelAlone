@@ -11,24 +11,25 @@
         <TextView
             android:id="@+id/title"
             android:text="제목"
-            android:layout_width="270sp"
+            android:layout_width="285sp"
             android:layout_height="25sp"
             android:textColor="@color/black"
-            android:textSize="17dp"/>
+            android:textSize="16dp"/>
 
         <TextView
-            android:padding="15dp"
+            android:layout_marginTop="5dp"
+            android:paddingRight="5dp"
             android:id="@+id/sub"
             android:text="본문입니다"
-            android:layout_width="270sp"
-            android:layout_height="80sp"
+            android:layout_width="285sp"
+            android:layout_height="85sp"
             android:textColor="@color/black"
             android:textSize="14dp" />
     </LinearLayout>
     <androidx.cardview.widget.CardView
         android:layout_marginTop="15dp"
-        android:layout_width="100sp"
-        android:layout_height="100sp"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
         app:cardCornerRadius="16dp"
         android:background="@color/black"
         app:cardElevation="0dp">
