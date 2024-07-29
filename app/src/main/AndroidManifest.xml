@@ -25,6 +25,9 @@
             android:name=".Community_Activity"
             android:exported="true" />
         <activity
+            android:name=".Community_Write_Activity"
+            android:exported="true" />
+        <activity
             android:name=".Locate_Activity"
             android:exported="true" />
         <activity

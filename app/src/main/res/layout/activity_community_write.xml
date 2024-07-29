@@ -47,17 +47,18 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="428dp"
             android:layout_height="83dp"
+            android:importantForAccessibility="no"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.529"
             app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/nav_background"
-            tools:ignore="SpeakableTextPresentCheck"
-            android:importantForAccessibility="no"/>
+            app:srcCompat="@drawable/register_button"
+            tools:ignore="SpeakableTextPresentCheck" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
