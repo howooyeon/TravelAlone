@@ -23,7 +23,18 @@
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
-            <!-- Existing region spinner -->
+            <!-- Region Spinner -->
+            <Spinner
+                android:id="@+id/region"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/category_region"
+                android:minWidth="80dp"
+                android:minHeight="25dp"
+                android:padding="8dp" />
+
+            <!-- Date Selection LinearLayout -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -31,27 +42,15 @@
                 android:layout_marginTop="20dp"
                 android:gravity="center_vertical">
 
-                <Spinner
-                    android:id="@+id/region"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/category_region"
-                    android:minWidth="80dp"
-                    android:minHeight="25dp"
-                    android:padding="8dp" />
-
                 <!-- Start date EditText -->
                 <EditText
                     android:id="@+id/start_date"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginStart="10dp"
-                    android:hint="Start Date"
-                    android:background="@drawable/category_region"
-                    android:focusable="false"
                     android:clickable="true"
+                    android:focusable="false"
+                    android:hint="출발 날짜"
                     android:minWidth="80dp"
                     android:minHeight="25dp"
                     android:padding="8dp" />
@@ -61,12 +60,11 @@
                     android:id="@+id/end_date"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginStart="10dp"
-                    android:hint="End Date"
-                    android:background="@drawable/category_region"
-                    android:focusable="false"
+                    android:layout_weight="1"
                     android:clickable="true"
+                    android:focusable="false"
+                    android:hint="도착 날짜"
                     android:minWidth="80dp"
                     android:minHeight="25dp"
                     android:padding="8dp" />
