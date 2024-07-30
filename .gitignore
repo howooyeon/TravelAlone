@@ -25,6 +25,11 @@ out/
 .gradle/
 build/
 
+# 추가
+project.properties
+secure.properties
+.DS_Store
+
 # Signing files
 .signing/
 
@@ -138,5 +143,7 @@ fabric.properties
 ### AndroidStudio Patch ###
 
 !/gradle/wrapper/gradle-wrapper.jar
+
+travelalone_keystore.jks
 
 # End of https://www.toptal.com/developers/gitignore/api/androidstudio
