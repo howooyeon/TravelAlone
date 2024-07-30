@@ -10,9 +10,6 @@ val properties = Properties().apply {
     load(project.rootProject.file("local.properties").inputStream())
 }
 
-val properties = Properties().apply {
-    load(project.rootProject.file("local.properties").inputStream())
-}
 
 android {
     namespace = "com.guru.travelalone"
@@ -31,9 +28,9 @@ android {
         buildConfigField("String", "OPENAI_API", "\"${properties.getProperty("OPENAI_KEY")}\"")
         buildConfigField("String", "CHATGPT_MODEL", "\"${properties.getProperty("CHATGPT_MODEL")}\"")
         buildConfigField("String", "KAKAO_API_KEY", "\"${properties.getProperty("KAKAO_API_KEY")}\"")
-
-        manifestPlaceholders["KAKAO_API_KEY"] = properties.getProperty("KAKAO_API_KEY") ?: "default_api_key"
         buildConfigField("String", "WEATHER_API_KEY", "\"${properties.getProperty("WEATHER_API_KEY")}\"")
+        manifestPlaceholders["KAKAO_API_KEY"] = properties.getProperty("KAKAO_API_KEY") ?: "default_api_key"
+
 
     }
 
