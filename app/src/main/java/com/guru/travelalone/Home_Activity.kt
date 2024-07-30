@@ -3,15 +3,12 @@ package com.guru.travelalone
 import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteException
 import android.os.Bundle
-import android.util.Log
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import android.widget.ViewFlipper
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +16,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import de.hdodenhof.circleimageview.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -45,7 +43,8 @@ class Home_Activity : AppCompatActivity() {
 
     // 날씨 api ----------------
     lateinit var weatherText : TextView
-    private val apiKey = "" // key 숨기는 법을 몰라 그냥 빼눴습니다.
+
+    private val apiKey = com.guru.travelalone.BuildConfig.WEATHER_API_KEY
     private val city = "Seoul"
     lateinit var image1 : ImageView
     lateinit var image2 : ImageView
