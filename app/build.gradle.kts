@@ -30,18 +30,18 @@ android {
         manifestPlaceholders["KAKAO_API_KEY"] = properties.getProperty("KAKAO_API_KEY") ?: "default_api_key"
     }
 
-    signingConfigs {
-        create("release") {
-            keyAlias = properties.getProperty("KEY_ALIAS")
-            keyPassword = properties.getProperty("KEY_PASSWORD")
-            storeFile = file(properties.getProperty("STORE_FILE"))
-            storePassword = properties.getProperty("STORE_PASSWORD")
-        }
-    }
+//    signingConfigs {
+//        create("release") {
+//            keyAlias = properties.getProperty("KEY_ALIAS")
+//            keyPassword = properties.getProperty("KEY_PASSWORD")
+//            storeFile = file(properties.getProperty("STORE_FILE"))
+//            storePassword = properties.getProperty("STORE_PASSWORD")
+//        }
+//    }
 
     buildTypes {
         getByName("release") {
-            signingConfig = signingConfigs.getByName("release")
+           // signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
