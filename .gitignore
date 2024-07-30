@@ -139,4 +139,5 @@ fabric.properties
 
 !/gradle/wrapper/gradle-wrapper.jar
 
+travelalone_keystore.jks
 # End of https://www.toptal.com/developers/gitignore/api/androidstudio
