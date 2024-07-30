@@ -2,8 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- 날씨 API 가져오기 / 인터넷 연결 -->
+
+    <!-- 인터넷 사용 권한 설정-->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 위치 정보 사용 권한을 선언-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -17,6 +21,24 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".NormalPro_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Start_Activity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ProEdit_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Login_Activity"
+            android:exported="true" />
+        <activity
             android:name=".Mypage_Activity"
             android:exported="false" />
         <activity
@@ -24,7 +46,7 @@
             android:exported="false" />
         <activity
             android:name=".Locate_Activity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Travbot_activity"
             android:exported="false" />
@@ -44,13 +66,28 @@
 
         <activity
             android:name=".MainActivity"
+            android:exported="true" />
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="oauth"
+                    android:scheme="kakao${KAKAO_API_KEY}" />
             </intent-filter>
         </activity>
+        <meta-data
+            android:name="com.kakao.vectormap.APP_KEY"
+            android:value="${KAKAO_API_KEY}"/>
+
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="${KAKAO_API_KEY}"/>
     </application>
 
 </manifest>
