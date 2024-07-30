@@ -6,11 +6,13 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.os.Bundle
 import android.util.Log
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.ViewFlipper
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
@@ -38,6 +40,8 @@ class Home_Activity : AppCompatActivity() {
     lateinit var mypageButton: ImageButton
     lateinit var communityButton: ImageButton
     //하단바 ----------
+
+    lateinit var viewFlipper: ViewFlipper
 
     // 날씨 api ----------------
     lateinit var weatherText : TextView
@@ -81,6 +85,13 @@ class Home_Activity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        // viewFlipper -----------
+        viewFlipper = findViewById(R.id.viewFlipper)
+        viewFlipper.setFlipInterval(5000) // 5초마다 전환
+        viewFlipper.startFlipping() // ViewFlipper 시작
+        viewFlipper.inAnimation = AnimationUtils.loadAnimation(this, R.anim.slide_in_right)
+        viewFlipper.outAnimation = AnimationUtils.loadAnimation(this, R.anim.slide_out_left)
 
 
         // 날씨 api ----------------

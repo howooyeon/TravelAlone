@@ -19,14 +19,14 @@
             android:layout_marginTop="20sp">
 
             <ImageView
-                android:layout_marginLeft="20sp"
+                android:layout_marginLeft="20dp"
                 android:layout_width="140sp"
                 android:layout_height="40sp"
                 app:srcCompat="@drawable/logo_home"
                 android:layout_marginBottom="20sp" />
 
             <TextView
-                android:layout_marginLeft="20sp"
+                android:layout_marginLeft="20dp"
                 android:fontFamily="@font/inter_medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
                     <FrameLayout
-                        android:layout_marginLeft="20sp"
+                        android:layout_marginLeft="20dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
@@ -79,7 +79,7 @@
                                 android:layout_marginTop="105dp"
 
                                 android:textColor="@color/white"
-                                android:textSize="13dp" />
+                                android:textSize="13sp" />
 
                             <TextView
                                 android:fontFamily="@font/inter_medium"
@@ -89,7 +89,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:layout_marginTop="125dp"
                                 android:textColor="@color/white"
-                                android:textSize="8dp" />
+                                android:textSize="8sp" />
                         </androidx.cardview.widget.CardView>
 
                     </FrameLayout>
@@ -122,7 +122,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:layout_marginTop="105dp"
                                 android:textColor="@color/white"
-                                android:textSize="13dp" />
+                                android:textSize="13sp" />
 
                             <TextView
                                 android:fontFamily="@font/inter_medium"
@@ -132,7 +132,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:layout_marginTop="125dp"
                                 android:textColor="@color/white"
-                                android:textSize="8dp" />
+                                android:textSize="8sp" />
                         </androidx.cardview.widget.CardView>
 
                     </FrameLayout>
@@ -166,7 +166,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:layout_marginTop="105dp"
                                 android:textColor="@color/white"
-                                android:textSize="13dp" />
+                                android:textSize="13sp" />
 
                             <TextView
                                 android:fontFamily="@font/inter_medium"
@@ -176,7 +176,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:layout_marginTop="125dp"
                                 android:textColor="@color/white"
-                                android:textSize="8dp" />
+                                android:textSize="8sp" />
                         </androidx.cardview.widget.CardView>
 
                     </FrameLayout>
@@ -209,7 +209,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:layout_marginTop="105dp"
                                 android:textColor="@color/white"
-                                android:textSize="13dp" />
+                                android:textSize="13sp" />
 
                             <TextView
                                 android:fontFamily="@font/inter_medium"
@@ -219,7 +219,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:layout_marginTop="125dp"
                                 android:textColor="@color/white"
-                                android:textSize="8dp" />
+                                android:textSize="8sp" />
                         </androidx.cardview.widget.CardView>
 
                     </FrameLayout>
@@ -235,7 +235,7 @@
                             app:cardUseCompatPadding="true"
                             app:cardElevation="2dp"
                             app:cardCornerRadius="16dp"
-                            android:layout_marginRight="15sp">
+                            android:layout_marginRight="15dp">
                             <ImageView
                                 android:id="@+id/image_5"
                                 android:layout_width="match_parent"
@@ -253,7 +253,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:layout_marginTop="105dp"
                                 android:textColor="@color/white"
-                                android:textSize="13dp" />
+                                android:textSize="13sp" />
 
                             <TextView
                                 android:fontFamily="@font/inter_medium"
@@ -263,32 +263,73 @@
                                 android:layout_marginLeft="10dp"
                                 android:layout_marginTop="125dp"
                                 android:textColor="@color/white"
-                                android:textSize="8dp" />
+                                android:textSize="8sp" />
                         </androidx.cardview.widget.CardView>
 
                     </FrameLayout>
                 </LinearLayout>
             </HorizontalScrollView>
 
-            <androidx.cardview.widget.CardView
-                android:layout_marginLeft="20sp"
-                android:layout_marginTop="20dp"
-                android:layout_width="match_parent"
-                android:layout_height="153dp"
-                app:cardBackgroundColor="@color/black"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
-                android:layout_marginRight="20sp">
-                <ImageView
+            <ViewFlipper
+                android:id="@+id/viewFlipper"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_marginLeft="20sp"
+                    android:layout_marginTop="20dp"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/banner_1"
-                    android:scaleType="centerCrop"
-                    android:tintMode="src_atop"/>
-            </androidx.cardview.widget.CardView>
+                    android:layout_height="153dp"
+                    app:cardBackgroundColor="@color/black"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    android:layout_marginRight="20sp">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/banner_1"
+                        android:scaleType="centerCrop"
+                        android:tintMode="src_atop"/>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_marginLeft="20sp"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="153dp"
+                    app:cardBackgroundColor="@color/black"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    android:layout_marginRight="20sp">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/banner_2"
+                        android:scaleType="centerCrop"
+                        android:tintMode="src_atop"/>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_marginLeft="20sp"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="153dp"
+                    app:cardBackgroundColor="@color/black"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    android:layout_marginRight="20sp">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/banner_3"
+                        android:scaleType="centerCrop"
+                        android:tintMode="src_atop"/>
+                </androidx.cardview.widget.CardView>
+            </ViewFlipper>
+
 
             <TextView
-                android:layout_marginLeft="20sp"
+                android:layout_marginLeft="20dp"
                 android:fontFamily="@font/inter_medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -313,7 +354,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_marginLeft="20sp"
+                        android:layout_marginLeft="20dp"
                         android:layout_marginBottom="10sp">
 
                         <androidx.cardview.widget.CardView
@@ -340,7 +381,7 @@
                                 android:layout_marginTop="15dp"
                                 android:text="부산"
                                 android:textColor="@color/white"
-                                android:textSize="18dp" />
+                                android:textSize="18sp" />
 
                             <TextView
                                 android:fontFamily="@font/inter_medium"
@@ -350,7 +391,7 @@
                                 android:layout_marginTop="40dp"
                                 android:text="광안리 해변 · 감천 문화마을"
                                 android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                android:textSize="12sp" />
                         </androidx.cardview.widget.CardView>
 
                     </FrameLayout>
@@ -383,7 +424,7 @@
                                 android:layout_marginTop="15dp"
                                 android:text="경주"
                                 android:textColor="@color/white"
-                                android:textSize="18dp" />
+                                android:textSize="18sp" />
 
                             <TextView
                                 android:fontFamily="@font/inter_medium"
@@ -393,7 +434,7 @@
                                 android:layout_marginTop="40dp"
                                 android:text="동궁  · 첨성대"
                                 android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                android:textSize="12sp" />
                         </androidx.cardview.widget.CardView>
 
                     </FrameLayout>
@@ -427,7 +468,7 @@
                                 android:layout_marginTop="15dp"
                                 android:text="제주"
                                 android:textColor="@color/white"
-                                android:textSize="18dp" />
+                                android:textSize="18sp" />
 
                             <TextView
                                 android:fontFamily="@font/inter_medium"
@@ -437,7 +478,7 @@
                                 android:layout_marginTop="40dp"
                                 android:text="금오름 · 협재해변"
                                 android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                android:textSize="12sp" />
                         </androidx.cardview.widget.CardView>
 
                     </FrameLayout>
@@ -454,7 +495,7 @@
                             app:cardElevation="0dp"
                             app:cardPreventCornerOverlap="true"
                             app:cardUseCompatPadding="true"
-                            android:layout_marginRight="15sp">
+                            android:layout_marginRight="15dp">
 
                             <ImageView
                                 android:layout_width="match_parent"
@@ -472,7 +513,7 @@
                                 android:layout_marginTop="15dp"
                                 android:text="여수"
                                 android:textColor="@color/white"
-                                android:textSize="18dp" />
+                                android:textSize="18sp" />
 
                             <TextView
                                 android:fontFamily="@font/inter_medium"
@@ -482,7 +523,7 @@
                                 android:layout_marginTop="40dp"
                                 android:text="하멜등대 · 돌산대교"
                                 android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                android:textSize="12sp" />
                         </androidx.cardview.widget.CardView>
 
                     </FrameLayout>
@@ -514,7 +555,8 @@
             app:layout_constraintBottom_toBottomOf="@id/nav"
             app:layout_constraintEnd_toEndOf="@id/nav"
             app:tint="@null"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="MissingConstraints"
+            android:contentDescription="fab button"/>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cd_trip"
@@ -533,7 +575,8 @@
                 android:id="@+id/bt_trip"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#00ff0000">
+                android:background="#00ff0000"
+                tools:ignore="SpeakableTextPresentCheck">
             </Button>
             <LinearLayout
                 android:layout_marginTop="3dp"
@@ -548,7 +591,7 @@
                     android:layout_height="wrap_content"
                     android:text="나혼자 제주도 여행"
                     android:textColor="@color/white"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:layout_marginBottom="3dp"/>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -559,7 +602,7 @@
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:text="8.19(월) - 8.22(목)"
-                        android:textSize="12dp"
+                        android:textSize="12sp"
                         android:textColor="@color/white"/>
                     <TextView
                         android:gravity="right"
@@ -569,7 +612,7 @@
                         android:layout_marginLeft="110dp"
                         android:layout_marginRight="5dp"
                         android:text="통영/거제/남해"
-                        android:textSize="12dp"
+                        android:textSize="12sp"
                         android:textColor="@color/white"/>
                 </LinearLayout>
             </LinearLayout>
