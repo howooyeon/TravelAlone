@@ -97,49 +97,41 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
-                        android:layout_height="248dp"
-                        android:hint="내용"
+                        android:layout_height="204dp"
                         android:background="@drawable/rounded_background"
+                        android:hint="내용"
                         android:padding="16dp"
                         android:textColorHint="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="16dp">
+                <ImageButton
+                    android:id="@+id/imageButton"
+                    android:layout_width="149dp"
+                    android:layout_height="137dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="8dp"
+                    app:srcCompat="@drawable/gallery" />
 
-                    <ImageView
-                        android:id="@+id/imageView3"
-                        android:layout_width="400dp"
-                        android:layout_height="69dp"
-                        android:importantForAccessibility="no"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.523"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:srcCompat="@drawable/register_button"
-                        tools:ignore="SpeakableTextPresentCheck" />
-
-                    <ImageButton
-                        android:id="@+id/imageButton"
-                        android:layout_width="149dp"
-                        android:layout_height="137dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="8dp"
-                        app:layout_constraintBottom_toTopOf="@+id/imageView3"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="1.0"
-                        app:srcCompat="@drawable/gallery" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp">
 
-    <!-- 하단 네비게이션 바 -->
-
+        <ImageButton
+            android:id="@+id/imageButton3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-1dp"
+            android:layout_marginEnd="-1dp"
+            android:layout_marginBottom="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/register_button" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>
