@@ -7,7 +7,13 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.Spinner
+import android.widget.Switch
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -17,6 +23,7 @@ import androidx.core.view.WindowInsetsCompat
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+
 
 class Community_Write_Activity : AppCompatActivity() {
 
@@ -77,6 +84,22 @@ class Community_Write_Activity : AppCompatActivity() {
         // Set up date pickers
         setUpDatePicker(startDateEditText)
         setUpDatePicker(endDateEditText)
+
+
+        // Switch 위젯을 찾습니다.
+        val switch2 = findViewById<Switch>(R.id.switch2)
+
+
+        // Switch 상태 변화 리스너를 설정합니다.
+        switch2.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                // Switch가 오른쪽으로 이동하면 '공개'로 설정합니다.
+                switch2.text = "공개"
+            } else {
+                // Switch가 왼쪽으로 이동하면 '비공개'로 설정합니다.
+                switch2.text = "비공개"
+            }
+        }
     }
 
     private fun openGallery() {
