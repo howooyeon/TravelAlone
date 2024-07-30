@@ -2,19 +2,15 @@ package com.guru.travelalone
 
 import android.Manifest
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
-import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.Spinner
-import android.widget.Toast
+import android.provider.MediaStore
+import android.view.View
+import android.widget.*
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -28,23 +24,11 @@ class Community_Write_Activity : AppCompatActivity() {
     private lateinit var regionSpinner: Spinner
     private lateinit var startDateEditText: EditText
     private lateinit var endDateEditText: EditText
+
+    private val PICK_IMAGE_REQUEST: Int = 1
+    private val PERMISSION_REQUEST_CODE: Int = 2
     private lateinit var imageButton: ImageButton
     private lateinit var selectedImageView: ImageView
-
-    private val pickImage: ActivityResultLauncher<String> =
-        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-            uri?.let {
-                selectedImageView.setImageURI(it)
-            }
-        }
-
-    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-        if (isGranted) {
-            openGallery()
-        } else {
-            Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,8 +45,25 @@ class Community_Write_Activity : AppCompatActivity() {
         startDateEditText = findViewById(R.id.start_date)
         endDateEditText = findViewById(R.id.end_date)
 
-        imageButton = findViewById(R.id.imageButton);
-        selectedImageView = findViewById(R.id.selectedImageView);
+        imageButton = findViewById(R.id.imageButton)
+        selectedImageView = findViewById(R.id.selectedImageView)
+
+        imageButton.setOnClickListener {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                )
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                    PERMISSION_REQUEST_CODE
+                )
+            } else {
+                openGallery()
+            }
+        }
 
         // Spinner에 어댑터 설정
         val adapter = ArrayAdapter.createFromResource(
@@ -76,22 +77,37 @@ class Community_Write_Activity : AppCompatActivity() {
         // Set up date pickers
         setUpDatePicker(startDateEditText)
         setUpDatePicker(endDateEditText)
-
-        // 이미지 버튼 클릭 리스너
-        imageButton.setOnClickListener {
-            when {
-                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED -> {
-                    openGallery()
-                }
-                else -> {
-                    requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-                }
-            }
-        }
     }
 
     private fun openGallery() {
-        pickImage.launch("image/*")
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(intent, PICK_IMAGE_REQUEST)
+    }
+
+    @Deprecated("This method has been deprecated in favor of using the Activity Result API\n      which brings increased type safety via an {@link ActivityResultContract} and the prebuilt\n      contracts for common intents available in\n      {@link androidx.activity.result.contract.ActivityResultContracts}, provides hooks for\n      testing, and allow receiving results in separate, testable classes independent from your\n      activity. Use\n      {@link #registerForActivityResult(ActivityResultContract, ActivityResultCallback)}\n      with the appropriate {@link ActivityResultContract} and handling the result in the\n      {@link ActivityResultCallback#onActivityResult(Object) callback}.")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.data != null) {
+            val imageUri = data.data
+            selectedImageView.setImageURI(imageUri)
+            selectedImageView.visibility = View.VISIBLE
+            imageButton.visibility = View.GONE
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openGallery()
+            } else {
+                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun setUpDatePicker(editText: EditText) {
