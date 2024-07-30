@@ -71,26 +71,6 @@
             android:layout_height="330dp"
             android:layout_centerInParent="true" />
 
-
-
-<!--        <com.applikeysolutions.cosmocalendar.view.CalendarView-->
-<!--            android:id="@+id/calendar_view"-->
-<!--            android:layout_marginTop="25sp"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:calendarBackgroundColor="#FEF7FF"-->
-<!--            app:currentDayTextColor="#1D5D9B"-->
-<!--            app:dayTextColor="@color/black"-->
-<!--            app:firstDayOfTheWeek="sunday"-->
-<!--            app:monthTextColor="@color/black"-->
-<!--            app:orientation="horizontal"-->
-<!--            app:selectedDayBackgroundColor="#00ff0000"-->
-<!--            app:selectedDayBackgroundEndColor="#EEEEEE"-->
-<!--            app:selectedDayBackgroundStartColor="#EEEEEE"-->
-<!--            app:selectedDayTextColor="#1D5D9B"-->
-<!--            app:selectionType="range"-->
-<!--            app:weekendDayTextColor="#ef4550" />-->
-
     </LinearLayout>
 
     <android.widget.Button

@@ -53,6 +53,6 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
-    // 달력
-    implementation(libs.cosmocalendar)
+
+    implementation (libs.circleimageview) //Circle ImageView
 }
