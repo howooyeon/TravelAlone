@@ -45,6 +45,7 @@ android {
 
     buildFeatures {
         buildConfig = true
+        viewBinding = true
     }
 
     compileOptions {
@@ -72,6 +73,9 @@ dependencies {
     implementation(libs.kakao.sdk)
     //글라이들 의존성
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    // TabLayout 사용을 위한 의존성
+    implementation ("androidx.viewpager2:viewpager2:1.0.0")
+    implementation ("com.google.android.material:material:1.4.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

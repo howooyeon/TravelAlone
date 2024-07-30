@@ -7,35 +7,30 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.guru.travelalone.databinding.ActivityMypageBinding
+import com.google.android.material.tabs.TabLayout
 
 class Mypage_Activity : AppCompatActivity() {
 
-    //하단바 ----------
-    lateinit var homeButton: ImageButton
-    lateinit var locateButton: ImageButton
-    lateinit var travbotButton: ImageButton
-    lateinit var mypageButton: ImageButton
-    lateinit var communityButton: ImageButton
-    //하단바 ----------
+    private lateinit var binding: ActivityMypageBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_mypage)
+        binding = ActivityMypageBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        //하단바 ----------
-        homeButton = findViewById(R.id.homeButton)
-        locateButton = findViewById(R.id.locateButton)
-        travbotButton = findViewById(R.id.travbotButton)
-        mypageButton = findViewById(R.id.mypageButton)
-        communityButton = findViewById(R.id.commuButton)
+        binding.editButton.setOnClickListener {
+            // 기존에 있는 수정하기 연결
+        }
 
-        locateButton.setOnClickListener {
+        binding.locateButton.setOnClickListener {
             val intent = Intent(
                 this@Mypage_Activity,
                 Locate_Activity::class.java
@@ -43,7 +38,7 @@ class Mypage_Activity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        travbotButton.setOnClickListener {
+        binding.travbotButton.setOnClickListener {
             val intent = Intent(
                 this@Mypage_Activity,
                 Travbot_activity::class.java
@@ -51,7 +46,7 @@ class Mypage_Activity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        homeButton.setOnClickListener {
+        binding.homeButton.setOnClickListener {
             val intent = Intent(
                 this@Mypage_Activity,
                 Home_Activity::class.java
@@ -59,7 +54,7 @@ class Mypage_Activity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        communityButton.setOnClickListener {
+        binding.commuButton.setOnClickListener {
             val intent = Intent(
                 this@Mypage_Activity,
                 Community_Activity::class.java
@@ -67,12 +62,34 @@ class Mypage_Activity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        mypageButton.setOnClickListener {
+        binding.mypageButton.setOnClickListener {
             val intent = Intent(
                 this@Mypage_Activity,
                 Mypage_Activity::class.java
             )
             startActivity(intent)
         }
+
+        setTabLayout()
+    }
+
+    private fun setTabLayout() {
+        // 초기 tab 세팅
+        binding.tabLayoutContainer.setBackgroundResource(R.color.babyblue)
+
+        binding.tabLayoutContainer.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when (tab!!.position) {
+                    0 -> binding.tabLayoutContainer.setBackgroundResource(R.color.babyblue)
+                    1 -> binding.tabLayoutContainer.setBackgroundResource(R.color.white)
+                    2 -> binding.tabLayoutContainer.setBackgroundResource(R.color.black)
+                    3 -> binding.tabLayoutContainer.setBackgroundResource(R.color.white)
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
     }
 }
