@@ -72,6 +72,10 @@ dependencies {
 
     //원형 이미지 뷰 종속성
     implementation("de.hdodenhof:circleimageview:2.2.0")
+
+    //비밀번호 기반
+    implementation("com.google.firebase:firebase-auth-ktx")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

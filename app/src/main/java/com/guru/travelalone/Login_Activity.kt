@@ -9,9 +9,15 @@ import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import android.view.View
+import android.widget.Button
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.guru.travelalone.databinding.ActivityLoginBinding
 import com.kakao.sdk.auth.AuthApiClient
@@ -28,6 +34,7 @@ class Login_Activity : AppCompatActivity() {
 
     private val binding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
     private val db = FirebaseFirestore.getInstance()
+    private lateinit var auth: FirebaseAuth
 
     private val mCallback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
         if (error != null) {
@@ -78,7 +85,7 @@ class Login_Activity : AppCompatActivity() {
         KakaoSdk.init(this, kakaoApiKey)
 
         // Log the key hash
-       // Log.d(TAG, "Key Hash: ${getKeyHash()}")
+        // Log.d(TAG, "Key Hash: ${getKeyHash()}")
 
         if (AuthApiClient.instance.hasToken()) {
             UserApiClient.instance.accessTokenInfo { _, error ->
@@ -89,6 +96,14 @@ class Login_Activity : AppCompatActivity() {
         }
 
         binding.btnLogin.setOnClickListener(onClickListener)
+
+        auth = Firebase.auth
+
+        binding.emailLoginBtn.setOnClickListener {
+            email_login()
+        }
+
+
     }
 
     private fun checkUserProfile() {
@@ -143,21 +158,62 @@ class Login_Activity : AppCompatActivity() {
         }
     }
 
-//    private fun getKeyHash(): String? {
-//        return try {
-//            val info: PackageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
-//            for (signature in info.signatures) {
-//                val md: MessageDigest = MessageDigest.getInstance("SHA")
-//                md.update(signature.toByteArray())
-//                return Base64.encodeToString(md.digest(), Base64.NO_WRAP)
-//            }
-//            null
-//        } catch (e: PackageManager.NameNotFoundException) {
-//            Log.e(TAG, "NameNotFoundException", e)
-//            null
-//        } catch (e: NoSuchAlgorithmException) {
-//            Log.e(TAG, "NoSuchAlgorithmException", e)
-//            null
-//        }
-//    }
+    fun email_login() {
+        if (binding.emailEdt.text.toString().isNullOrEmpty() || binding.pwEdt.text.toString()
+                .isNullOrEmpty()
+        ) {
+            Toast.makeText(this, "이메일 혹은 비밀 번호를 입력해주세요", Toast.LENGTH_SHORT).show()
+        } else {
+            signinAndssignup()
+        }
+    }
+
+    fun signinAndssignup() {
+        auth.createUserWithEmailAndPassword(
+            binding.emailEdt.text.toString(),
+            binding.pwEdt.text.toString()
+        )
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    //이메일로 성공적으로 계정을 만들었을 경우
+                    moveProEditPage(task.result?.user)
+                } else if (task.exception?.message.isNullOrEmpty()) {
+                    Toast.makeText(this, task.exception?.message, Toast.LENGTH_SHORT).show()
+                } else {
+                    //이메일의 계정이 이미 존재하는 경우
+                    sigininEmail()
+                }
+            }
+    }
+
+    fun sigininEmail() {
+        auth.signInWithEmailAndPassword(
+            binding.emailEdt.text.toString(),
+            binding.pwEdt.text.toString()
+        )
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    //로그인 성공
+                    moveHomePage(task.result?.user)
+                } else {
+                    Toast.makeText(this, task.exception?.message, Toast.LENGTH_SHORT).show()
+                }
+
+            }
+    }
+
+    fun moveHomePage(user: FirebaseUser?) {
+        if (user != null) {
+            startActivity(Intent(this, Home_Activity::class.java))
+            finish()
+        }
+    }
+
+    fun moveProEditPage(user: FirebaseUser?) {
+        if (user != null) {
+            startActivity(Intent(this, NormalPro_Activity::class.java))
+            finish()
+        }
+    }
+
 }

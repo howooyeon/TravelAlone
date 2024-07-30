@@ -5,4 +5,5 @@ data class Member(
     val nickname: String,
     val profileImageUrl: String,
     val introduce: String,
+    val login_id : String = ""
 )
