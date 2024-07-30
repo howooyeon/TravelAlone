@@ -10,6 +10,7 @@ val properties = Properties().apply {
     load(project.rootProject.file("local.properties").inputStream())
 }
 
+
 android {
     namespace = "com.guru.travelalone"
     compileSdk = 34
@@ -23,11 +24,14 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+
         buildConfigField("String", "OPENAI_API", "\"${properties.getProperty("OPENAI_KEY")}\"")
         buildConfigField("String", "CHATGPT_MODEL", "\"${properties.getProperty("CHATGPT_MODEL")}\"")
         buildConfigField("String", "KAKAO_API_KEY", "\"${properties.getProperty("KAKAO_API_KEY")}\"")
-
+        buildConfigField("String", "WEATHER_API_KEY", "\"${properties.getProperty("WEATHER_API_KEY")}\"")
         manifestPlaceholders["KAKAO_API_KEY"] = properties.getProperty("KAKAO_API_KEY") ?: "default_api_key"
+
+
     }
 
 //    signingConfigs {
@@ -60,7 +64,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
 }
+
 
 dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
@@ -76,6 +82,7 @@ dependencies {
     //비밀번호 기반
     implementation("com.google.firebase:firebase-auth-ktx")
 
+    implementation(libs.okhttp.v4100)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -86,10 +93,19 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+
+    // 날씨 api 의존성 추가
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.logging.interceptor)
+
+    implementation (libs.circleimageview) //Circle ImageView
+
     //카카오 api 맵
     implementation("com.kakao.maps.open:android:2.6.0")
     implementation("com.google.android.gms:play-services-location:21.1.0")
     implementation("com.kakao.sdk:v2-common:2.7.0")
     implementation("com.kakao.sdk:v2-talk:2.7.0")
 }
+
 
