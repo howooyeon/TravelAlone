@@ -9,6 +9,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.guru.travelalone.databinding.ActivityMypageBinding
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.auth.FirebaseAuth
 
 class Mypage_Activity : AppCompatActivity() {
 
@@ -27,7 +28,11 @@ class Mypage_Activity : AppCompatActivity() {
         }
 
         binding.editButton.setOnClickListener {
-            // 기존에 있는 수정하기 연결
+            val intent = Intent(
+                this@Mypage_Activity,
+                MyProEdit_Activity::class.java
+            )
+            startActivity(intent)
         }
 
         binding.locateButton.setOnClickListener {
@@ -68,6 +73,13 @@ class Mypage_Activity : AppCompatActivity() {
                 Mypage_Activity::class.java
             )
             startActivity(intent)
+        }
+
+        binding.logout.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            val intent = Intent(this@Mypage_Activity, Login_Activity::class.java)
+            startActivity(intent)
+            finish()
         }
 
         setTabLayout()
