@@ -1,4 +1,4 @@
-package com.guru.travelalone
+package com.guru.travelalone.item
 
 import android.graphics.drawable.Drawable
 

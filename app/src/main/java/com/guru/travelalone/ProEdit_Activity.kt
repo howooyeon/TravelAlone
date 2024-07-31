@@ -24,12 +24,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.io.File
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
 
 class ProEdit_Activity : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
     private val binding by lazy { ActivityProEditBinding.inflate(layoutInflater) }
-
     private val storage = FirebaseStorage.getInstance()
     private val storageRef = storage.reference
 
@@ -109,22 +112,41 @@ class ProEdit_Activity : AppCompatActivity() {
         // Save button 클릭 리스너 설정
         binding.saveButton.setOnClickListener {
             editnickname = binding.txtNickName.text.toString().trim()
-            if (imageUri == null) {
-                Toast.makeText(this, "이미지를 선택해주세요.", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            CoroutineScope(Dispatchers.Main).launch {
-                try {
-                    saveUserProfile()
-                    val intent = Intent(this@ProEdit_Activity, Home_Activity::class.java)
-                    startActivity(intent)
-                } catch (e: Exception) {
-                    Log.e("ProEdit_Activity", "Error saving profile", e)
-                    Toast.makeText(this@ProEdit_Activity, "프로필 저장 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+            member_introduce = binding.Introduce.text.toString().trim()
+            if (editnickname.isNotEmpty() && member_introduce.isNotEmpty()) {
+                Toast.makeText(this@ProEdit_Activity, "프로필 등록 중, 잠시 기다려주세요.", Toast.LENGTH_SHORT)
+                    .show()
+                CoroutineScope(Dispatchers.Main).launch {
+                    try {
+                        if (imageUri == null && profileImageUrl.isNotEmpty()) {
+                            Log.d("ProEdit_Activity", "Uploading Kakao profile image to storage")
+                            profileImageUrl = withContext(Dispatchers.IO) {
+                                uploadImageUrlToStorage(profileImageUrl)
+                            }
+                        } else if (imageUri != null) {
+                            Log.d("ProEdit_Activity", "Uploading local image to storage")
+                            profileImageUrl = withContext(Dispatchers.IO) {
+                                uploadImageToStorage(imageUri!!)
+                            }
+                        }
+                        saveUserProfile()
+                        val intent = Intent(this@ProEdit_Activity, Home_Activity::class.java)
+                        startActivity(intent)
+                    } catch (e: Exception) {
+                        Log.e("ProEdit_Activity", "Error saving profile", e)
+                        Toast.makeText(
+                            this@ProEdit_Activity,
+                            "프로필 저장 중 오류가 발생했습니다.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
+            } else {
+                Toast.makeText(this, "정보를 다 입력해주세요", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
 
     private fun openGallery() {
         val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
@@ -132,17 +154,41 @@ class ProEdit_Activity : AppCompatActivity() {
     }
 
     private suspend fun uploadImageToStorage(uri: Uri): String {
-        val file = Uri.fromFile(File(uri.path))
-        val riversRef = storageRef.child("images/${file.lastPathSegment}")
-        riversRef.putFile(uri).await()
-        return riversRef.downloadUrl.await().toString()
+        return withContext(Dispatchers.IO) {
+            try {
+                val file = Uri.fromFile(File(uri.path))
+                val riversRef = storageRef.child("images/${file.lastPathSegment}")
+                riversRef.putFile(uri).await()
+                riversRef.downloadUrl.await().toString()
+            } catch (e: Exception) {
+                Log.e("ProEdit_Activity", "Error uploading image to storage", e)
+                throw e
+            }
+        }
+    }
+
+    private suspend fun uploadImageUrlToStorage(imageUrl: String): String {
+        return withContext(Dispatchers.IO) {
+            try {
+                val url = URL(imageUrl)
+                val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
+                connection.doInput = true
+                connection.connect()
+                val inputStream: InputStream = connection.inputStream
+                val tempFile = File.createTempFile("tempImage", "jpg")
+                tempFile.outputStream().use { inputStream.copyTo(it) }
+
+                val fileUri = Uri.fromFile(tempFile)
+                uploadImageToStorage(fileUri)
+            } catch (e: Exception) {
+                Log.e("ProEdit_Activity", "Error downloading image from URL", e)
+                throw e
+            }
+        }
     }
 
     private suspend fun saveUserProfile() {
         val memberId = CounterHelper.getNextMemberId()
-        if (imageUri != null) {
-            profileImageUrl = uploadImageToStorage(imageUri!!)
-        }
         val member = Member(memberId, nickname, editnickname, profileImageUrl, introduce.text.toString())
         db.collection("members").document(memberId.toString())
             .set(member)
