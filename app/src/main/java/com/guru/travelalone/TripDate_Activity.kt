@@ -1,8 +1,6 @@
 package com.guru.travelalone
 
 import android.content.Intent
-import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteException
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -17,15 +15,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import java.sql.Date
+import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 
 class TripDate_Activity: AppCompatActivity() {
-    private lateinit var dbManager: DBManager_1
-    lateinit var sqlitedb: SQLiteDatabase
+    val db = FirebaseFirestore.getInstance()
     private lateinit var bt_back : ImageButton
     private lateinit var spinner : Spinner
     private lateinit var bt_reg : Button
@@ -102,24 +99,34 @@ class TripDate_Activity: AppCompatActivity() {
             }
         }
 
-        dbManager = DBManager_1(this, "tripdate", null, 1)
         bt_reg.setOnClickListener {
 
             val str_title = et_title.text.toString()
 
-            if(str_title.length !=0 && str_spinner != "여행, 어디로 떠나시나요?" && startDate !=null)
-            {
-                sqlitedb = dbManager.writableDatabase
-                sqlitedb.execSQL("INSERT INTO tripdate VALUES ('"+str_title+"', '"+str_spinner+"', '"+startDate+"', '"+endDate+"');")
-                sqlitedb.close()
+            if (str_title.isNotEmpty() && str_spinner != "여행, 어디로 떠나시나요?" && startDate != null) {
+                // Firestore에 저장할 데이터
+                val tripData = hashMapOf(
+                    "title" to str_title,
+                    "location" to str_spinner,
+                    "start_date" to startDate,
+                    "end_date" to endDate
+                )
 
-                val intent = Intent(this, Home_Activity::class.java)
-                startActivity(intent)
-            }
-            else{
+                // Firestore에 데이터 추가
+                db.collection("tripdate")
+                    .add(tripData)
+                    .addOnSuccessListener { documentReference ->
+                        // 데이터 추가 성공 시 실행
+                        val intent = Intent(this, Home_Activity::class.java)
+                        startActivity(intent)
+                    }
+                    .addOnFailureListener { e ->
+                        // 데이터 추가 실패 시 실행
+                        Toast.makeText(this, "데이터 저장 실패: ${e.message}", Toast.LENGTH_SHORT).show()
+                    }
+            } else {
                 Toast.makeText(this, "모든 항목을 입력해주세요", Toast.LENGTH_SHORT).show()
             }
-
         }
     }
 }

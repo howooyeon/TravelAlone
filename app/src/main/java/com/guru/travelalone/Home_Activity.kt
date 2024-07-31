@@ -1,8 +1,6 @@
 package com.guru.travelalone
 
 import android.content.Intent
-import android.database.Cursor
-import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.view.animation.AnimationUtils
 import android.widget.Button
@@ -16,7 +14,8 @@ import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import de.hdodenhof.circleimageview.BuildConfig
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QueryDocumentSnapshot
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -27,6 +26,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.TimeUnit
+import java.util.Calendar
+
 
 
 class Home_Activity : AppCompatActivity() {
@@ -70,8 +71,10 @@ class Home_Activity : AppCompatActivity() {
     lateinit var trip_title : TextView
     lateinit var trip_date : TextView
     lateinit var trip_location : TextView
-    lateinit var dbMangager: DBManager_1
-    lateinit var sqlitedb: SQLiteDatabase
+
+    // Firestore 인스턴스 초기화
+    val db = FirebaseFirestore.getInstance()
+
     private val dateFormat = SimpleDateFormat("MM.dd(E)", Locale.KOREAN)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -134,46 +137,69 @@ class Home_Activity : AppCompatActivity() {
         }
         // FAB -----------------
 
-        // 데이터 베이스
 
-        dbMangager = DBManager_1(this, "tripdate", null, 1)
-        sqlitedb = dbMangager.readableDatabase
-        var cursor: Cursor
-        cursor = sqlitedb.rawQuery("SELECT * FROM tripdate;", null)
-        if (cursor.count != 0) {
-            fab.hide()
-            cursor.moveToLast()
-            cursor.moveToNext()
-            while(cursor.getPosition() == cursor.count)
-            {
-                cursor.moveToPrevious()
-                val str_title = cursor.getString(0)
-                trip_title.text = str_title
+        // Firestore에서 데이터 가져오기
+        db.collection("tripdate")
+            .orderBy("start_date") // 일정의 시작일을 기준으로 오름차순 정렬
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val documents = task.result
+                    if (documents != null && !documents.isEmpty) {
+                        fab.hide()
+                        var validDocument: QueryDocumentSnapshot? = null
+                        for (document in documents) {
+                            val longStartDate = document.getLong("start_date") ?: continue
+                            val longEndDate = document.getLong("end_date") ?: Long.MAX_VALUE // 종료일이 null이면 최대값으로 설정
 
-                val str_location = cursor.getString(1)
-                trip_location.text = str_location
+                            // 현재 날짜 계산
+                            val currentDate = Calendar.getInstance().timeInMillis
 
-                val long_start_date = cursor.getLong(2)
-                val long_end_date: Long? = if (cursor.isNull(3)) null else cursor.getLong(3)
-                if(long_end_date?.toInt() != 0)
-                {
-                    trip_date.text = "${dateFormat.format(long_start_date)}" +" ~ "+ "${dateFormat.format(long_end_date)}"
-                }
-                else
-                {
-                    trip_date.text = "${dateFormat.format(long_start_date)}"
+                            // 현재 날짜가 일정의 시작일과 종료일 사이에 있는지 확인
+                            val isCurrentDateInRange = currentDate in longStartDate..longEndDate
+
+                            // 일정이 유효한 경우
+                            if (isCurrentDateInRange || longEndDate > currentDate) {
+                                validDocument = document
+                                break // 가장 먼저 발견된 유효한 일정으로 설정
+                            }
+                        }
+
+                        if (validDocument != null) {
+                            val strTitle = validDocument.getString("title") ?: "Unknown Title"
+                            trip_title.text = strTitle
+
+                            val strLocation = validDocument.getString("location") ?: "Unknown Location"
+                            trip_location.text = strLocation
+
+                            val longStartDate = validDocument.getLong("start_date") ?: 0L
+                            val longEndDate = validDocument.getLong("end_date")
+
+                            if (longEndDate != null && longEndDate != 0L) {
+                                trip_date.text = "${dateFormat.format(longStartDate)} ~ ${dateFormat.format(longEndDate)}"
+                            } else {
+                                trip_date.text = dateFormat.format(longStartDate)
+                            }
+
+                            trip_cd.visibility = CardView.VISIBLE
+                            trip_bt.visibility = Button.VISIBLE
+                        } else {
+                            fab.show()
+                            trip_cd.visibility = CardView.GONE
+                            trip_bt.visibility = Button.GONE
+                        }
+                    } else {
+                        fab.show()
+                        trip_cd.visibility = CardView.GONE
+                        trip_bt.visibility = Button.GONE
+                    }
+                } else {
+                    // Firestore 데이터 가져오기 실패 처리
+                    fab.show()
+                    trip_cd.visibility = CardView.GONE
+                    trip_bt.visibility = Button.GONE
                 }
             }
-            trip_cd.visibility = CardView.VISIBLE
-            trip_bt.visibility = Button.VISIBLE
-        } else {
-            fab.show()
-            trip_cd.visibility = CardView.GONE
-            trip_bt.visibility = Button.GONE
-        }
-        cursor.close()
-        sqlitedb.close()
-        dbMangager.close()
 
 
 
