@@ -194,7 +194,7 @@ class Locate_Activity : AppCompatActivity() {
         }
 
         // Initialize Kakao SDK
-        KakaoSdk.init(this, "2aa5c5c42c65ba832facba91310228c7")
+        KakaoSdk.init(this, BuildConfig.KAKAO_API_KEY)
     }
 
     private fun shareLocationViaKakao() {
