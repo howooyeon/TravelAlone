@@ -1,4 +1,4 @@
-package com.guru.travelalone
+package com.guru.travelalone.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.guru.travelalone.R
+import com.guru.travelalone.item.MypageTripListItem
 
-class MypagePostListAdapter(val context: Context, val items : ArrayList<MypagePostListItem>) :BaseAdapter()
+class MypageTripListAdapter(val context: Context, val items : ArrayList<MypageTripListItem>) : BaseAdapter()
 {
     override fun getCount(): Int = items.size
 
@@ -16,16 +18,16 @@ class MypagePostListAdapter(val context: Context, val items : ArrayList<MypagePo
 
     override fun getItemId(position: Int): Long = position.toLong()
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View{
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view: View = LayoutInflater.from(context).inflate(R.layout.listview_mypage_trip, null)
-        val img = view.findViewById<ImageView>(R.id.image)
+        val location_img = view.findViewById<ImageView>(R.id.location_image)
         val title = view.findViewById<TextView>(R.id.title)
-        val sub = view.findViewById<TextView>(R.id.sub)
+        val date = view.findViewById<TextView>(R.id.date)
 
         val item = items[position]
-        img.setImageDrawable(item.img)
+        location_img.setImageDrawable(item.location_img)
         title.text = item.title
-        sub.text = item.sub
+        date.text = item.date
 
         return view
     }
