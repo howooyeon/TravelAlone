@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.widget.ArrayAdapter
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class Community_Activity : AppCompatActivity() {
 
@@ -88,6 +89,12 @@ class Community_Activity : AppCompatActivity() {
                 this@Community_Activity,
                 Mypage_Activity::class.java
             )
+            startActivity(intent)
+        }
+
+        val fab: FloatingActionButton = findViewById(R.id.fab)
+        fab.setOnClickListener {
+            val intent = Intent(this, Community_Write_Activity::class.java)
             startActivity(intent)
         }
     }

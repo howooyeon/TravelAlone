@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -70,6 +71,20 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="90dp"
+            android:backgroundTint="#1D5D9B"
+            android:contentDescription="fab button"
+            android:src="@drawable/pen"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@null" />
+
         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="428dp"
@@ -160,4 +175,5 @@
             android:importantForAccessibility="no"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- FAB -->
 </RelativeLayout>
