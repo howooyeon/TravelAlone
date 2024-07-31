@@ -84,6 +84,8 @@ class Community_Write_Activity : AppCompatActivity() {
         val content = contentEditText.text.toString()
         val isPrivate = privacySwitch.isChecked
 
+        Toast.makeText(this, "게시글 등록 중, 잠시 기다려주세요.", Toast.LENGTH_SHORT).show()
+
         if (selectedImageUri != null) {
             val storageReference = FirebaseStorage.getInstance().reference.child("images/${UUID.randomUUID()}")
             storageReference.putFile(selectedImageUri!!)
@@ -100,7 +102,6 @@ class Community_Write_Activity : AppCompatActivity() {
             savePostToFirestore(title, content, isPrivate, null)
         }
     }
-
     private fun savePostToFirestore(title: String, content: String, isPrivate: Boolean, imageUrl: String?) {
         val post = hashMapOf(
             "title" to title,
