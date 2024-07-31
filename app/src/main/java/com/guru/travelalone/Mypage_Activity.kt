@@ -38,7 +38,7 @@ class Mypage_Activity : AppCompatActivity() {
         }
 
         binding.editButton.setOnClickListener {
-            val intent = Intent(this, ProEdit_Activity::class.java)
+            val intent = Intent(this, MyProEdit_Activity::class.java)
 
             startActivity(intent)
         }

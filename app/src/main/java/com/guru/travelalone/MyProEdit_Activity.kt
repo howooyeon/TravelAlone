@@ -152,11 +152,13 @@ class MyProEdit_Activity : AppCompatActivity() {
                     Log.e("KakaoLogout", "카카오 로그아웃 실패", error)
                 } else {
                     Log.i("KakaoLogout", "카카오 로그아웃 성공")
-                    val intent = Intent(this@MyProEdit_Activity, Login_Activity::class.java)
-                    startActivity(intent)
-                    finish()
+
                 }
             }
+
+            val intent = Intent(this@MyProEdit_Activity, Login_Activity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 
