@@ -1,36 +1,42 @@
 package com.guru.travelalone
 
 import android.Manifest
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.Spinner
-import android.widget.Switch
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
-
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 class Community_Write_Activity : AppCompatActivity() {
 
-    private val PICK_IMAGE_REQUEST: Int = 1
-    private val PERMISSION_REQUEST_CODE: Int = 2
     private lateinit var imageButton: ImageButton
     private lateinit var selectedImageView: ImageView
+    private lateinit var titleEditText: TextInputEditText
+    private lateinit var contentEditText: TextInputEditText
+    private lateinit var privacySwitch: Switch
+    private lateinit var submitButton: Button
+
+    private val openGalleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uri?.let {
+            selectedImageView.setImageURI(it)
+            selectedImageView.visibility = View.VISIBLE
+            imageButton.visibility = View.GONE
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,13 +50,16 @@ class Community_Write_Activity : AppCompatActivity() {
 
         imageButton = findViewById(R.id.imageButton)
         selectedImageView = findViewById(R.id.selectedImageView)
+        titleEditText = findViewById(R.id.titleEditText)
+        contentEditText = findViewById(R.id.contentEditText)
+        privacySwitch = findViewById(R.id.switch2)
+        submitButton = findViewById(R.id.bt_reg)
 
         imageButton.setOnClickListener {
             if (ContextCompat.checkSelfPermission(
                     this,
                     Manifest.permission.READ_EXTERNAL_STORAGE
-                )
-                != PackageManager.PERMISSION_GRANTED
+                ) != PackageManager.PERMISSION_GRANTED
             ) {
                 ActivityCompat.requestPermissions(
                     this,
@@ -58,38 +67,29 @@ class Community_Write_Activity : AppCompatActivity() {
                     PERMISSION_REQUEST_CODE
                 )
             } else {
-                openGallery()
+                openGalleryLauncher.launch("image/*")
             }
         }
-        // Switch 위젯을 찾습니다.
-        val switch2 = findViewById<Switch>(R.id.switch2)
 
-        // Switch 상태 변화 리스너를 설정합니다.
-        switch2.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                // Switch가 오른쪽으로 이동하면 '공개'로 설정합니다.
-                switch2.text = "공개"
-            } else {
-                // Switch가 왼쪽으로 이동하면 '비공개'로 설정합니다.
-                switch2.text = "비공개"
-            }
+        privacySwitch.setOnCheckedChangeListener { _, isChecked ->
+            privacySwitch.text = if (isChecked) "공개" else "비공개"
+        }
+
+        submitButton.setOnClickListener {
+            submitPost()
+            finish() // Activity를 종료하고 이전 화면으로 돌아감
         }
     }
 
-    private fun openGallery() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(intent, PICK_IMAGE_REQUEST)
-    }
+    private fun submitPost() {
+        val title = titleEditText.text.toString()
+        val content = contentEditText.text.toString()
+        val isPrivate = privacySwitch.isChecked
 
-    @Deprecated("This method has been deprecated in favor of using the Activity Result API\n      which brings increased type safety via an {@link ActivityResultContract} and the prebuilt\n      contracts for common intents available in\n      {@link androidx.activity.result.contract.ActivityResultContracts}, provides hooks for\n      testing, and allow receiving results in separate, testable classes independent from your\n      activity. Use\n      {@link #registerForActivityResult(ActivityResultContract, ActivityResultCallback)}\n      with the appropriate {@link ActivityResultContract} and handling the result in the\n      {@link ActivityResultCallback#onActivityResult(Object) callback}.")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.data != null) {
-            val imageUri = data.data
-            selectedImageView.setImageURI(imageUri)
-            selectedImageView.visibility = View.VISIBLE
-            imageButton.visibility = View.GONE
-        }
+        // 여기에 서버에 데이터를 전송하는 로직을 추가합니다.
+        // 예: retrofitService.submitPost(title, content, isPrivate, selectedImageUri)
+
+        Toast.makeText(this, "게시글이 등록되었습니다.", Toast.LENGTH_SHORT).show()
     }
 
     override fun onRequestPermissionsResult(
@@ -100,10 +100,14 @@ class Community_Write_Activity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openGallery()
+                openGalleryLauncher.launch("image/*")
             } else {
                 Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    companion object {
+        private const val PERMISSION_REQUEST_CODE = 2
     }
 }
