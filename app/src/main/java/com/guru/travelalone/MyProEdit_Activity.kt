@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.guru.travelalone.databinding.ActivityMyProEditBinding
 import com.guru.travelalone.databinding.ActivityProEditBinding
 import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.CoroutineScope
@@ -31,7 +32,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 
 class MyProEdit_Activity : AppCompatActivity() {
-    private val binding by lazy { ActivityProEditBinding.inflate(layoutInflater) }
+    private val binding by lazy { ActivityMyProEditBinding.inflate(layoutInflater) }
 
     private val storage = FirebaseStorage.getInstance()
     private val storageRef = storage.reference
@@ -136,6 +137,24 @@ class MyProEdit_Activity : AppCompatActivity() {
                                 }
                             }
                     }
+                }
+            }
+        }
+
+        //로그아웃 버튼
+        binding.logoutbtn2.setOnClickListener {
+            // Firebase 로그아웃
+            FirebaseAuth.getInstance().signOut()
+
+            // Kakao 로그아웃
+            UserApiClient.instance.logout { error ->
+                if (error != null) {
+                    Log.e("KakaoLogout", "카카오 로그아웃 실패", error)
+                } else {
+                    Log.i("KakaoLogout", "카카오 로그아웃 성공")
+                    val intent = Intent(this@MyProEdit_Activity, Login_Activity::class.java)
+                    startActivity(intent)
+                    finish()
                 }
             }
         }

@@ -28,6 +28,13 @@
                 android:textColor="@color/black"
                 android:fontFamily="@font/inter_bold"/>
 
+            <Button
+                android:id="@+id/logoutbtn2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text = "로그아웃"
+                android:layout_gravity = "center"/>
+
             <!-- 프로필 이미지 -->
             <FrameLayout
                 android:layout_width="wrap_content"
@@ -98,6 +105,10 @@
                 android:textColor="@color/hintgray"
                 android:layout_gravity="center"
                 android:fontFamily="@font/inter_medium"/>
+
+
+
+
 
         </LinearLayout>
     </ScrollView>

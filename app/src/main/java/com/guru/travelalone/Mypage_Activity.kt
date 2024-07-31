@@ -79,7 +79,7 @@ class Mypage_Activity : AppCompatActivity() {
 
 
         //로그아웃 버튼
-        binding.logout.setOnClickListener {
+        binding.logoutbtn2.setOnClickListener {
             // Firebase 로그아웃
             FirebaseAuth.getInstance().signOut()
 
