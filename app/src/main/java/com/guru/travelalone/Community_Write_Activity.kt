@@ -27,11 +27,6 @@ import java.util.Locale
 
 class Community_Write_Activity : AppCompatActivity() {
 
-    // Spinner 추가
-    private lateinit var regionSpinner: Spinner
-    private lateinit var startDateEditText: EditText
-    private lateinit var endDateEditText: EditText
-
     private val PICK_IMAGE_REQUEST: Int = 1
     private val PERMISSION_REQUEST_CODE: Int = 2
     private lateinit var imageButton: ImageButton
@@ -46,11 +41,6 @@ class Community_Write_Activity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        // Spinner 초기화
-        regionSpinner = findViewById(R.id.region)
-        startDateEditText = findViewById(R.id.start_date)
-        endDateEditText = findViewById(R.id.end_date)
 
         imageButton = findViewById(R.id.imageButton)
         selectedImageView = findViewById(R.id.selectedImageView)
@@ -71,24 +61,8 @@ class Community_Write_Activity : AppCompatActivity() {
                 openGallery()
             }
         }
-
-        // Spinner에 어댑터 설정
-        val adapter = ArrayAdapter.createFromResource(
-            this,
-            R.array.region_list,
-            android.R.layout.simple_spinner_item
-        )
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        regionSpinner.adapter = adapter
-
-        // Set up date pickers
-        setUpDatePicker(startDateEditText)
-        setUpDatePicker(endDateEditText)
-
-
         // Switch 위젯을 찾습니다.
         val switch2 = findViewById<Switch>(R.id.switch2)
-
 
         // Switch 상태 변화 리스너를 설정합니다.
         switch2.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -130,24 +104,6 @@ class Community_Write_Activity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
             }
-        }
-    }
-
-    private fun setUpDatePicker(editText: EditText) {
-        editText.setOnClickListener {
-            val calendar = Calendar.getInstance()
-            val year = calendar.get(Calendar.YEAR)
-            val month = calendar.get(Calendar.MONTH)
-            val day = calendar.get(Calendar.DAY_OF_MONTH)
-
-            val datePickerDialog = DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
-                val selectedDate = Calendar.getInstance()
-                selectedDate.set(selectedYear, selectedMonth, selectedDay)
-                val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                editText.setText(dateFormat.format(selectedDate.time))
-            }, year, month, day)
-
-            datePickerDialog.show()
         }
     }
 }
