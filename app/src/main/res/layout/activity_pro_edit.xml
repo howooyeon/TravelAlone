@@ -40,18 +40,19 @@
                     android:layout_height="100dp"
                     android:layout_gravity="center"
                     android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/ic_launcher_background" />
+                    android:src="@drawable/ic_launcher_background" />
 
-                <ImageView
-                    android:id="@+id/imageView2"
+                <ImageButton
+                    android:id="@+id/plusBtn"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_gravity="bottom|end"
-                    app:srcCompat="@drawable/proedit_plus" />
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/plus_btnsize" />
 
             </FrameLayout>
 
-            <TextView
+            <EditText
                 android:id="@+id/txtNickName"
                 style="@style/underline"
                 android:layout_width="wrap_content"
@@ -59,7 +60,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="20dp"
                 android:gravity="center"
-                android:text="닉네임"
+                android:hint="닉네임"
                 android:textColor="@color/black"
                 android:textSize="30dp"
                 android:textStyle="normal"
