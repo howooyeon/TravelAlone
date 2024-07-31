@@ -1,6 +1,7 @@
 package com.guru.travelalone
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -102,6 +103,7 @@ class Community_Write_Activity : AppCompatActivity() {
             savePostToFirestore(title, content, isPrivate, null)
         }
     }
+
     private fun savePostToFirestore(title: String, content: String, isPrivate: Boolean, imageUrl: String?) {
         val post = hashMapOf(
             "title" to title,
@@ -115,7 +117,9 @@ class Community_Write_Activity : AppCompatActivity() {
             .add(post)
             .addOnSuccessListener {
                 Toast.makeText(this, "게시글이 등록되었습니다.", Toast.LENGTH_SHORT).show()
-                finish() // Activity를 종료하고 이전 화면으로 돌아갑니다.
+                val intent = Intent(this, Community_Activity::class.java)
+                startActivity(intent)
+                finish() // 현재 Activity를 종료합니다.
             }
             .addOnFailureListener {
                 Toast.makeText(this, "게시글 등록 실패", Toast.LENGTH_SHORT).show()
