@@ -21,6 +21,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import java.util.*
 
+import com.kakao.sdk.user.UserApiClient
+
 class Community_Write_Activity : AppCompatActivity() {
 
     private lateinit var imageButton: ImageButton
@@ -93,8 +95,24 @@ class Community_Write_Activity : AppCompatActivity() {
         val title = titleEditText.text.toString()
         val content = contentEditText.text.toString()
         val isPrivate = privacySwitch.isChecked
-        val userId = currentUser?.uid
-        val userEmail = currentUser?.email
+        var userId: String?
+        var userEmail: String?
+
+        if (currentUser != null) {
+            userId = currentUser?.uid
+            userEmail = currentUser?.email
+        } else {
+            UserApiClient.instance.me { user, error ->
+                if (error != null) {
+                    Toast.makeText(this, "Kakao 로그인 실패", Toast.LENGTH_SHORT).show()
+                    return@me
+                }
+                userId = user?.id.toString()
+                userEmail = user?.kakaoAccount?.email
+                savePostToFirestore(title, content, isPrivate, null, userId, userEmail)
+            }
+            return
+        }
 
         Toast.makeText(this, "게시글 등록 중, 잠시 기다려주세요.", Toast.LENGTH_SHORT).show()
 
@@ -158,3 +176,4 @@ class Community_Write_Activity : AppCompatActivity() {
         private const val PERMISSION_REQUEST_CODE = 2
     }
 }
+
