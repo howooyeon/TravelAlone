@@ -17,10 +17,13 @@ class MypagePostListAdapter(val context: Context, val items : ArrayList<MypagePo
     override fun getItemId(position: Int): Long = position.toLong()
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View{
-        val view: View = LayoutInflater.from(context).inflate(R.layout.listview_mypage_trip, null)
+        val view: View = LayoutInflater.from(context).inflate(R.layout.listview_community_post, null)
         val img = view.findViewById<ImageView>(R.id.image)
         val title = view.findViewById<TextView>(R.id.title)
         val sub = view.findViewById<TextView>(R.id.sub)
+        // 북마크 상단으로 올리기
+        val bookmark = view.findViewById<ImageView>(R.id.bookmark)
+        bookmark.bringToFront()
 
         val item = items[position]
         img.setImageDrawable(item.img)
