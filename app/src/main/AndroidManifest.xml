@@ -9,6 +9,10 @@
     <!-- 위치 정보 사용 권한을 선언-->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- 유저 갤러리에서 사진 가져올 때-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+
 
     <application
         android:allowBackup="true"
@@ -44,7 +48,10 @@
             android:exported="false" />
         <activity
             android:name=".Community_Activity"
-            android:exported="false" />
+            android:exported="true" />
+        <activity
+            android:name=".Community_Write_Activity"
+            android:exported="true" />
         <activity
             android:name=".Locate_Activity"
             android:exported="true" />
