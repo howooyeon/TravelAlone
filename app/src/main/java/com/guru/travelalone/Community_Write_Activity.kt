@@ -15,6 +15,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import java.util.*
@@ -28,6 +30,9 @@ class Community_Write_Activity : AppCompatActivity() {
     private lateinit var privacySwitch: Switch
     private lateinit var submitButton: Button
     private var selectedImageUri: Uri? = null
+
+    private lateinit var auth: FirebaseAuth
+    private var currentUser: FirebaseUser? = null
 
     private val openGalleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
@@ -54,6 +59,10 @@ class Community_Write_Activity : AppCompatActivity() {
         contentEditText = findViewById(R.id.contentEditText)
         privacySwitch = findViewById(R.id.switch2)
         submitButton = findViewById(R.id.bt_reg)
+
+        // Firebase Auth 초기화
+        auth = FirebaseAuth.getInstance()
+        currentUser = auth.currentUser
 
         imageButton.setOnClickListener {
             if (ContextCompat.checkSelfPermission(
@@ -84,6 +93,8 @@ class Community_Write_Activity : AppCompatActivity() {
         val title = titleEditText.text.toString()
         val content = contentEditText.text.toString()
         val isPrivate = privacySwitch.isChecked
+        val userId = currentUser?.uid
+        val userEmail = currentUser?.email
 
         Toast.makeText(this, "게시글 등록 중, 잠시 기다려주세요.", Toast.LENGTH_SHORT).show()
 
@@ -93,24 +104,26 @@ class Community_Write_Activity : AppCompatActivity() {
                 .addOnSuccessListener { taskSnapshot ->
                     taskSnapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener { uri ->
                         val imageUrl = uri.toString()
-                        savePostToFirestore(title, content, isPrivate, imageUrl)
+                        savePostToFirestore(title, content, isPrivate, imageUrl, userId, userEmail)
                     }
                 }
                 .addOnFailureListener {
                     Toast.makeText(this, "이미지 업로드 실패", Toast.LENGTH_SHORT).show()
                 }
         } else {
-            savePostToFirestore(title, content, isPrivate, null)
+            savePostToFirestore(title, content, isPrivate, null, userId, userEmail)
         }
     }
 
-    private fun savePostToFirestore(title: String, content: String, isPrivate: Boolean, imageUrl: String?) {
+    private fun savePostToFirestore(title: String, content: String, isPrivate: Boolean, imageUrl: String?, userId: String?, userEmail: String?) {
         val post = hashMapOf(
             "title" to title,
             "content" to content,
             "isPrivate" to isPrivate,
             "imageUrl" to imageUrl,
-            "timestamp" to System.currentTimeMillis()
+            "timestamp" to System.currentTimeMillis(),
+            "userId" to userId,
+            "userEmail" to userEmail
         )
 
         FirebaseFirestore.getInstance().collection("posts")
