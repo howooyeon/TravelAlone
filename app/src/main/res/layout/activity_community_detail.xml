@@ -2,27 +2,25 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
     <ImageView
         android:id="@+id/bookmark"
         android:layout_width="25dp"
         android:layout_height="35dp"
-        android:src="@drawable/bookmark"
-        android:layout_marginLeft="330dp"/>
+        android:layout_marginLeft="330dp"
+        android:src="@drawable/bookmark" />
 
     <androidx.cardview.widget.CardView
-        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="match_parent"
         app:cardCornerRadius="16dp"
-        app:cardElevation="0dp"
-        >
+        app:cardElevation="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="702dp"
             android:orientation="vertical">
 
             <ImageView
@@ -30,37 +28,38 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:scaleType="centerCrop"
-                android:src="@color/gray"/>
+                android:src="@color/gray" />
 
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image_profile"
-                android:layout_marginTop="-40dp"
-                android:layout_marginLeft="20dp"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="-40dp"
                 android:src="@color/gray"
-                app:civ_border_width="3dp"
                 app:civ_border_color="#FFFFFF"
-                />
+                app:civ_border_width="3dp" />
+
             <TextView
-                android:gravity="left"
                 android:id="@+id/name"
                 android:layout_width="140dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="-30dp"
                 android:layout_marginLeft="110dp"
+                android:layout_marginTop="-30dp"
+                android:gravity="left"
                 android:text="name"
                 android:textColor="@color/black"
                 android:textSize="13sp" />
+
             <TextView
-                android:layout_gravity="right"
-                android:gravity="right"
                 android:id="@+id/date"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="right"
                 android:layout_marginTop="-20dp"
                 android:layout_marginRight="10dp"
+                android:gravity="right"
                 android:text="date"
                 android:textColor="@color/black"
                 android:textSize="13sp" />
@@ -69,11 +68,11 @@
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
                 android:text="Title"
-                android:textSize="16sp"
                 android:textColor="@color/black"
+                android:textSize="16sp"
 
                 android:textStyle="bold" />
 
@@ -81,8 +80,8 @@
                 android:id="@+id/sub"
                 android:layout_width="wrap_content"
                 android:layout_height="65dp"
-                android:layout_marginTop="7dp"
                 android:layout_marginLeft="20dp"
+                android:layout_marginTop="7dp"
                 android:layout_marginRight="10dp"
                 android:text="sub"
                 android:textColor="@color/black"
