@@ -587,8 +587,8 @@
                 android:padding="10dp">
                 <TextView
                     android:id="@+id/trip_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="250dp"
+                    android:layout_height="25dp"
                     android:text="나혼자 제주도 여행"
                     android:textColor="@color/white"
                     android:textSize="16sp"
@@ -600,7 +600,7 @@
                     <TextView
                         android:id="@+id/trip_date"
                         android:layout_width="150dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="20dp"
                         android:text="8.19(월) - 8.22(목)"
                         android:textSize="12sp"
                         android:textColor="@color/white"/>
