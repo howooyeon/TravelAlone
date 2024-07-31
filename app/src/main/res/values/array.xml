@@ -15,4 +15,10 @@
         <item>통영/거제/남해</item>
         <item>포항/안동</item>
     </string-array>
+
+    <string-array name="spending">
+        <item>쇼핑</item>
+        <item>음식</item>
+        <item>기타</item>
+    </string-array>
 </resources>

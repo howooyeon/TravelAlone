@@ -160,6 +160,12 @@ class MyProEdit_Activity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        binding.budget.setOnClickListener {
+            val intent = Intent(this@MyProEdit_Activity, Budget_Activity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 
     private fun loadUserProfile() {
