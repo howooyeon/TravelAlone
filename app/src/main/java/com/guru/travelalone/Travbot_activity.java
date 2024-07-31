@@ -104,7 +104,7 @@ public class Travbot_activity extends AppCompatActivity {
         try {
             //AI 속성설정
             baseAi.put("role", "user");
-            baseAi.put("content", "You are a helpful and kind AI Assistant.");
+            baseAi.put("content", "You are a helpful and kind AI Assistant who makes travel more enjoyable and convenient.");
             //유저 메세지
             userMsg.put("role", "user");
             userMsg.put("content", question);
