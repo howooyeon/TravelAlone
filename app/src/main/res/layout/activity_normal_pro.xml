@@ -34,25 +34,25 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center">
 
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/kakaoPro"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    app:civ_border_color="@color/deepblue"
+                    android:src="@drawable/samplepro" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/kakaoPro"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="center"
-                android:scaleType="centerCrop"
-                app:civ_border_width="2dp"
-                app:civ_border_color = "@color/deepblue"
-                app:srcCompat="@drawable/samplepro" />
-
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="bottom|end"
-                app:srcCompat="@drawable/proedit_plus" />
+                <ImageButton
+                    android:id="@+id/plusBtn"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="bottom|end"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/plus_btnsize" />
 
             </FrameLayout>
+
 
             <EditText
                 android:id="@+id/txtNickName"
@@ -92,6 +92,8 @@
                 android:text="로또 1등 당첨돼서 여행다니는 개발자"
                 android:textColor="@color/hintgray"
                 android:layout_gravity="center" />
+
+
 
         </LinearLayout>
     </ScrollView>
