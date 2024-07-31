@@ -3,7 +3,9 @@ package com.guru.travelalone
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+
 import android.widget.Toast
+
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -12,8 +14,10 @@ import com.bumptech.glide.Glide
 import com.guru.travelalone.databinding.ActivityMypageBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
+
 import com.google.firebase.firestore.FirebaseFirestore
 import com.kakao.sdk.user.Constants
+
 import com.kakao.sdk.user.UserApiClient
 
 class Mypage_Activity : AppCompatActivity() {
@@ -35,6 +39,7 @@ class Mypage_Activity : AppCompatActivity() {
 
         binding.editButton.setOnClickListener {
             val intent = Intent(this, ProEdit_Activity::class.java)
+
             startActivity(intent)
         }
 
@@ -79,6 +84,7 @@ class Mypage_Activity : AppCompatActivity() {
         }
 
         fetchUserProfile()
+
         setTabLayout()
     }
 
