@@ -26,7 +26,7 @@ class Community_Activity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_community)
+        setContentView(R.layout.listview_test)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -40,7 +40,7 @@ class Community_Activity : AppCompatActivity() {
         mypageButton = findViewById(R.id.mypageButton)
         communityButton = findViewById(R.id.commuButton)
         // Spinner 초기화
-        regionSpinner = findViewById(R.id.region)
+        regionSpinner = findViewById(R.id.location_spinner)
 
         // Spinner에 어댑터 설정
         val adapter = ArrayAdapter.createFromResource(
