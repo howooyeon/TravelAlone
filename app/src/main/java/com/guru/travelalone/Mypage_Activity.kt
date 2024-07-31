@@ -2,6 +2,7 @@ package com.guru.travelalone
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.guru.travelalone.databinding.ActivityMypageBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
+import com.kakao.sdk.user.UserApiClient
 
 class Mypage_Activity : AppCompatActivity() {
 
@@ -75,12 +77,25 @@ class Mypage_Activity : AppCompatActivity() {
             startActivity(intent)
         }
 
+
+        //로그아웃 버튼
         binding.logout.setOnClickListener {
+            // Firebase 로그아웃
             FirebaseAuth.getInstance().signOut()
-            val intent = Intent(this@Mypage_Activity, Login_Activity::class.java)
-            startActivity(intent)
-            finish()
+
+            // Kakao 로그아웃
+            UserApiClient.instance.logout { error ->
+                if (error != null) {
+                    Log.e("KakaoLogout", "카카오 로그아웃 실패", error)
+                } else {
+                    Log.i("KakaoLogout", "카카오 로그아웃 성공")
+                    val intent = Intent(this@Mypage_Activity, Login_Activity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+            }
         }
+
 
         setTabLayout()
     }
