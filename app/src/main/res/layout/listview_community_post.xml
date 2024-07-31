@@ -15,7 +15,7 @@
     <androidx.cardview.widget.CardView
         android:layout_marginTop="5dp"
         android:layout_width="match_parent"
-        android:layout_height="270dp"
+        android:layout_height="250dp"
         app:cardCornerRadius="16dp"
         app:cardElevation="0dp"
         >
@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/img_jeonju"/>
+                android:src="@color/gray"/>
 
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -39,29 +39,29 @@
                 android:layout_marginLeft="20dp"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:src="@drawable/img_busan"
+                android:src="@color/gray"
                 app:civ_border_width="3dp"
                 app:civ_border_color="#FFFFFF"
                 />
             <TextView
                 android:gravity="left"
                 android:id="@+id/name"
-                android:layout_width="wrap_content"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-30dp"
                 android:layout_marginLeft="110dp"
-                android:text="이름"
+                android:text="name"
                 android:textColor="@color/black"
                 android:textSize="13sp" />
             <TextView
                 android:layout_gravity="right"
                 android:gravity="right"
                 android:id="@+id/date"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-20dp"
                 android:layout_marginRight="10dp"
-                android:text="2024.08.22 ~ 2024.09.01"
+                android:text="date"
                 android:textColor="@color/black"
                 android:textSize="13sp" />
 
@@ -80,11 +80,11 @@
             <TextView
                 android:id="@+id/sub"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="65dp"
                 android:layout_marginTop="7dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="10dp"
-                android:text="삼교리 원조 동치미 막국수 강릉에 많은 막국수 집이 있는데요, 제가 먹어본 집 중에서는 단연코 삼교리  원조 동치미 막국수가 최고 입니다."
+                android:text="sub"
                 android:textColor="@color/black"
 
                 android:textSize="14sp" />
