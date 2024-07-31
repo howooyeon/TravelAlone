@@ -1,17 +1,12 @@
 package com.guru.travelalone
 
 import android.Manifest
-import android.app.Activity
-import android.app.DatePickerDialog
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.View
 import android.widget.*
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -19,7 +14,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import java.util.*
 
 class Community_Write_Activity : AppCompatActivity() {
 
@@ -29,9 +26,11 @@ class Community_Write_Activity : AppCompatActivity() {
     private lateinit var contentEditText: TextInputEditText
     private lateinit var privacySwitch: Switch
     private lateinit var submitButton: Button
+    private var selectedImageUri: Uri? = null
 
     private val openGalleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
+            selectedImageUri = it
             selectedImageView.setImageURI(it)
             selectedImageView.visibility = View.VISIBLE
             imageButton.visibility = View.GONE
@@ -77,7 +76,6 @@ class Community_Write_Activity : AppCompatActivity() {
 
         submitButton.setOnClickListener {
             submitPost()
-            finish() // Activity를 종료하고 이전 화면으로 돌아감
         }
     }
 
@@ -86,10 +84,41 @@ class Community_Write_Activity : AppCompatActivity() {
         val content = contentEditText.text.toString()
         val isPrivate = privacySwitch.isChecked
 
-        // 여기에 서버에 데이터를 전송하는 로직을 추가합니다.
-        // 예: retrofitService.submitPost(title, content, isPrivate, selectedImageUri)
+        if (selectedImageUri != null) {
+            val storageReference = FirebaseStorage.getInstance().reference.child("images/${UUID.randomUUID()}")
+            storageReference.putFile(selectedImageUri!!)
+                .addOnSuccessListener { taskSnapshot ->
+                    taskSnapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener { uri ->
+                        val imageUrl = uri.toString()
+                        savePostToFirestore(title, content, isPrivate, imageUrl)
+                    }
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "이미지 업로드 실패", Toast.LENGTH_SHORT).show()
+                }
+        } else {
+            savePostToFirestore(title, content, isPrivate, null)
+        }
+    }
 
-        Toast.makeText(this, "게시글이 등록되었습니다.", Toast.LENGTH_SHORT).show()
+    private fun savePostToFirestore(title: String, content: String, isPrivate: Boolean, imageUrl: String?) {
+        val post = hashMapOf(
+            "title" to title,
+            "content" to content,
+            "isPrivate" to isPrivate,
+            "imageUrl" to imageUrl,
+            "timestamp" to System.currentTimeMillis()
+        )
+
+        FirebaseFirestore.getInstance().collection("posts")
+            .add(post)
+            .addOnSuccessListener {
+                Toast.makeText(this, "게시글이 등록되었습니다.", Toast.LENGTH_SHORT).show()
+                finish() // Activity를 종료하고 이전 화면으로 돌아갑니다.
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "게시글 등록 실패", Toast.LENGTH_SHORT).show()
+            }
     }
 
     override fun onRequestPermissionsResult(
