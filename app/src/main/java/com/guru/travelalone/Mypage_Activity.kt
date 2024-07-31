@@ -11,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.guru.travelalone.databinding.ActivityMypageBinding
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.kakao.sdk.user.Constants
 import com.kakao.sdk.user.UserApiClient
@@ -82,48 +83,78 @@ class Mypage_Activity : AppCompatActivity() {
     }
 
     private fun fetchUserProfile() {
-        try {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser != null) {
+            val email = currentUser.email
+            db.collection("members")
+                .whereEqualTo("login_id", email)
+                .get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        val nickname = document.getString("editnickname") ?: "닉네임 없음"
+                        val introduction = document.getString("introduce") ?: "소개 없음"
+                        val profileImageUrl = document.getString("profileImageUrl") ?: ""
+
+                        Log.d("Firebase", "닉네임: $nickname")
+                        Log.d("Firebase", "소개: $introduction")
+                        Log.d("Firebase", "프로필 이미지 URL: $profileImageUrl")
+
+                        binding.nickname.text = nickname
+                        binding.introduction.text = introduction
+
+                        if (profileImageUrl.isNotEmpty()) {
+                            Log.d("Firebase", "프로필 이미지 로드 시도: $profileImageUrl")
+                            Glide.with(this)
+                                .load(profileImageUrl)
+                                .into(binding.kakaoPro)
+                        } else {
+                            Log.d("Firebase", "프로필 이미지 URL이 비어 있습니다.")
+                        }
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Log.w("Firebase", "문서 가져오기 실패: ", e)
+                    Toast.makeText(this, "문서 가져오기 실패", Toast.LENGTH_SHORT).show()
+                }
+        } else {
             UserApiClient.instance.me { user, error ->
                 if (error != null) {
-                    Log.e(Constants.TAG, "사용자 정보 요청 실패 $error")
+                    Log.e("Kakao", "사용자 정보 요청 실패", error)
                     Toast.makeText(this, "사용자 정보 요청 실패", Toast.LENGTH_SHORT).show()
                 } else if (user != null) {
-                    val userId = user.id.toString()
-                    Log.d(Constants.TAG, "사용자 ID: $userId")
-
-                    db.collection("members").document().get()
-                        .addOnSuccessListener { document ->
-                            if (document != null) {
-                                val nickname = document.getString("nickname") ?: ""
-                                val introduction = document.getString("introduction") ?: ""
+                    val kakaoNickname = user.kakaoAccount?.profile?.nickname ?: ""
+                    db.collection("members")
+                        .whereEqualTo("nickname", kakaoNickname)
+                        .get()
+                        .addOnSuccessListener { documents ->
+                            for (document in documents) {
+                                val nickname = document.getString("editnickname") ?: "닉네임 없음"
+                                val introduction = document.getString("introduce") ?: "소개 없음"
                                 val profileImageUrl = document.getString("profileImageUrl") ?: ""
 
-                                Log.d(Constants.TAG, "nickname: $nickname")
-                                Log.d(Constants.TAG, "introduction: $introduction")
-                                Log.d(Constants.TAG, "profileImageUrl: $profileImageUrl")
+                                Log.d("Kakao", "닉네임: $nickname")
+                                Log.d("Kakao", "소개: $introduction")
+                                Log.d("Kakao", "프로필 이미지 URL: $profileImageUrl")
 
                                 binding.nickname.text = nickname
                                 binding.introduction.text = introduction
 
                                 if (profileImageUrl.isNotEmpty()) {
+                                    Log.d("Kakao", "프로필 이미지 로드 시도: $profileImageUrl")
                                     Glide.with(this)
                                         .load(profileImageUrl)
                                         .into(binding.kakaoPro)
+                                } else {
+                                    Log.d("Kakao", "프로필 이미지 URL이 비어 있습니다.")
                                 }
-                            } else {
-                                Log.d(Constants.TAG, "No such document")
-                                Toast.makeText(this, "No such document", Toast.LENGTH_SHORT).show()
                             }
                         }
                         .addOnFailureListener { e ->
-                            Log.w(Constants.TAG, "Error getting documents: ", e)
-                            Toast.makeText(this, "Error getting documents", Toast.LENGTH_SHORT).show()
+                            Log.w("Kakao", "문서 가져오기 실패: ", e)
+                            Toast.makeText(this, "문서 가져오기 실패", Toast.LENGTH_SHORT).show()
                         }
                 }
             }
-        } catch (e: Exception) {
-            Log.e(Constants.TAG, "사용자 정보 요청 중 예외 발생", e)
-            Toast.makeText(this, "사용자 정보 요청 중 예외 발생", Toast.LENGTH_SHORT).show()
         }
     }
 
