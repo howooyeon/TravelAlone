@@ -36,7 +36,27 @@
             <ListView
                 android:layout_marginTop="20sp"
                 android:layout_marginBottom="50sp"
-                android:id="@+id/postlistview"
+                android:id="@+id/mypagepostlistview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:dividerHeight="50px"
+                android:divider="@null"
+                />
+
+            <ListView
+                android:layout_marginTop="20sp"
+                android:layout_marginBottom="50sp"
+                android:id="@+id/mypagetriplistview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:dividerHeight="50px"
+                android:divider="@null"
+                />
+
+            <ListView
+                android:layout_marginTop="20sp"
+                android:layout_marginBottom="50sp"
+                android:id="@+id/communitypostlistview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:dividerHeight="50px"

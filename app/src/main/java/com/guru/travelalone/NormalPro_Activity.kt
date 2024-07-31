@@ -3,6 +3,8 @@ package com.guru.travelalone
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -18,12 +20,18 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
 import com.guru.travelalone.databinding.ActivityNormalProBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
 
 class NormalPro_Activity : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
@@ -92,11 +100,20 @@ class NormalPro_Activity : AppCompatActivity() {
             editnickname = binding.txtNickName.text.toString().trim()
             val memberIntroduce = binding.Introduce.text.toString().trim()
             val loginId = currentUser?.email.toString()
-
-            if (editnickname.isNotEmpty() && memberIntroduce.isNotEmpty() && imageUri != null) {
+            if (editnickname.isNotEmpty() && memberIntroduce.isNotEmpty()) {
+                Toast.makeText(this@NormalPro_Activity, "프로필 등록 중, 잠시 기다려주세요.", Toast.LENGTH_SHORT).show()
                 CoroutineScope(Dispatchers.Main).launch {
                     try {
-                        val profileImageUrl = uploadImageToStorage(imageUri!!)
+                        val profileImageUrl = if (imageUri != null) {
+                            uploadImageToStorage(imageUri!!)
+                        } else {
+                            val drawable = binding.kakaoPro.drawable
+                            if (drawable is BitmapDrawable) {
+                                uploadBitmapToStorage(drawable.bitmap)
+                            } else {
+                                ""
+                            }
+                        }
                         saveUserProfile(nickname, editnickname, memberIntroduce, loginId, profileImageUrl)
                         val intent = Intent(this@NormalPro_Activity, Home_Activity::class.java)
                         startActivity(intent)
@@ -117,10 +134,23 @@ class NormalPro_Activity : AppCompatActivity() {
     }
 
     private suspend fun uploadImageToStorage(uri: Uri): String {
-        val file = Uri.fromFile(File(uri.path))
-        val riversRef = storageRef.child("images/${file.lastPathSegment}")
-        riversRef.putFile(uri).await()
-        return riversRef.downloadUrl.await().toString()
+        return withContext(Dispatchers.IO) {
+            val file = Uri.fromFile(File(uri.path))
+            val riversRef = storageRef.child("images/${file.lastPathSegment}")
+            riversRef.putFile(uri).await()
+            riversRef.downloadUrl.await().toString()
+        }
+    }
+
+    private suspend fun uploadBitmapToStorage(bitmap: Bitmap): String {
+        return withContext(Dispatchers.IO) {
+            val baos = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+            val data = baos.toByteArray()
+            val tempFile = storageRef.child("images/${System.currentTimeMillis()}.jpg")
+            tempFile.putBytes(data).await()
+            tempFile.downloadUrl.await().toString()
+        }
     }
 
     private suspend fun saveUserProfile(nickname: String, editnickname: String, memberIntroduce: String, loginId: String, profileImageUrl: String) {
