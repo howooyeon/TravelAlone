@@ -45,15 +45,15 @@
             android:gravity="left"
             android:text="name"
             android:textColor="@color/black"
-            android:textSize="13sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/date"
             android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_height="20dp"
+            android:layout_gravity="left"
+            android:layout_marginLeft="100dp"
             android:layout_marginTop="15dp"
-            android:layout_marginRight="160dp"
             android:gravity="left"
             android:text="date"
             android:textColor="@color/black"
