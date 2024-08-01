@@ -16,5 +16,6 @@
         <item>여수</item>
         <item>제주</item>
     </string-array>
+    <string name="used_amount_format">%1$s원</string>
+    <string name="remaining_amount_format">%1$s원</string>
 </resources>
-

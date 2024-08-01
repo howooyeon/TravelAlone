@@ -1,0 +1,70 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="10dp">
+
+        <ImageView
+            android:id="@+id/greenIcon"
+            android:layout_width="45dp"
+            android:layout_height="148dp"
+            app:srcCompat="@drawable/budget_green"></ImageView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/greenDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:fontFamily="@font/inter_medium"
+                android:text="2024.08.07"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/greenAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_bold"
+                android:textSize="25sp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="30dp"
+                android:text = "60,000원"/>
+
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/greenMini"
+                    android:layout_width="match_parent"
+                    android:layout_height="58dp"
+                    app:srcCompat="@drawable/budget_mini" />
+
+                <TextView
+                    android:id="@+id/greenDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_bold"
+                    android:text="1차 충전"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginLeft="30dp"
+                    android:textSize="15sp"
+                    android:layout_gravity="left|center"/>
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

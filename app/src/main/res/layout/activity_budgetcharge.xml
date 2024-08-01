@@ -1,0 +1,111 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fitsSystemWindows="true">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        android:layout_above="@+id/saveButton">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="20sp"
+            android:paddingBottom="90dp"> <!-- 하단 패딩 추가 -->
+
+            <EditText
+                android:id="@+id/chargeMoney"
+                style="@style/green_underline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="60dp"
+                android:gravity="center"
+                android:hint="충전할 금액을 입력하세요"
+                android:textColor="@color/black"
+                android:textSize="30dp"
+                android:inputType="number"
+                app:layout_constraintTop_toTopOf="parent"
+                android:fontFamily="@font/inter_bold"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="95dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:fontFamily="@font/inter_medium"
+                    android:text="분류"
+                    android:textSize="20sp" />
+
+                <ImageButton
+                    android:id="@+id/spendbtn"
+                    android:layout_width="130dp"
+                    android:layout_height="50dp"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/budget_deposit_size" />
+
+                <ImageButton
+                    android:id="@+id/chargebtn"
+                    android:layout_width="130dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/budget_green_charge_size" />
+            </LinearLayout>
+
+            <!-- 메모 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="50dp">
+
+                <TextView
+                    android:layout_width="96dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:fontFamily="@font/inter_medium"
+                    android:text="메모"
+                    android:textSize="20sp" />
+
+                <EditText
+                    android:id="@+id/chargeMemo"
+                    android:layout_width="272dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:hint="입력하세요"
+                    android:textSize="17dp" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <ImageButton
+        android:id="@+id/saveButton"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/transparent"
+        android:scaleType="fitXY"
+        android:text="저장"
+        app:srcCompat="@drawable/budget_green_save"
+        android:layout_marginBottom="16dp"/>
+
+</RelativeLayout>
