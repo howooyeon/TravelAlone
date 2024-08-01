@@ -3,6 +3,7 @@ package com.guru.travelalone
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,6 +30,12 @@ class Budget_Activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(binding.root)
+
+        // 뒤로 가기 버튼 설정
+        val backButton: ImageButton = findViewById(R.id.backbtn)
+        backButton.setOnClickListener {
+            finish() // 현재 액티비티를 종료하여 뒤로 가기 동작 수행
+        }
 
         // RecyclerView 설정
         transactionAdapter = TransactionAdapter(transactionList)
