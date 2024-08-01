@@ -15,6 +15,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -23,6 +25,7 @@ import java.util.Locale
 
 class TripDate_Activity: AppCompatActivity() {
     val db = FirebaseFirestore.getInstance()
+    val auth = FirebaseAuth.getInstance()
     private lateinit var bt_back : ImageButton
     private lateinit var spinner : Spinner
     private lateinit var bt_reg : Button
@@ -99,31 +102,43 @@ class TripDate_Activity: AppCompatActivity() {
             }
         }
 
+
+
         bt_reg.setOnClickListener {
 
             val str_title = et_title.text.toString()
 
             if (str_title.isNotEmpty() && str_spinner != "여행, 어디로 떠나시나요?" && startDate != null) {
-                // Firestore에 저장할 데이터
-                val tripData = hashMapOf(
-                    "title" to str_title,
-                    "location" to str_spinner,
-                    "start_date" to startDate,
-                    "end_date" to endDate
-                )
 
-                // Firestore에 데이터 추가
-                db.collection("tripdate")
-                    .add(tripData)
-                    .addOnSuccessListener { documentReference ->
-                        // 데이터 추가 성공 시 실행
-                        val intent = Intent(this, Home_Activity::class.java)
-                        startActivity(intent)
-                    }
-                    .addOnFailureListener { e ->
-                        // 데이터 추가 실패 시 실행
-                        Toast.makeText(this, "데이터 저장 실패: ${e.message}", Toast.LENGTH_SHORT).show()
-                    }
+                // Firestore에 저장할 데이터
+                val currentUser = auth.currentUser
+                if (currentUser != null) {
+                    val userId = currentUser.email
+
+                    // Firestore에 저장할 데이터
+                    val tripData = hashMapOf(
+                        "title" to str_title,
+                        "location" to str_spinner,
+                        "start_date" to startDate,
+                        "end_date" to endDate,
+                        "user_id" to userId
+                    )
+
+                    // Firestore에 데이터 추가
+                    db.collection("tripdate")
+                        .add(tripData)
+                        .addOnSuccessListener { documentReference ->
+                            // 데이터 추가 성공 시 실행
+                            val intent = Intent(this, Home_Activity::class.java)
+                            startActivity(intent)
+                        }
+                        .addOnFailureListener { e ->
+                            // 데이터 추가 실패 시 실행
+                            Toast.makeText(this, "데이터 저장 실패: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
+                } else {
+                    Toast.makeText(this, "사용자가 로그인되어 있지 않습니다.", Toast.LENGTH_SHORT).show()
+                }
             } else {
                 Toast.makeText(this, "모든 항목을 입력해주세요", Toast.LENGTH_SHORT).show()
             }
