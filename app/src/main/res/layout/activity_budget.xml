@@ -18,13 +18,31 @@
             android:layout_margin="20sp"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/inter_bold"
-                android:text="예산 관리"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id = "@+id/backbtn"
+                    android:layout_width="20dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/budget_back_size" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_bold"
+                    android:text="예산 관리"
+                    android:layout_marginLeft="20dp"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"

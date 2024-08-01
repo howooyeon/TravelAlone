@@ -3,6 +3,7 @@ package com.guru.travelalone
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -32,6 +33,14 @@ class Budgetcharge_Activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(binding.root)
+
+        val backButton: ImageButton = findViewById(R.id.backbtn)
+        backButton.setOnClickListener {
+            // Budget_Activity로 이동
+            val intent = Intent(this@Budgetcharge_Activity, Budget_Activity::class.java)
+            startActivity(intent)
+            finish() // 현재 액티비티를 종료하여 Budget_Activity로 돌아가기
+        }
 
         // Firebase Auth 초기화
         auth = FirebaseAuth.getInstance()

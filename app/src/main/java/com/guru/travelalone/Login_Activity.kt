@@ -104,6 +104,12 @@ class Login_Activity : AppCompatActivity() {
         }
 
 
+//        binding.release.setOnClickListener{
+//            val intent = Intent(this@Login_Activity, Release_Activity::class.java)
+//            startActivity(intent)
+//            finish()
+//        }
+
     }
 
     private fun checkUserProfile() {
@@ -215,5 +221,6 @@ class Login_Activity : AppCompatActivity() {
             finish()
         }
     }
+
 
 }

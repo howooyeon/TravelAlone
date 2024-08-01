@@ -20,13 +20,22 @@
             android:layout_margin="20sp"
             android:paddingBottom="90dp"> <!-- 하단 패딩 추가 -->
 
+            <ImageButton
+                android:id = "@+id/backbtn"
+                android:layout_width="20dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center|left"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/budget_back_size" />
+
+
             <EditText
                 android:id="@+id/chargeMoney"
                 style="@style/green_underline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="60dp"
+                android:layout_marginTop="30dp"
                 android:gravity="center"
                 android:hint="충전할 금액을 입력하세요"
                 android:textColor="@color/black"
