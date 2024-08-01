@@ -43,7 +43,7 @@ class Community_Detail_Activity : AppCompatActivity() {
                             // Set the data to the views
                             nameTextView.text = it.nickname
                             dateTextView.text = it.date
-                            timeTextView.text = it.time // Assuming you have a time field
+                            timeTextView.text = it.createdAt // Use createdAt for the time field
                             titleTextView.text = it.title
                             contentTextView.text = it.content
 

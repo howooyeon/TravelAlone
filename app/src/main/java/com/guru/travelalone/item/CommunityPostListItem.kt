@@ -11,6 +11,6 @@ data class CommunityPostListItem(
     val location: String? = null,
     val nickname: String? = null,        // 닉네임 필드
     val profileImageUrl: String? = null,  // 프로필 이미지 URL 필드
-    val time: String? = null,
+    val createdAt: String? = null,
     var id: String = "", // Add an ID field
 )
