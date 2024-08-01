@@ -10,13 +10,13 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.guru.travelalone.databinding.ActivityMypageBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.kakao.sdk.user.Constants
 
 import com.kakao.sdk.user.UserApiClient
 
@@ -24,6 +24,7 @@ class Mypage_Activity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMypageBinding
     private val db = FirebaseFirestore.getInstance()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -164,16 +165,29 @@ class Mypage_Activity : AppCompatActivity() {
         }
     }
 
+    val fragment1: Fragment = Fragment1()
+    val fragment2: Fragment = Fragment2()
+    val fragment3: Fragment = Fragment3()
     private fun setTabLayout() {
         // 초기 tab 세팅
         binding.tabLayoutContainer.setBackgroundResource(R.color.gray)
 
         binding.tabLayoutContainer.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                when (tab!!.position) {
-                    0 -> binding.tabLayoutContainer.setBackgroundResource(R.color.gray)
-                    1 -> binding.tabLayoutContainer.setBackgroundResource(R.color.gray)
-                    2 -> binding.tabLayoutContainer.setBackgroundResource(R.color.gray)
+
+                val selected: Fragment? = when (tab!!.position) {
+                    0 -> fragment1
+                    1 -> fragment2
+                    2 -> fragment3
+                    else -> null
+                }
+
+                if (selected != null) {
+                    supportFragmentManager.beginTransaction().replace(R.id.frame, selected).commit()
+                }
+                else
+                {
+                    supportFragmentManager.beginTransaction().replace(R.id.frame, fragment1).commit()
                 }
             }
 

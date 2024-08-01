@@ -113,7 +113,7 @@ class TripDate_Activity: AppCompatActivity() {
                 // Firestore에 저장할 데이터
                 val currentUser = auth.currentUser
                 if (currentUser != null) {
-                    val userId = currentUser.email
+                    val userId = currentUser.uid
 
                     // Firestore에 저장할 데이터
                     val tripData = hashMapOf(

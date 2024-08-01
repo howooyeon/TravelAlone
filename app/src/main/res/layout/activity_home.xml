@@ -17,13 +17,28 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="20sp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_marginLeft="20dp"
+                    android:layout_width="140sp"
+                    android:layout_height="40sp"
+                    app:srcCompat="@drawable/logo_home"
+                    android:layout_marginBottom="20sp" />
 
-            <ImageView
-                android:layout_marginLeft="20dp"
-                android:layout_width="140sp"
-                android:layout_height="40sp"
-                app:srcCompat="@drawable/logo_home"
-                android:layout_marginBottom="20sp" />
+                <ImageButton
+                    android:id="@+id/bt_pig"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginLeft="190dp"
+                    android:layout_width="35dp"
+                    android:layout_height="30dp"
+                    app:srcCompat="@drawable/bt_pig"
+                    android:scaleType="centerCrop"
+                    android:background="@android:color/transparent"/>
+            </LinearLayout>
+
 
             <TextView
                 android:layout_marginLeft="20dp"
