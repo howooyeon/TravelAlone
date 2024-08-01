@@ -9,7 +9,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.widget.ArrayAdapter
+import android.widget.ListView
+import androidx.core.content.ContextCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.guru.travelalone.adapter.CommunityPostListAdapter
+import com.guru.travelalone.item.CommunityPostListItem
+import com.guru.travelalone.item.MypageTripListItem
 
 class Community_Activity : AppCompatActivity() {
 
@@ -24,10 +29,12 @@ class Community_Activity : AppCompatActivity() {
     // Spinner 추가
     lateinit var regionSpinner: Spinner
 
+    lateinit var communitypostlistview : ListView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.listview_test)
+        setContentView(R.layout.activity_community)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -51,6 +58,16 @@ class Community_Activity : AppCompatActivity() {
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         regionSpinner.adapter = adapter
+
+        communitypostlistview = findViewById(R.id.communitypostlistview)
+        var communitypostList = arrayListOf<CommunityPostListItem>(
+            CommunityPostListItem(ContextCompat.getDrawable(this, R.drawable.normal_1)!!, ContextCompat.getDrawable(this, R.drawable.samplepro)!!,"이름","제목", "본문", "날짜"),
+            CommunityPostListItem(ContextCompat.getDrawable(this, R.drawable.normal_1)!!, ContextCompat.getDrawable(this, R.drawable.samplepro)!!,"이름","제목", "본문", "날짜")
+        )
+        communitypostList.add(CommunityPostListItem(ContextCompat.getDrawable(this, R.drawable.normal_1)!!, ContextCompat.getDrawable(this, R.drawable.samplepro)!!,"이름","제목", "본문", "날짜"))
+
+        val communitypostadapter = CommunityPostListAdapter(this, communitypostList)
+        communitypostlistview.adapter = communitypostadapter
 
         locateButton.setOnClickListener {
             val intent = Intent(
