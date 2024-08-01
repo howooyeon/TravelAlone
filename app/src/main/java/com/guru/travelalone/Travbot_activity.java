@@ -7,6 +7,7 @@ import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,6 +43,7 @@ public class Travbot_activity extends AppCompatActivity {
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
     OkHttpClient client;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +62,21 @@ public class Travbot_activity extends AppCompatActivity {
         messageAdapter = new MessageAdapter(messageList);
         recycler_view.setAdapter(messageAdapter);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+
+        ImageButton backButton = findViewById(R.id.back_button);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed(); // 뒤로 가기 기능
+            }
+        });
+
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,6 +92,9 @@ public class Travbot_activity extends AppCompatActivity {
                 .writeTimeout(120, TimeUnit.SECONDS)
                 .readTimeout(60, TimeUnit.SECONDS)
                 .build();
+
+        // 초기 환영 메시지 추가
+        addWelcomeMessage();
     }
 
     void addToChat(String message, String sentBy) {
@@ -93,8 +113,11 @@ public class Travbot_activity extends AppCompatActivity {
         addToChat(response, Message.SENT_BY_BOT);
     }
 
+    void addWelcomeMessage() {
+        addToChat("안녕하세요! 당신의 여행 비서\uD83E\uDDF3 트래봇입니다 \uD83E\uDD16 무엇을 도와드릴까요?", Message.SENT_BY_BOT);
+    }
 
-    void callAPI(String question){
+    void callAPI(String question) {
         //okhttp
         messageList.add(new Message("...", Message.SENT_BY_BOT));
 
@@ -102,13 +125,13 @@ public class Travbot_activity extends AppCompatActivity {
         JSONObject baseAi = new JSONObject();
         JSONObject userMsg = new JSONObject();
         try {
-            //AI 속성설정
+            // AI 속성설정
             baseAi.put("role", "user");
             baseAi.put("content", "You are a helpful and kind AI Assistant who makes travel more enjoyable and convenient.");
-            //유저 메세지
+            // 유저 메세지
             userMsg.put("role", "user");
             userMsg.put("content", question);
-            //array로 담아서 한번에 보낸다
+            // array로 담아서 한번에 보낸다
             arr.put(baseAi);
             arr.put(userMsg);
         } catch (JSONException e) {
@@ -119,10 +142,10 @@ public class Travbot_activity extends AppCompatActivity {
         try {
             object.put("model", BuildConfig.CHATGPT_MODEL);
             object.put("messages", arr);
-
-        } catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
+
         RequestBody body = RequestBody.create(object.toString(), JSON);
         Request request = new Request.Builder()
                 .url("https://api.openai.com/v1/chat/completions")
@@ -133,19 +156,19 @@ public class Travbot_activity extends AppCompatActivity {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                addResponse("Failed to load response due to "+e.getMessage());
+                addResponse("Failed to load response due to " + e.getMessage());
             }
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     JSONObject jsonObject = null;
                     try {
                         jsonObject = new JSONObject(response.body().string());
                         JSONArray jsonArray = jsonObject.getJSONArray("choices");
                         String result = jsonArray.getJSONObject(0).getJSONObject("message").getString("content");
                         addResponse(result.trim());
-                    }catch (JSONException e){
+                    } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 } else {
