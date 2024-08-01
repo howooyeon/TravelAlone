@@ -118,15 +118,24 @@ class Community_Activity : AppCompatActivity() {
     }
 
     private fun loadPosts() {
-        val communityPostList = arrayListOf<CommunityPostListItem>()
         firestore.collection("posts")
             .get()
             .addOnSuccessListener { result ->
+                val communityPostList = arrayListOf<CommunityPostListItem>()
                 for (document: QueryDocumentSnapshot in result) {
                     val post = document.toObject(CommunityPostListItem::class.java)
                     communityPostList.add(post)
                 }
-                val communitypostadapter = CommunityPostListAdapter(this, communityPostList)
+                val communitypostadapter = CommunityPostListAdapter(
+                    this,
+                    communityPostList
+                ) { post ->
+                    // Handle item click
+                    val intent = Intent(this, Community_Detail_Activity::class.java).apply {
+                        putExtra("POST_ID", post.id) // Pass the post ID
+                    }
+                    startActivity(intent)
+                }
                 communitypostlistview.adapter = communitypostadapter
             }
             .addOnFailureListener { exception ->
