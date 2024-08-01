@@ -114,6 +114,7 @@ dependencies {
     implementation("com.kakao.sdk:v2-talk:2.7.0")
 
     implementation("androidx.fragment:fragment:1.5.7")
+    implementation("com.squareup.picasso:picasso:2.71828")
 }
 
 
