@@ -1,31 +1,34 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:fitsSystemWindows="true">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:scrollbars="none">
+        android:scrollbars="none"
+        android:layout_above="@+id/saveButton">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_margin="20sp">
+            android:layout_margin="20sp"
+            android:paddingBottom="90dp"> <!-- 하단 패딩 추가 -->
 
             <EditText
-                android:id="@+id/depositMoney"
+                android:id="@+id/chargeMoney"
                 style="@style/green_underline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="60dp"
                 android:gravity="center"
-                android:hint="지출한 금액을 입력하세요"
+                android:hint="충전할 금액을 입력하세요"
                 android:textColor="@color/black"
                 android:textSize="30dp"
                 android:inputType="number"
@@ -47,20 +50,23 @@
                     android:text="분류"
                     android:textSize="20sp" />
 
-                <ImageView
-                    android:layout_width="100dp"
+                <ImageButton
+                    android:id="@+id/spendbtn"
+                    android:layout_width="130dp"
                     android:layout_height="50dp"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/budget_deposit_size" />
 
-                    app:srcCompat="@drawable/budget_deposit_green" />
-
-                <ImageView
-                    android:layout_width="100dp"
+                <ImageButton
+                    android:id="@+id/chargebtn"
+                    android:layout_width="130dp"
                     android:layout_height="50dp"
                     android:layout_marginLeft="10dp"
-                    app:srcCompat="@drawable/budget_spend" />
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/budget_green_charge_size" />
             </LinearLayout>
 
-            <!--            메모-->
+            <!-- 메모 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -77,6 +83,7 @@
                     android:textSize="20sp" />
 
                 <EditText
+                    android:id="@+id/chargeMemo"
                     android:layout_width="272dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_horizontal"
@@ -84,7 +91,7 @@
                     android:background="@android:color/transparent"
                     android:gravity="center"
                     android:hint="입력하세요"
-                    android:textSize="15dp" />
+                    android:textSize="17dp" />
 
             </LinearLayout>
         </LinearLayout>
@@ -98,6 +105,7 @@
         android:background="@android:color/transparent"
         android:scaleType="fitXY"
         android:text="저장"
-        app:srcCompat="@drawable/budget_green_save" />
+        app:srcCompat="@drawable/budget_green_save"
+        android:layout_marginBottom="16dp"/>
 
 </RelativeLayout>

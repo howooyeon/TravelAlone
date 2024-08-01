@@ -1,20 +1,154 @@
 package com.guru.travelalone
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.guru.travelalone.databinding.ActivityBudgetBinding
+import com.kakao.sdk.user.UserApiClient
+import java.text.NumberFormat
+import java.util.Locale
 
 class Budget_Activity : AppCompatActivity() {
+
+    private val binding by lazy { ActivityBudgetBinding.inflate(layoutInflater) }
+    private lateinit var transactionAdapter: TransactionAdapter
+    private val transactionList = mutableListOf<Transaction>()
+
+    // Firebase Auth 불러오기
+    private lateinit var auth: FirebaseAuth
+    private val db = FirebaseFirestore.getInstance()
+
+    private var userUid: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_budget)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        setContentView(binding.root)
+
+        // RecyclerView 설정
+        transactionAdapter = TransactionAdapter(transactionList)
+        binding.green.adapter = transactionAdapter
+        binding.green.layoutManager = LinearLayoutManager(this)
+
+        // Firebase Auth 초기화
+        auth = FirebaseAuth.getInstance()
+
+        // 유저 프로필 로드 후 예산 정보 로드
+        loadUserProfile()
+
+        binding.budgetFab.setOnClickListener {
+            val intent = Intent(this@Budget_Activity, Budgetcharge_Activity::class.java)
+            startActivity(intent)
+            finish()
+        }
+    }
+
+    private fun loadBudget(uid: String) {
+        Log.d("Budget_Activity", "현재 사용자 UID: $uid")
+
+        var totalChargeAmount = 0
+        var totalSpendAmount = 0
+
+        // 충전 금액 합계 계산
+        db.collection("budget_charges")
+            .whereEqualTo("user_uid", uid)
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val charge = document.toObject(BudgetCharge::class.java)
+                    val chargeAmount = charge.charge_amount.replace(",", "").toIntOrNull() ?: 0
+                    totalChargeAmount += chargeAmount
+
+                    val transaction = Transaction(
+                        id = charge.id,
+                        user_uid = charge.user_uid,
+                        amount = charge.charge_amount,
+                        category = null,
+                        store = null,
+                        memo = charge.charge_memo,
+                        date = charge.charge_date,
+                        type = TransactionType.CHARGE
+                    )
+                    transactionList.add(transaction)
+                }
+
+                // 지출 금액 합계 계산
+                db.collection("budget_spends")
+                    .whereEqualTo("user_uid", uid)
+                    .get()
+                    .addOnSuccessListener { spendResult ->
+                        for (document in spendResult) {
+                            val spend = document.toObject(BudgetSpend::class.java)
+                            val spendAmount = spend.spend_amount.replace(",", "").toIntOrNull() ?: 0
+                            totalSpendAmount += spendAmount
+
+                            val transaction = Transaction(
+                                id = spend.id,
+                                user_uid = spend.user_uid,
+                                amount = spend.spend_amount,
+                                category = spend.spend_category.name,
+                                store = spend.spend_store,
+                                memo = spend.spend_memo,
+                                date = spend.spend_date,
+                                type = TransactionType.SPEND
+                            )
+                            transactionList.add(transaction)
+                        }
+
+                        // 날짜 순으로 정렬
+                        transactionList.sortByDescending { it.date }
+
+                        // 어댑터에 데이터 변경 알림
+                        transactionAdapter.notifyDataSetChanged()
+
+                        Log.d("Budget_Activity", "총 충전 금액: $totalChargeAmount")
+                        Log.d("Budget_Activity", "총 지출 금액: $totalSpendAmount")
+
+                        // 남은 금액과 지출 금액 계산 후 UI 업데이트
+                        val remainingAmount = totalChargeAmount - totalSpendAmount
+                        updateBudgetUI(totalSpendAmount, remainingAmount)
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w("Budget_Activity", "지출 문서 가져오기 오류", e)
+                    }
+            }
+            .addOnFailureListener { e ->
+                Log.w("Budget_Activity", "충전 문서 가져오기 오류", e)
+            }
+    }
+
+    private fun updateBudgetUI(usedAmount: Int, remainingAmount: Int) {
+        val numberFormat = NumberFormat.getInstance(Locale.getDefault())
+        val formattedUsedAmount = numberFormat.format(usedAmount)
+        val formattedRemainingAmount = numberFormat.format(remainingAmount)
+
+        Log.d("Budget_Activity", "사용한 금액: $formattedUsedAmount, 남은 금액: $formattedRemainingAmount")
+        binding.usedmoney.text = getString(R.string.used_amount_format, formattedUsedAmount)
+        binding.leftmoney.text = getString(R.string.remaining_amount_format, formattedRemainingAmount)
+    }
+
+    private fun loadUserProfile() {
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            // Firebase 로그인 유저 정보 가져오기
+            userUid = currentUser?.uid.toString()
+            userUid?.let { loadBudget(it) }
+        } else {
+            // Kakao 로그인 유저 정보 가져오기
+            UserApiClient.instance.me { user, error ->
+                if (error != null) {
+                    Log.e("Kakao", "사용자 정보 요청 실패", error)
+                } else if (user != null) {
+                    userUid = user.id.toString()
+                    userUid?.let { loadBudget(it) }
+                }
+            }
         }
     }
 }

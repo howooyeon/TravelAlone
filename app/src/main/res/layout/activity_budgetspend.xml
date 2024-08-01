@@ -1,16 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:fitsSystemWindows="true">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:scrollbars="none">
+        android:scrollbars="none"
+        android:paddingBottom="90dp"> <!-- 하단 패딩 추가 -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -18,7 +21,7 @@
             android:layout_margin="20sp">
 
             <EditText
-                android:id="@+id/depositMoney"
+                android:id="@+id/spendMoney"
                 style="@style/pink_underline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -47,22 +50,25 @@
                     android:text="분류"
                     android:textSize="20sp" />
 
-                <ImageView
-                    android:layout_width="100dp"
+                <ImageButton
+                    android:id="@+id/spendbtn"
+                    android:layout_width="130dp"
                     android:layout_height="50dp"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/budget_spend_red_size" />
 
-                    app:srcCompat="@drawable/budget_deposit_red" />
-
-                <ImageView
-                    android:layout_width="100dp"
+                <ImageButton
+                    android:id="@+id/chargebtn"
+                    android:layout_width="130dp"
                     android:layout_height="50dp"
                     android:layout_marginLeft="10dp"
-                    app:srcCompat="@drawable/budget_spend" />
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/budget_charge_size" />
             </LinearLayout>
 
-<!--            지출 클릭시-->
+            <!-- 지출 클릭시 -->
 
-<!--            카테고리 선택-->
+            <!-- 카테고리 선택 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -79,6 +85,7 @@
                     android:textSize="20sp" />
 
                 <Spinner
+                    android:id="@+id/spendCate"
                     android:layout_width="178dp"
                     android:layout_height="40dp"
                     android:background="@drawable/spinner_design2"
@@ -89,7 +96,7 @@
 
             </LinearLayout>
 
-<!--            가게이름-->
+            <!-- 가게이름 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -106,6 +113,7 @@
                     android:textSize="20sp" />
 
                 <EditText
+                    android:id="@+id/spendStore"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_horizontal"
@@ -113,11 +121,11 @@
                     android:background="@android:color/transparent"
                     android:gravity="center"
                     android:hint="입력하세요"
-                    android:textSize="15dp" />
+                    android:textSize="17dp" />
 
             </LinearLayout>
 
-            <!--            쇼핑목록-->
+            <!-- 쇼핑목록 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -134,6 +142,7 @@
                     android:textSize="20sp" />
 
                 <EditText
+                    android:id="@+id/spendMemo"
                     android:layout_width="272dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_horizontal"
@@ -141,7 +150,7 @@
                     android:background="@android:color/transparent"
                     android:gravity="center"
                     android:hint="입력하세요"
-                    android:textSize="15dp" />
+                    android:textSize="17dp" />
 
             </LinearLayout>
         </LinearLayout>

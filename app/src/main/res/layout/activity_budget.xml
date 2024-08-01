@@ -4,31 +4,31 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:fitsSystemWindows="true">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:scrollbars="none">
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_margin="20sp">
+            android:layout_margin="20sp"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_bold"
                 android:text="예산 관리"
-                android:textSize="20sp"
                 android:textColor="@color/black"
-                android:fontFamily="@font/inter_bold"/>
+                android:textSize="20sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <RelativeLayout
@@ -41,80 +41,73 @@
                         android:layout_height="match_parent"
                         app:srcCompat="@drawable/budget_back" />
 
-                    <TextView
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
-                        android:layout_width="111dp"
-                        android:layout_height="69dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginStart="42dp"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginEnd="218dp"
-                        android:layout_marginBottom="89dp"
-                        android:fontFamily="@font/inter_medium"
-                        android:gravity="center"
-                        android:padding="10dp"
-                        android:text="사용한 돈"
-                        android:textColor="@color/black"
-                        android:textSize="15sp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="40dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/inter_medium"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="사용한 돈"
+                            android:textColor="@color/black"
+                            android:textSize="15sp" />
 
-                    <TextView
-                        android:id="@+id/usedmoney"
-                        android:layout_width="138dp"
-                        android:layout_height="71dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginStart="27dp"
-                        android:layout_marginTop="78dp"
-                        android:layout_marginEnd="206dp"
-                        android:layout_marginBottom="33dp"
-                        android:fontFamily="@font/inter_bold"
-                        android:gravity="center"
-                        android:padding="10dp"
-                        android:text="10000"
-                        android:textColor="@color/black"
-                        android:textSize="30sp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="40dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/inter_medium"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="남은 돈"
+                            android:textColor="@color/black"
+                            android:textSize="15sp" />
+                    </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/leftmoney"
-                        android:layout_width="134dp"
-                        android:layout_height="74dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginStart="211dp"
-                        android:layout_marginTop="77dp"
-                        android:layout_marginEnd="26dp"
-                        android:layout_marginBottom="31dp"
-                        android:fontFamily="@font/inter_bold"
-                        android:gravity="center"
-                        android:padding="10dp"
-                        android:text="10000"
-                        android:textColor="@color/black"
-                        android:textSize="30sp" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="111dp"
-                        android:layout_height="69dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginStart="218dp"
-                        android:layout_marginTop="25dp"
-                        android:layout_marginEnd="42dp"
-                        android:layout_marginBottom="88dp"
-                        android:fontFamily="@font/inter_medium"
-                        android:gravity="center"
-                        android:padding="10dp"
-                        android:text="남은 돈"
-                        android:textColor="@color/black"
-                        android:textSize="15sp" />
+                        <TextView
+                            android:id="@+id/usedmoney"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="78dp"
+                            android:layout_marginBottom="33dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/inter_bold"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="10000원"
+                            android:textColor="@color/black"
+                            android:textSize="30sp" />
+
+                        <TextView
+                            android:id="@+id/leftmoney"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="78dp"
+                            android:layout_marginEnd="20dp"
+                            android:layout_marginBottom="33dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/inter_bold"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="10000원"
+                            android:textColor="@color/black"
+                            android:textSize="30sp" />
+
+                    </LinearLayout>
 
                 </RelativeLayout>
 
@@ -124,6 +117,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:paddingBottom="0dp"
+                    android:background="@color/white"
                     tools:listitem="@layout/item_transaction_green" />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -131,12 +126,28 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:paddingBottom="0dp"
+                    android:background="@color/white"
                     tools:listitem="@layout/item_transaction_red" />
+
             </LinearLayout>
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/budget_fab"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="90dp"
+        android:backgroundTint="#1D5D9B"
+        android:scaleType="fitXY"
+        android:src="@drawable/budget_fab_size"
+        app:tint="@null"
+        tools:ignore="MissingConstraints"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"
+        android:contentDescription="fab button"/>
 
 </RelativeLayout>
-
-
-
