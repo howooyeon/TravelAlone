@@ -1,6 +1,7 @@
 package com.guru.travelalone;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -93,8 +94,13 @@ public class Travbot_activity extends AppCompatActivity {
                 .readTimeout(60, TimeUnit.SECONDS)
                 .build();
 
-        // 초기 환영 메시지 추가
-        addWelcomeMessage();
+        // 초기 환영 메시지 추가 (2초 지연)
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                addWelcomeMessage();
+            }
+        }, 1500); // 2초 지연
     }
 
     void addToChat(String message, String sentBy) {
