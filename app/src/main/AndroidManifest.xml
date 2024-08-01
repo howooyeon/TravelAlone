@@ -54,6 +54,9 @@
             android:name=".Community_Detail_Activity"
             android:exported="true" />
         <activity
+            android:name=".Community_Select_Activity"
+            android:exported="true" />
+        <activity
             android:name=".Locate_Activity"
             android:exported="true" />
         <activity
