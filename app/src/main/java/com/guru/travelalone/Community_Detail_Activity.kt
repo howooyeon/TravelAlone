@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
@@ -35,6 +36,7 @@ class Community_Detail_Activity : AppCompatActivity() {
         val titleTextView: TextView = findViewById(R.id.title)
         val contentTextView: TextView = findViewById(R.id.sub)
         val textView2: TextView = findViewById(R.id.textView2)
+        val deleteButton: TextView = findViewById(R.id.textView3) // Assuming there's a delete button in the layout
 
         // Load post details
         postId?.let {
@@ -86,6 +88,13 @@ class Community_Detail_Activity : AppCompatActivity() {
                 openEditPostActivity(id)
             }
         }
+
+        deleteButton.setOnClickListener {
+            postId?.let { id ->
+                // Show confirmation dialog
+                showDeleteConfirmationDialog(id)
+            }
+        }
     }
 
     private fun openEditPostActivity(postId: String) {
@@ -99,11 +108,34 @@ class Community_Detail_Activity : AppCompatActivity() {
         postRef.update(
             mapOf(
                 "imageUrl" to null,
+                "profileImageUrl" to null
             )
         ).addOnSuccessListener {
             // Successfully updated the document
         }.addOnFailureListener { exception ->
             // Handle the error
         }
+    }
+
+    private fun showDeleteConfirmationDialog(postId: String) {
+        AlertDialog.Builder(this)
+            .setTitle("삭제 확인")
+            .setMessage("정말로 이 게시글을 삭제하시겠습니까?")
+            .setPositiveButton("확인") { _, _ ->
+                deletePost(postId)
+            }
+            .setNegativeButton("취소", null)
+            .show()
+    }
+
+    private fun deletePost(postId: String) {
+        firestore.collection("posts").document(postId).delete()
+            .addOnSuccessListener {
+                // Successfully deleted the document
+                finish() // Close the activity
+            }
+            .addOnFailureListener { exception ->
+                // Handle the error
+            }
     }
 }
