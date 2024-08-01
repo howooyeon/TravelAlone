@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.widget.ArrayAdapter
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class Community_Activity : AppCompatActivity() {
 
@@ -26,7 +27,7 @@ class Community_Activity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_community)
+        setContentView(R.layout.listview_test)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -40,7 +41,7 @@ class Community_Activity : AppCompatActivity() {
         mypageButton = findViewById(R.id.mypageButton)
         communityButton = findViewById(R.id.commuButton)
         // Spinner 초기화
-        regionSpinner = findViewById(R.id.region)
+        regionSpinner = findViewById(R.id.location_spinner)
 
         // Spinner에 어댑터 설정
         val adapter = ArrayAdapter.createFromResource(
@@ -88,6 +89,12 @@ class Community_Activity : AppCompatActivity() {
                 this@Community_Activity,
                 Mypage_Activity::class.java
             )
+            startActivity(intent)
+        }
+
+        val fab: FloatingActionButton = findViewById(R.id.fab)
+        fab.setOnClickListener {
+            val intent = Intent(this, Community_Select_Activity::class.java)
             startActivity(intent)
         }
     }

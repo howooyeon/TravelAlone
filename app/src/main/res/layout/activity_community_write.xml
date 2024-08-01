@@ -1,176 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:scrollbars="none">
+        android:layout_margin="20dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="20dp">
 
-        <LinearLayout
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="어떤 여행을 하셨나요?"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_margin="20dp">
+            android:padding="8dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="어떤 여행을 하셨나요?"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
-
-            <!-- Region Spinner -->
-            <Spinner
-                android:id="@+id/region"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/category_region"
-                android:minWidth="80dp"
-                android:minHeight="25dp"
-                android:padding="8dp" />
-
-            <!-- Date Selection LinearLayout -->
-            <LinearLayout
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/titleEditText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="20dp"
-                android:gravity="center_vertical">
+                android:layout_height="66dp"
+                android:background="@drawable/rounded_background"
+                android:hint="제목"
+                android:padding="16dp"
+                android:textColorHint="@color/black" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Start date EditText -->
-                <EditText
-                    android:id="@+id/start_date"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:focusable="false"
-                    android:hint="출발 날짜"
-                    android:minWidth="80dp"
-                    android:minHeight="25dp"
-                    android:padding="8dp" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="8dp">
 
-                <!-- End date EditText -->
-                <EditText
-                    android:id="@+id/end_date"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:focusable="false"
-                    android:hint="도착 날짜"
-                    android:minWidth="80dp"
-                    android:minHeight="25dp"
-                    android:padding="8dp" />
-            </LinearLayout>
-
-            <LinearLayout
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/contentEditText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="204dp"
+                android:background="@drawable/rounded_background"
+                android:hint="내용"
+                android:padding="16dp"
+                android:textColorHint="@color/black" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="66dp"
-                        android:background="@drawable/rounded_background"
-                        android:hint="제목"
-                        android:padding="16dp"
-                        android:textColorHint="@color/black" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:padding="8dp">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="204dp"
-                        android:background="@drawable/rounded_background"
-                        android:hint="내용"
-                        android:padding="16dp"
-                        android:textColorHint="@color/black" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp">
-
-                    <!-- ImageButton to open gallery -->
-                    <ImageButton
-                        android:id="@+id/imageButton"
-                        android:layout_width="149dp"
-                        android:layout_height="137dp"
-                        app:srcCompat="@drawable/gallery"
-                        android:contentDescription="Open Gallery"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/selectedImageView"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="8dp"/>
-
-                    <!-- ImageView to display selected image -->
-                    <ImageView
-                        android:id="@+id/selectedImageView"
-                        android:layout_width="149dp"
-                        android:layout_height="137dp"
-                        android:visibility="gone"
-                        android:scaleType="centerCrop"
-                        android:adjustViewBounds="true"
-                        android:contentDescription="Selected Image"
-                        app:layout_constraintStart_toEndOf="@+id/imageButton"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="8dp"/>
-
-                    <Switch
-                        android:id="@+id/switch2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="6dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="비공개"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </LinearLayout>
-
+            <!-- 갤러리 열기 버튼 -->
             <ImageButton
-                android:id="@+id/imageButton3"
+                android:id="@+id/imageButton"
+                android:layout_width="149dp"
+                android:layout_height="137dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp"
+                android:contentDescription="Open Gallery"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/selectedImageView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/gallery" />
+
+            <!-- 선택된 이미지를 표시하는 ImageView -->
+            <ImageView
+                android:id="@+id/selectedImageView"
+                android:layout_width="149dp"
+                android:layout_height="137dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="Selected Image"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageButton"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Switch
+                android:id="@+id/switch2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="-1dp"
-                android:layout_marginEnd="-1dp"
-                app:srcCompat="@drawable/register_button" />
+                android:layout_marginEnd="6dp"
+                android:layout_marginBottom="10dp"
+                android:text="비공개"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
-        </LinearLayout>
-    </ScrollView>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <!-- 게시글 등록 버튼 -->
+    <android.widget.Button
+        android:id="@+id/bt_reg"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp">
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</RelativeLayout>
+        android:layout_height="75dp"
+        android:background="@drawable/btn_round_main"
+        android:text="게시글 등록하기"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

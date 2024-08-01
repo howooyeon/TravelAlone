@@ -21,6 +21,20 @@
           </targets>
         </DialogSelection>
       </SelectionState>
+      <SelectionState runConfigName="Community_Activity">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="Locate_Activity">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="Community_Write_Activity">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="Community_Activity_detail">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="Community_Select_Activity">
+        <option name="selectionMode" value="DROPDOWN" />
       <SelectionState runConfigName="MainActivity">
         <option name="selectionMode" value="DROPDOWN" />
         <DropdownSelection timestamp="2024-07-24T13:42:25.900521900Z">
