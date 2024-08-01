@@ -1,5 +1,6 @@
 package com.guru.travelalone
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
@@ -26,7 +27,8 @@ class Community_Detail_Activity : AppCompatActivity() {
 
         // Find views
         val imageView: ImageView = findViewById(R.id.image)
-        val profileImageView: de.hdodenhof.circleimageview.CircleImageView = findViewById(R.id.image_profile)
+        val profileImageView: de.hdodenhof.circleimageview.CircleImageView =
+            findViewById(R.id.image_profile)
         val nameTextView: TextView = findViewById(R.id.name)
         val dateTextView: TextView = findViewById(R.id.date)
         val timeTextView: TextView = findViewById(R.id.time)
@@ -73,5 +75,19 @@ class Community_Detail_Activity : AppCompatActivity() {
                     // Handle the error
                 }
         }
+
+        // 예를 들어, 게시글 ID는 Intent에서 받아온다고 가정
+//        val postId = intent.getStringExtra("postId")
+
+        val textView2 = findViewById<TextView>(R.id.textView2)
+        textView2.setOnClickListener {
+            postId?.let { id -> openEditPostActivity(id) }
+        }
+    }
+
+    private fun openEditPostActivity(postId: String) {
+        val intent = Intent(this, Community_Write_Activity::class.java)
+        intent.putExtra("postId", postId)
+        startActivity(intent)
     }
 }

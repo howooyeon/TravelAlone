@@ -54,6 +54,8 @@ class Community_Write_Activity : AppCompatActivity() {
         }
     }
 
+    private var postId: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -62,6 +64,14 @@ class Community_Write_Activity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+
+        // Intent에서 데이터 받기
+        postId = intent.getStringExtra("postId") // 게시글 ID를 받아옵니다.
+
+        // 기존 게시글 데이터를 불러옵니다.
+        if (postId != null) {
+            fetchPostData(postId!!)
         }
 
         val title = intent.getStringExtra("title")
@@ -111,6 +121,29 @@ class Community_Write_Activity : AppCompatActivity() {
         submitButton.setOnClickListener {
             submitPost(date, location)
         }
+    }
+
+    private fun fetchPostData(postId: String) {
+        FirebaseFirestore.getInstance().collection("posts").document(postId)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    titleEditText.setText(document.getString("title"))
+                    contentEditText.setText(document.getString("content"))
+                    privacySwitch.isChecked = document.getBoolean("isPrivate") ?: false
+                    val imageUrl = document.getString("imageUrl")
+                    if (imageUrl != null && imageUrl != getUriFromDrawable(R.drawable.sample_image_placeholder).toString()) {
+                        selectedImageView.visibility = View.VISIBLE
+                        imageButton.visibility = View.GONE
+                        selectedImageView.setImageURI(Uri.parse(imageUrl))
+                    }
+                } else {
+                    Toast.makeText(this, "게시글을 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "게시글 불러오기 실패", Toast.LENGTH_SHORT).show()
+            }
     }
 
     private fun fetchUserProfile() {
@@ -194,10 +227,8 @@ class Community_Write_Activity : AppCompatActivity() {
         nickname: String?,
         profileImageUrl: String?
     ) {
-        // Use the placeholder image if imageUrl is null
         val finalImageUrl = imageUrl ?: getUriFromDrawable(R.drawable.sample_image_placeholder).toString()
 
-        // Formatting the current time as "yy.MM.dd HH:mm"
         val dateFormat = SimpleDateFormat("yy.MM.dd HH:mm", Locale.getDefault())
         val currentDateTime = dateFormat.format(System.currentTimeMillis())
 
@@ -213,20 +244,35 @@ class Community_Write_Activity : AppCompatActivity() {
             "location" to location,
             "nickname" to nickname,
             "profileImageUrl" to profileImageUrl,
-            "createdAt" to currentDateTime // Add createdAt field
+            "createdAt" to currentDateTime
         )
 
-        FirebaseFirestore.getInstance().collection("posts")
-            .add(post)
-            .addOnSuccessListener {
-                Toast.makeText(this, "게시글이 등록되었습니다.", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, Community_Activity::class.java)
-                startActivity(intent)
-                finish()
-            }
-            .addOnFailureListener {
-                Toast.makeText(this, "게시글 등록 실패", Toast.LENGTH_SHORT).show()
-            }
+        val firestore = FirebaseFirestore.getInstance()
+        if (postId != null) {
+            firestore.collection("posts").document(postId!!)
+                .set(post)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "게시글이 수정되었습니다.", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, Community_Activity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "게시글 수정 실패", Toast.LENGTH_SHORT).show()
+                }
+        } else {
+            firestore.collection("posts")
+                .add(post)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "게시글이 등록되었습니다.", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, Community_Activity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "게시글 등록 실패", Toast.LENGTH_SHORT).show()
+                }
+        }
     }
 
     private fun getUriFromDrawable(drawableId: Int): Uri {
