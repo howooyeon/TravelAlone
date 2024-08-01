@@ -71,48 +71,33 @@ class Community_Activity : AppCompatActivity() {
         loadPosts()
 
         locateButton.setOnClickListener {
-            val intent = Intent(
-                this@Community_Activity,
-                Locate_Activity::class.java
-            )
+            val intent = Intent(this, Locate_Activity::class.java)
             startActivity(intent)
         }
 
         travbotButton.setOnClickListener {
-            val intent = Intent(
-                this@Community_Activity,
-                Travbot_activity::class.java
-            )
+            val intent = Intent(this, Travbot_activity::class.java)
             startActivity(intent)
         }
 
         homeButton.setOnClickListener {
-            val intent = Intent(
-                this@Community_Activity,
-                Home_Activity::class.java
-            )
+            val intent = Intent(this, Home_Activity::class.java)
             startActivity(intent)
         }
 
         communityButton.setOnClickListener {
-            val intent = Intent(
-                this@Community_Activity,
-                Community_Activity::class.java
-            )
+            val intent = Intent(this, Community_Activity::class.java)
             startActivity(intent)
         }
 
         mypageButton.setOnClickListener {
-            val intent = Intent(
-                this@Community_Activity,
-                Mypage_Activity::class.java
-            )
+            val intent = Intent(this, Mypage_Activity::class.java)
             startActivity(intent)
         }
 
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener {
-            val intent = Intent(this, Community_Select_Activity::class.java)
+            val intent = Intent(this, Community_Write_Activity::class.java)
             startActivity(intent)
         }
     }
@@ -124,6 +109,7 @@ class Community_Activity : AppCompatActivity() {
                 val communityPostList = arrayListOf<CommunityPostListItem>()
                 for (document: QueryDocumentSnapshot in result) {
                     val post = document.toObject(CommunityPostListItem::class.java)
+                    post.id = document.id // Set the Firestore document ID
                     communityPostList.add(post)
                 }
                 val communitypostadapter = CommunityPostListAdapter(

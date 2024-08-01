@@ -54,9 +54,13 @@ class CommunityPostListAdapter(
                 profileImageView.setImageResource(R.drawable.samplepro)
             }
 
-            // Set up item click listener
+            // Set the post item as the tag of the view
+            view.tag = it
+
+            // Use the tag to get the post item when the view is clicked
             view.setOnClickListener {
-                post?.let { itemClickListener(it) }
+                val clickedPost = view.tag as? CommunityPostListItem
+                clickedPost?.let { itemClickListener(it) }
             }
         }
 
