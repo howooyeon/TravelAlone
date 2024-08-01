@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.text.format.DateFormat
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
@@ -25,6 +26,8 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.kakao.sdk.user.UserApiClient
+import java.text.SimpleDateFormat
+import java.util.Locale
 import java.util.UUID
 
 class Community_Write_Activity : AppCompatActivity() {
@@ -194,6 +197,10 @@ class Community_Write_Activity : AppCompatActivity() {
         // Use the placeholder image if imageUrl is null
         val finalImageUrl = imageUrl ?: getUriFromDrawable(R.drawable.sample_image_placeholder).toString()
 
+        // Formatting the current time as "yy.MM.dd HH:mm"
+        val dateFormat = SimpleDateFormat("yy.MM.dd HH:mm", Locale.getDefault())
+        val currentDateTime = dateFormat.format(System.currentTimeMillis())
+
         val post = hashMapOf(
             "title" to title,
             "content" to content,
@@ -205,7 +212,8 @@ class Community_Write_Activity : AppCompatActivity() {
             "date" to date,
             "location" to location,
             "nickname" to nickname,
-            "profileImageUrl" to profileImageUrl
+            "profileImageUrl" to profileImageUrl,
+            "createdAt" to currentDateTime // Add createdAt field
         )
 
         FirebaseFirestore.getInstance().collection("posts")
@@ -225,10 +233,11 @@ class Community_Write_Activity : AppCompatActivity() {
         val resources = resources
         return Uri.parse(
             ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
-                resources.getResourcePackageName(drawableId) + '/' +
-                resources.getResourceTypeName(drawableId) + '/' +
-                resources.getResourceEntryName(drawableId))
+                    resources.getResourcePackageName(drawableId) + '/' +
+                    resources.getResourceTypeName(drawableId) + '/' +
+                    resources.getResourceEntryName(drawableId))
     }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
