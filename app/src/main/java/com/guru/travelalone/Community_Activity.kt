@@ -2,21 +2,24 @@ package com.guru.travelalone
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import android.widget.ImageButton
+import android.widget.ListView
 import android.widget.Spinner
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import android.widget.ArrayAdapter
-import android.widget.ListView
-import androidx.core.content.ContextCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.guru.travelalone.adapter.CommunityPostListAdapter
 import com.guru.travelalone.item.CommunityPostListItem
-import com.guru.travelalone.item.MypageTripListItem
 
 class Community_Activity : AppCompatActivity() {
+
+    // Firebase Firestore instance
+    private lateinit var firestore: FirebaseFirestore
 
     // 하단바 ----------
     lateinit var homeButton: ImageButton
@@ -29,7 +32,7 @@ class Community_Activity : AppCompatActivity() {
     // Spinner 추가
     lateinit var regionSpinner: Spinner
 
-    lateinit var communitypostlistview : ListView
+    lateinit var communitypostlistview: ListView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +43,9 @@ class Community_Activity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        // Initialize Firestore
+        firestore = FirebaseFirestore.getInstance()
 
         // 하단바 ----------
         homeButton = findViewById(R.id.homeButton)
@@ -60,14 +66,9 @@ class Community_Activity : AppCompatActivity() {
         regionSpinner.adapter = adapter
 
         communitypostlistview = findViewById(R.id.communitypostlistview)
-        var communitypostList = arrayListOf<CommunityPostListItem>(
-            CommunityPostListItem(ContextCompat.getDrawable(this, R.drawable.normal_1)!!, ContextCompat.getDrawable(this, R.drawable.samplepro)!!,"이름","제목", "본문", "날짜"),
-            CommunityPostListItem(ContextCompat.getDrawable(this, R.drawable.normal_1)!!, ContextCompat.getDrawable(this, R.drawable.samplepro)!!,"이름","제목", "본문", "날짜")
-        )
-        communitypostList.add(CommunityPostListItem(ContextCompat.getDrawable(this, R.drawable.normal_1)!!, ContextCompat.getDrawable(this, R.drawable.samplepro)!!,"이름","제목", "본문", "날짜"))
 
-        val communitypostadapter = CommunityPostListAdapter(this, communitypostList)
-        communitypostlistview.adapter = communitypostadapter
+        // Load posts from Firestore
+        loadPosts()
 
         locateButton.setOnClickListener {
             val intent = Intent(
@@ -114,5 +115,22 @@ class Community_Activity : AppCompatActivity() {
             val intent = Intent(this, Community_Select_Activity::class.java)
             startActivity(intent)
         }
+    }
+
+    private fun loadPosts() {
+        val communityPostList = arrayListOf<CommunityPostListItem>()
+        firestore.collection("posts")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document: QueryDocumentSnapshot in result) {
+                    val post = document.toObject(CommunityPostListItem::class.java)
+                    communityPostList.add(post)
+                }
+                val communitypostadapter = CommunityPostListAdapter(this, communityPostList)
+                communitypostlistview.adapter = communitypostadapter
+            }
+            .addOnFailureListener { exception ->
+                // Handle the error
+            }
     }
 }
