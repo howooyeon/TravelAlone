@@ -34,6 +34,7 @@ class Community_Detail_Activity : AppCompatActivity() {
         val timeTextView: TextView = findViewById(R.id.time)
         val titleTextView: TextView = findViewById(R.id.title)
         val contentTextView: TextView = findViewById(R.id.sub)
+        val textView2: TextView = findViewById(R.id.textView2)
 
         // Load post details
         postId?.let {
@@ -76,12 +77,14 @@ class Community_Detail_Activity : AppCompatActivity() {
                 }
         }
 
-        // 예를 들어, 게시글 ID는 Intent에서 받아온다고 가정
-//        val postId = intent.getStringExtra("postId")
-
-        val textView2 = findViewById<TextView>(R.id.textView2)
         textView2.setOnClickListener {
-            postId?.let { id -> openEditPostActivity(id) }
+            postId?.let { id ->
+                // Update the post to set image URLs to null
+                updatePostImagesToNull(id)
+
+                // Start the edit activity
+                openEditPostActivity(id)
+            }
         }
     }
 
@@ -89,5 +92,18 @@ class Community_Detail_Activity : AppCompatActivity() {
         val intent = Intent(this, Community_Write_Activity::class.java)
         intent.putExtra("postId", postId)
         startActivity(intent)
+    }
+
+    private fun updatePostImagesToNull(postId: String) {
+        val postRef = firestore.collection("posts").document(postId)
+        postRef.update(
+            mapOf(
+                "imageUrl" to null,
+            )
+        ).addOnSuccessListener {
+            // Successfully updated the document
+        }.addOnFailureListener { exception ->
+            // Handle the error
+        }
     }
 }
