@@ -103,11 +103,11 @@ class Community_Write_Activity : AppCompatActivity() {
         }
 
         submitButton.setOnClickListener {
-            submitPost()
+            submitPost(date, location)
         }
     }
 
-    private fun submitPost() {
+    private fun submitPost(date: String?, location: String?) {
         val title = titleEditText.text.toString()
         val content = contentEditText.text.toString()
         val isPrivate = privacySwitch.isChecked
@@ -125,7 +125,7 @@ class Community_Write_Activity : AppCompatActivity() {
                 }
                 userId = user?.id.toString()
                 userEmail = user?.kakaoAccount?.email
-                savePostToFirestore(title, content, isPrivate, null, userId, userEmail)
+                savePostToFirestore(title, content, isPrivate, null, userId, userEmail, date, location)
             }
             return
         }
@@ -138,18 +138,18 @@ class Community_Write_Activity : AppCompatActivity() {
                 .addOnSuccessListener { taskSnapshot ->
                     taskSnapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener { uri ->
                         val imageUrl = uri.toString()
-                        savePostToFirestore(title, content, isPrivate, imageUrl, userId, userEmail)
+                        savePostToFirestore(title, content, isPrivate, imageUrl, userId, userEmail, date, location)
                     }
                 }
                 .addOnFailureListener {
                     Toast.makeText(this, "이미지 업로드 실패", Toast.LENGTH_SHORT).show()
                 }
         } else {
-            savePostToFirestore(title, content, isPrivate, null, userId, userEmail)
+            savePostToFirestore(title, content, isPrivate, null, userId, userEmail, date, location)
         }
     }
 
-    private fun savePostToFirestore(title: String, content: String, isPrivate: Boolean, imageUrl: String?, userId: String?, userEmail: String?) {
+    private fun savePostToFirestore(title: String, content: String, isPrivate: Boolean, imageUrl: String?, userId: String?, userEmail: String?, date: String?, location: String?) {
         val post = hashMapOf(
             "title" to title,
             "content" to content,
@@ -157,7 +157,9 @@ class Community_Write_Activity : AppCompatActivity() {
             "imageUrl" to imageUrl,
             "timestamp" to System.currentTimeMillis(),
             "userId" to userId,
-            "userEmail" to userEmail
+            "userEmail" to userEmail,
+            "date" to date,
+            "location" to location
         )
 
         FirebaseFirestore.getInstance().collection("posts")
@@ -192,4 +194,3 @@ class Community_Write_Activity : AppCompatActivity() {
         private const val PERMISSION_REQUEST_CODE = 2
     }
 }
-
