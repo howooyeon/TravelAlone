@@ -89,7 +89,7 @@
                             android:padding="10dp"
                             android:text="10000원"
                             android:textColor="@color/black"
-                            android:textSize="30sp" />
+                            android:textSize="27sp" />
 
                         <TextView
                             android:id="@+id/leftmoney"
@@ -105,7 +105,7 @@
                             android:padding="10dp"
                             android:text="10000원"
                             android:textColor="@color/black"
-                            android:textSize="30sp" />
+                            android:textSize="27sp" />
 
                     </LinearLayout>
 
