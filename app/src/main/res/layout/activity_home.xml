@@ -545,6 +545,7 @@
 
          <!--FAB-->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:visibility="invisible"
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -559,6 +560,7 @@
             android:contentDescription="fab button"/>
 
         <androidx.cardview.widget.CardView
+            android:visibility="invisible"
             android:id="@+id/cd_trip"
             android:layout_width="match_parent"
             android:layout_height="75dp"
@@ -589,7 +591,7 @@
                     android:id="@+id/trip_title"
                     android:layout_width="250dp"
                     android:layout_height="25dp"
-                    android:text="나혼자 제주도 여행"
+                    android:text="Title"
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     android:layout_marginBottom="3dp"/>
@@ -601,7 +603,7 @@
                         android:id="@+id/trip_date"
                         android:layout_width="150dp"
                         android:layout_height="20dp"
-                        android:text="8.19(월) - 8.22(목)"
+                        android:text="date"
                         android:textSize="12sp"
                         android:textColor="@color/white"/>
                     <TextView
@@ -611,7 +613,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="110dp"
                         android:layout_marginRight="5dp"
-                        android:text="통영/거제/남해"
+                        android:text="location"
                         android:textSize="12sp"
                         android:textColor="@color/white"/>
                 </LinearLayout>
