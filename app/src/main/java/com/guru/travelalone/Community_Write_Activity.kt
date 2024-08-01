@@ -38,6 +38,7 @@ class Community_Write_Activity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private var currentUser: FirebaseUser? = null
+    private var userNickname: String? = null
 
     private val openGalleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
@@ -58,12 +59,10 @@ class Community_Write_Activity : AppCompatActivity() {
             insets
         }
 
-        // Intent로부터 데이터 가져오기
         val title = intent.getStringExtra("title")
         val date = intent.getStringExtra("date")
         val location = intent.getStringExtra("location")
 
-        // Fragment로 데이터 전달
         if (savedInstanceState == null) {
             val fragment = CommunityWriteFragment.newInstance(title, date, location)
             supportFragmentManager.beginTransaction()
@@ -78,9 +77,11 @@ class Community_Write_Activity : AppCompatActivity() {
         privacySwitch = findViewById(R.id.switch2)
         submitButton = findViewById(R.id.bt_reg)
 
-        // Firebase Auth 초기화
         auth = FirebaseAuth.getInstance()
         currentUser = auth.currentUser
+
+        // 닉네임을 가져오는 메서드 호출
+        fetchUserNickname()
 
         imageButton.setOnClickListener {
             if (ContextCompat.checkSelfPermission(
@@ -107,6 +108,31 @@ class Community_Write_Activity : AppCompatActivity() {
         }
     }
 
+    private fun fetchUserNickname() {
+        if (currentUser != null) {
+            val email = currentUser?.email
+            FirebaseFirestore.getInstance().collection("members")
+                .whereEqualTo("login_id", email)
+                .get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        userNickname = document.getString("editnickname") ?: "닉네임 없음"
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "닉네임 가져오기 실패", Toast.LENGTH_SHORT).show()
+                }
+        } else {
+            UserApiClient.instance.me { user, error ->
+                if (error != null) {
+                    Toast.makeText(this, "Kakao 로그인 실패", Toast.LENGTH_SHORT).show()
+                } else if (user != null) {
+                    userNickname = user.kakaoAccount?.profile?.nickname ?: "닉네임 없음"
+                }
+            }
+        }
+    }
+
     private fun submitPost(date: String?, location: String?) {
         val title = titleEditText.text.toString()
         val content = contentEditText.text.toString()
@@ -125,7 +151,7 @@ class Community_Write_Activity : AppCompatActivity() {
                 }
                 userId = user?.id.toString()
                 userEmail = user?.kakaoAccount?.email
-                savePostToFirestore(title, content, isPrivate, null, userId, userEmail, date, location)
+                savePostToFirestore(title, content, isPrivate, null, userId, userEmail, date, location, userNickname)
             }
             return
         }
@@ -138,18 +164,18 @@ class Community_Write_Activity : AppCompatActivity() {
                 .addOnSuccessListener { taskSnapshot ->
                     taskSnapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener { uri ->
                         val imageUrl = uri.toString()
-                        savePostToFirestore(title, content, isPrivate, imageUrl, userId, userEmail, date, location)
+                        savePostToFirestore(title, content, isPrivate, imageUrl, userId, userEmail, date, location, userNickname)
                     }
                 }
                 .addOnFailureListener {
                     Toast.makeText(this, "이미지 업로드 실패", Toast.LENGTH_SHORT).show()
                 }
         } else {
-            savePostToFirestore(title, content, isPrivate, null, userId, userEmail, date, location)
+            savePostToFirestore(title, content, isPrivate, null, userId, userEmail, date, location, userNickname)
         }
     }
 
-    private fun savePostToFirestore(title: String, content: String, isPrivate: Boolean, imageUrl: String?, userId: String?, userEmail: String?, date: String?, location: String?) {
+    private fun savePostToFirestore(title: String, content: String, isPrivate: Boolean, imageUrl: String?, userId: String?, userEmail: String?, date: String?, location: String?, nickname: String?) {
         val post = hashMapOf(
             "title" to title,
             "content" to content,
@@ -159,7 +185,8 @@ class Community_Write_Activity : AppCompatActivity() {
             "userId" to userId,
             "userEmail" to userEmail,
             "date" to date,
-            "location" to location
+            "location" to location,
+            "nickname" to nickname
         )
 
         FirebaseFirestore.getInstance().collection("posts")
@@ -168,7 +195,7 @@ class Community_Write_Activity : AppCompatActivity() {
                 Toast.makeText(this, "게시글이 등록되었습니다.", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, Community_Activity::class.java)
                 startActivity(intent)
-                finish() // 현재 Activity를 종료합니다.
+                finish()
             }
             .addOnFailureListener {
                 Toast.makeText(this, "게시글 등록 실패", Toast.LENGTH_SHORT).show()
