@@ -97,7 +97,7 @@ class Community_Activity : AppCompatActivity() {
 
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener {
-            val intent = Intent(this, Community_Write_Activity::class.java)
+            val intent = Intent(this, Community_Select_Activity::class.java)
             startActivity(intent)
         }
     }
