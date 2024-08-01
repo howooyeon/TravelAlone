@@ -1,6 +1,7 @@
 package com.guru.travelalone
 
 import android.Manifest
+import android.content.ContentResolver
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -178,12 +179,26 @@ class Community_Write_Activity : AppCompatActivity() {
         }
     }
 
-    private fun savePostToFirestore(title: String, content: String, isPrivate: Boolean, imageUrl: String?, userId: String?, userEmail: String?, date: String?, location: String?, nickname: String?, profileImageUrl: String?) {
+    private fun savePostToFirestore(
+        title: String,
+        content: String,
+        isPrivate: Boolean,
+        imageUrl: String?,
+        userId: String?,
+        userEmail: String?,
+        date: String?,
+        location: String?,
+        nickname: String?,
+        profileImageUrl: String?
+    ) {
+        // Use the placeholder image if imageUrl is null
+        val finalImageUrl = imageUrl ?: getUriFromDrawable(R.drawable.sample_image_placeholder).toString()
+
         val post = hashMapOf(
             "title" to title,
             "content" to content,
             "isPrivate" to isPrivate,
-            "imageUrl" to imageUrl,
+            "imageUrl" to finalImageUrl,
             "timestamp" to System.currentTimeMillis(),
             "userId" to userId,
             "userEmail" to userEmail,
@@ -206,6 +221,14 @@ class Community_Write_Activity : AppCompatActivity() {
             }
     }
 
+    private fun getUriFromDrawable(drawableId: Int): Uri {
+        val resources = resources
+        return Uri.parse(
+            ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
+                resources.getResourcePackageName(drawableId) + '/' +
+                resources.getResourceTypeName(drawableId) + '/' +
+                resources.getResourceEntryName(drawableId))
+    }
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
