@@ -6,7 +6,11 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.Switch
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -19,9 +23,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import java.util.*
-
 import com.kakao.sdk.user.UserApiClient
+import java.util.UUID
 
 class Community_Write_Activity : AppCompatActivity() {
 
@@ -53,6 +56,19 @@ class Community_Write_Activity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+
+        // Intent로부터 데이터 가져오기
+        val title = intent.getStringExtra("title")
+        val date = intent.getStringExtra("date")
+        val location = intent.getStringExtra("location")
+
+        // Fragment로 데이터 전달
+        if (savedInstanceState == null) {
+            val fragment = CommunityWriteFragment.newInstance(title, date, location)
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .commit()
         }
 
         imageButton = findViewById(R.id.imageButton)

@@ -93,7 +93,7 @@ class ListViewTest_Activity : AppCompatActivity(){
                             "포항/안동" -> R.drawable.img_pohang_andong
                             else -> R.color.gray // 기본 이미지 설정
                         }
-                        postList.add(MypageTripListItem(ContextCompat.getDrawable(this, drawableRes)!!, str_title, str_date))
+                        postList.add(MypageTripListItem(ContextCompat.getDrawable(this, drawableRes)!!, str_title, str_date, str_location))
                         Log.d("FirestoreData", "Document data: $document")
                     }
 

@@ -1,7 +1,9 @@
 package com.guru.travelalone
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -16,7 +18,7 @@ import java.util.Locale
 
 class Community_Select_Activity : AppCompatActivity() {
 
-    lateinit var mypagetriplistview : ListView
+    lateinit var mypagetriplistview: ListView
 
     // Firestore 인스턴스 초기화
     val db = FirebaseFirestore.getInstance()
@@ -73,7 +75,7 @@ class Community_Select_Activity : AppCompatActivity() {
                             "포항/안동" -> R.drawable.img_pohang_andong
                             else -> R.color.gray // 기본 이미지 설정
                         }
-                        postList.add(MypageTripListItem(ContextCompat.getDrawable(this, drawableRes)!!, str_title, str_date))
+                        postList.add(MypageTripListItem(ContextCompat.getDrawable(this, drawableRes)!!, str_title, str_date, str_location))
                         Log.d("FirestoreData", "Document data: $document")
                     }
 
@@ -82,6 +84,16 @@ class Community_Select_Activity : AppCompatActivity() {
                 .addOnFailureListener { exception ->
                     Toast.makeText(this, "Error getting documents: $exception", Toast.LENGTH_SHORT).show()
                 }
+        }
+
+        // ListView 아이템 클릭 리스너 설정
+        mypagetriplistview.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+            val selectedTrip = postList[position]
+            val intent = Intent(this, Community_Write_Activity::class.java)
+            intent.putExtra("title", selectedTrip.title)
+            intent.putExtra("date", selectedTrip.date)
+            intent.putExtra("location", selectedTrip.location)
+            startActivity(intent)
         }
     }
 }
