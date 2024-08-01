@@ -39,6 +39,7 @@ class Community_Write_Activity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private var currentUser: FirebaseUser? = null
     private var userNickname: String? = null
+    private var userProfileImageUrl: String? = null
 
     private val openGalleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
@@ -80,8 +81,8 @@ class Community_Write_Activity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         currentUser = auth.currentUser
 
-        // 닉네임을 가져오는 메서드 호출
-        fetchUserNickname()
+        // 닉네임과 프로필 이미지 URL을 가져오는 메서드 호출
+        fetchUserProfile()
 
         imageButton.setOnClickListener {
             if (ContextCompat.checkSelfPermission(
@@ -108,7 +109,7 @@ class Community_Write_Activity : AppCompatActivity() {
         }
     }
 
-    private fun fetchUserNickname() {
+    private fun fetchUserProfile() {
         if (currentUser != null) {
             val email = currentUser?.email
             FirebaseFirestore.getInstance().collection("members")
@@ -117,10 +118,11 @@ class Community_Write_Activity : AppCompatActivity() {
                 .addOnSuccessListener { documents ->
                     for (document in documents) {
                         userNickname = document.getString("editnickname") ?: "닉네임 없음"
+                        userProfileImageUrl = document.getString("profileImageUrl") ?: ""
                     }
                 }
                 .addOnFailureListener { e ->
-                    Toast.makeText(this, "닉네임 가져오기 실패", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "프로필 정보 가져오기 실패", Toast.LENGTH_SHORT).show()
                 }
         } else {
             UserApiClient.instance.me { user, error ->
@@ -128,6 +130,7 @@ class Community_Write_Activity : AppCompatActivity() {
                     Toast.makeText(this, "Kakao 로그인 실패", Toast.LENGTH_SHORT).show()
                 } else if (user != null) {
                     userNickname = user.kakaoAccount?.profile?.nickname ?: "닉네임 없음"
+                    // Kakao SDK에는 프로필 이미지 URL을 제공하지 않으므로 별도의 처리 필요
                 }
             }
         }
@@ -151,7 +154,7 @@ class Community_Write_Activity : AppCompatActivity() {
                 }
                 userId = user?.id.toString()
                 userEmail = user?.kakaoAccount?.email
-                savePostToFirestore(title, content, isPrivate, null, userId, userEmail, date, location, userNickname)
+                savePostToFirestore(title, content, isPrivate, null, userId, userEmail, date, location, userNickname, userProfileImageUrl)
             }
             return
         }
@@ -164,18 +167,18 @@ class Community_Write_Activity : AppCompatActivity() {
                 .addOnSuccessListener { taskSnapshot ->
                     taskSnapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener { uri ->
                         val imageUrl = uri.toString()
-                        savePostToFirestore(title, content, isPrivate, imageUrl, userId, userEmail, date, location, userNickname)
+                        savePostToFirestore(title, content, isPrivate, imageUrl, userId, userEmail, date, location, userNickname, userProfileImageUrl)
                     }
                 }
                 .addOnFailureListener {
                     Toast.makeText(this, "이미지 업로드 실패", Toast.LENGTH_SHORT).show()
                 }
         } else {
-            savePostToFirestore(title, content, isPrivate, null, userId, userEmail, date, location, userNickname)
+            savePostToFirestore(title, content, isPrivate, null, userId, userEmail, date, location, userNickname, userProfileImageUrl)
         }
     }
 
-    private fun savePostToFirestore(title: String, content: String, isPrivate: Boolean, imageUrl: String?, userId: String?, userEmail: String?, date: String?, location: String?, nickname: String?) {
+    private fun savePostToFirestore(title: String, content: String, isPrivate: Boolean, imageUrl: String?, userId: String?, userEmail: String?, date: String?, location: String?, nickname: String?, profileImageUrl: String?) {
         val post = hashMapOf(
             "title" to title,
             "content" to content,
@@ -186,7 +189,8 @@ class Community_Write_Activity : AppCompatActivity() {
             "userEmail" to userEmail,
             "date" to date,
             "location" to location,
-            "nickname" to nickname
+            "nickname" to nickname,
+            "profileImageUrl" to profileImageUrl
         )
 
         FirebaseFirestore.getInstance().collection("posts")
