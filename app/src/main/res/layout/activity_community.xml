@@ -24,20 +24,24 @@
 
             <!-- 밑에서 부터 LinearLayout 추가해서 코드 작성하시면 됩니다 -->
             <Spinner
-                android:id="@+id/region"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/category_region"
-                android:minWidth="80dp"
-                android:minHeight="25dp"
-                android:padding="8dp" />
+                android:id="@+id/location_spinner"
+                android:layout_width="160dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="15dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/spinner_design_yellow"
+                android:spinnerMode="dropdown"
+                android:paddingStart="8dp" />
 
-            <LinearLayout
+            <ListView
+                android:layout_marginTop="20sp"
+                android:layout_marginBottom="50sp"
+                android:id="@+id/communitypostlistview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-            </LinearLayout>
+                android:layout_height="wrap_content"
+                android:dividerHeight="50px"
+                android:divider="@null"
+                />
 
         </LinearLayout>
     </ScrollView>
@@ -46,6 +50,20 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="90dp"
+            android:backgroundTint="#1D5D9B"
+            android:contentDescription="fab button"
+            android:src="@drawable/pen"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@null" />
+
         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="428dp"
