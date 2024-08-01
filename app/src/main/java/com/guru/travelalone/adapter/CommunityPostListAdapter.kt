@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.guru.travelalone.R
 import com.guru.travelalone.item.CommunityPostListItem
-import com.squareup.picasso.Picasso
 
 class CommunityPostListAdapter(context: Context, private val posts: List<CommunityPostListItem>)
     : ArrayAdapter<CommunityPostListItem>(context, 0, posts) {
@@ -26,21 +26,38 @@ class CommunityPostListAdapter(context: Context, private val posts: List<Communi
         val contentTextView: TextView = view.findViewById(R.id.sub)
 
         post?.let {
-            titleTextView.text = it.title
-            contentTextView.text = it.content
-            dateTextView.text = it.date
+            // 닉네임 설정
             nameTextView.text = it.nickname // 닉네임 설정
 
+            // 제목 설정
+            titleTextView.text = it.title
+
+            // 내용 설정
+            contentTextView.text = it.content
+
+            // 날짜 설정
+            dateTextView.text = it.date
+
+            // 이미지 처리
             if (!it.imageUrl.isNullOrEmpty()) {
-                Picasso.get().load(it.imageUrl).into(imageView)
+                Glide.with(context)
+                    .load(it.imageUrl)
+                    .placeholder(R.drawable.sample_image_placeholder) // 로딩 중 표시할 기본 이미지
+                    .error(R.drawable.sample_image_placeholder) // 로딩 실패 시 표시할 이미지
+                    .into(imageView)
             } else {
                 imageView.visibility = View.GONE
             }
 
+            // 프로필 이미지 처리
             if (!it.profileImageUrl.isNullOrEmpty()) {
-                Picasso.get().load(it.profileImageUrl).into(profileImageView)
+                Glide.with(context)
+                    .load(it.profileImageUrl)
+                    .placeholder(R.drawable.samplepro) // 로딩 중 표시할 기본 이미지
+                    .error(R.drawable.samplepro) // 로딩 실패 시 표시할 이미지
+                    .into(profileImageView)
             } else {
-                profileImageView.setImageResource(R.color.gray) // 기본 이미지 설정
+                profileImageView.setImageResource(R.drawable.samplepro) // 기본 프로필 이미지 설정
             }
         }
 
