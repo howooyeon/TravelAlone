@@ -2,6 +2,8 @@ package com.guru.travelalone
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ImageButton
 import android.widget.ListView
@@ -67,8 +69,17 @@ class Community_Activity : AppCompatActivity() {
 
         communitypostlistview = findViewById(R.id.communitypostlistview)
 
-        // Load posts from Firestore
-        loadPosts()
+        // Load posts from Firestore based on selected region
+        regionSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val selectedRegion = parent.getItemAtPosition(position).toString()
+                loadPosts(selectedRegion)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // Do nothing
+            }
+        }
 
         locateButton.setOnClickListener {
             val intent = Intent(this, Locate_Activity::class.java)
@@ -102,9 +113,10 @@ class Community_Activity : AppCompatActivity() {
         }
     }
 
-    private fun loadPosts() {
+    private fun loadPosts(selectedRegion: String) {
         firestore.collection("posts")
-            .whereEqualTo("isPublic", true) // 공개된 게시글만 가져오기
+            .whereEqualTo("isPublic", true)
+            .whereEqualTo("location", selectedRegion)
             .get()
             .addOnSuccessListener { result ->
                 val communityPostList = arrayListOf<CommunityPostListItem>()
