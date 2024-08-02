@@ -17,26 +17,25 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import com.kakao.sdk.user.UserApiClient
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-
-class TripDate_Activity: AppCompatActivity() {
+class TripDate_Activity : AppCompatActivity() {
     val db = FirebaseFirestore.getInstance()
     val auth = FirebaseAuth.getInstance()
-    private lateinit var bt_back : ImageButton
-    private lateinit var spinner : Spinner
-    private lateinit var bt_reg : Button
-    private lateinit var et_title : EditText
+    private lateinit var bt_back: ImageButton
+    private lateinit var spinner: Spinner
+    private lateinit var bt_reg: Button
+    private lateinit var et_title: EditText
     private lateinit var calendarView: CalendarView
     private lateinit var rangeTextView: TextView
     private var startDate: Long? = null
     private var endDate: Long? = null
+    private var str_spinner: String = ""  // 클래스 멤버 변수로 선언
     private val dateFormat = SimpleDateFormat("MM월 dd일", Locale.KOREAN)
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,15 +49,12 @@ class TripDate_Activity: AppCompatActivity() {
         bt_back = findViewById(R.id.back)
         et_title = findViewById(R.id.et_title)
         spinner = findViewById(R.id.location_spinner)
-        var str_spinner = ""
         calendarView = findViewById(R.id.calendarView)
         rangeTextView = findViewById(R.id.rangeTextView)
         bt_reg = findViewById(R.id.bt_reg)
 
         bt_back.setOnClickListener {
-            val intent = Intent(
-                this, Home_Activity::class.java
-            )
+            val intent = Intent(this, Home_Activity::class.java)
             startActivity(intent)
         }
 
@@ -67,83 +63,77 @@ class TripDate_Activity: AppCompatActivity() {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 str_spinner = parent.getItemAtPosition(position).toString()
             }
-            // 아무 항목도 선택되지 않았을 때
+
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
         // 캘린더뷰 : 날짜 선택
         calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
-            val selectedDate = Calendar.getInstance()
-            selectedDate.set(year, month, dayOfMonth)
-            // 현재 날짜 선택
+            val selectedDate = Calendar.getInstance().apply {
+                set(year, month, dayOfMonth)
+            }
             val selectedDateInMillis = selectedDate.timeInMillis
 
-            // 사용자가 날짜를 클릭했을 때 실행되는 코드
             if (startDate == null || (startDate != null && endDate != null)) {
-                // startDate가 설정되지 않았거나, 이미 startDate와 endDate가 모두 설정된 경우
-                // 새로운 범위를 시작하기 위해 startDate를 현재 선택된 날짜로 설정하고 endDate는 null로 초기화
                 startDate = selectedDateInMillis
                 endDate = null
-                // 선택된 startDate를 표시
                 rangeTextView.text = "${dateFormat.format(startDate)}"
-            }
-            else if (startDate != null && endDate == null) {
-                // startDate는 설정되어 있고, endDate는 아직 설정되지 않은 경우
+            } else if (startDate != null && endDate == null) {
                 if (selectedDateInMillis > startDate!!) {
-                    // 현재 선택된 날짜가 startDate 이후인 경우
-                    // endDate를 현재 선택된 날짜로 설정
                     endDate = selectedDateInMillis
                     rangeTextView.text = "${dateFormat.format(startDate)}   ~   ${dateFormat.format(endDate)}"
                 } else {
-                    // 현재 선택된 날짜가 startDate 이전인 경우
-                    // startDate를 현재 선택된 날짜로 재설정
                     startDate = selectedDateInMillis
                     rangeTextView.text = "${dateFormat.format(startDate)}"
                 }
             }
         }
 
-
-
         bt_reg.setOnClickListener {
-
             val str_title = et_title.text.toString()
 
             if (str_title.isNotEmpty() && str_spinner != "여행, 어디로 떠나시나요?" && startDate != null) {
-
-                // Firestore에 저장할 데이터
                 val currentUser = auth.currentUser
-                Log.d("UserID", "No valid documents found for user_id: $currentUser")
                 if (currentUser != null) {
+                    // Firebase 인증된 사용자일 경우
                     val userId = currentUser.uid
-
-                    // Firestore에 저장할 데이터
-                    val tripData = hashMapOf(
-                        "title" to str_title,
-                        "location" to str_spinner,
-                        "start_date" to startDate,
-                        "end_date" to endDate,
-                        "user_id" to userId
-                    )
-
-                    // Firestore에 데이터 추가
-                    db.collection("tripdate")
-                        .add(tripData)
-                        .addOnSuccessListener { documentReference ->
-                            // 데이터 추가 성공 시 실행
-                            val intent = Intent(this, Home_Activity::class.java)
-                            startActivity(intent)
-                        }
-                        .addOnFailureListener { e ->
-                            // 데이터 추가 실패 시 실행
-                            Toast.makeText(this, "데이터 저장 실패: ${e.message}", Toast.LENGTH_SHORT).show()
-                        }
+                    saveTripData(userId)
                 } else {
-                    Toast.makeText(this, "사용자가 로그인되어 있지 않습니다.", Toast.LENGTH_SHORT).show()
+                    // 카카오 로그인 상태 확인
+                    UserApiClient.instance.me { user, error ->
+                        if (error != null) {
+                            Log.e("Kakao", "사용자 정보 요청 실패", error)
+                            Toast.makeText(this, "카카오 사용자 정보 요청 실패", Toast.LENGTH_SHORT).show()
+                        } else if (user != null) {
+                            // KakaoUID 받아와서 값 넘김 DB에서 동일하게 UID로 불러오기 가능
+                            val kakaoUserId = user?.id.toString()
+                            saveTripData(kakaoUserId)
+                        }
+                    }
                 }
             } else {
                 Toast.makeText(this, "모든 항목을 입력해주세요", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun saveTripData(userId: String) {
+        val tripData = hashMapOf(
+            "title" to et_title.text.toString(),
+            "location" to str_spinner,
+            "start_date" to startDate,
+            "end_date" to endDate,
+            "user_id" to userId
+        )
+
+        db.collection("tripdate")
+            .add(tripData)
+            .addOnSuccessListener { documentReference ->
+                val intent = Intent(this, Home_Activity::class.java)
+                startActivity(intent)
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "데이터 저장 실패: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
     }
 }
