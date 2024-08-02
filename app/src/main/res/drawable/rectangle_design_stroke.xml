@@ -1,0 +1,24 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <layer-list>
+            <!-- 바깥선 정의 -->
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="#1D5D9B" /> <!-- 바깥선 색상 설정 -->
+                    <corners android:radius="19dp" />
+                </shape>
+            </item>
+            <!-- 내부 모양 정의 -->
+            <item android:left="3dp" android:top="3dp" android:right="3dp" android:bottom="3dp">
+                <shape android:shape="rectangle">
+                    <solid android:color="#FFFFFF" />
+                    <padding
+                        android:top="6dp"
+                        android:bottom="6dp"
+                        android:right="6dp" />
+                    <corners android:radius="18dp" /> <!-- 내부 모양의 둥근 모서리 설정 (바깥선과 약간 차이 둠) -->
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</selector>

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ListView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -39,6 +40,7 @@ class Fragment2 : Fragment() {
         val view = inflater.inflate(R.layout.fragment_2, container, false)
         var mypagetriplistview : ListView = view.findViewById(R.id.mypagetriplistview)
         val postList = arrayListOf<MypageTripListItem>()
+        val tripIds = mutableListOf<String>()
         val mypagetripadapter = MypageTripListAdapter(requireContext(), postList)
         mypagetriplistview.adapter = mypagetripadapter
 
@@ -56,6 +58,7 @@ class Fragment2 : Fragment() {
                 .addOnSuccessListener { result ->
                     postList.clear() // 데이터가 중복되지 않도록 리스트를 초기화
                     for (document in result) {
+                        val str_id = document.id
                         val str_title = document.getString("title") ?: ""
                         val str_location = document.getString("location") ?: ""
                         val long_start_date = document.getLong("start_date") ?: 0L
@@ -84,6 +87,7 @@ class Fragment2 : Fragment() {
                             else -> R.color.gray // 기본 이미지 설정
                         }
                         postList.add(MypageTripListItem(ContextCompat.getDrawable(requireContext(), drawableRes)!!, str_title, str_date, str_location))
+                        tripIds.add(document.id)
                         Log.d("FirestoreData", "Document data: $document")
                     }
 
@@ -159,6 +163,44 @@ class Fragment2 : Fragment() {
             }
         }
 
+
+        fun showDeleteConfirmationDialog(position: Int) {
+            val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_delete_confirmation, null)
+
+            val alertDialog = AlertDialog.Builder(requireContext())
+                .setView(dialogView)
+                .create()
+
+            dialogView.findViewById<Button>(R.id.btnCancel).setOnClickListener {
+                alertDialog.dismiss()
+            }
+
+            dialogView.findViewById<Button>(R.id.btnDelete).setOnClickListener {
+                val selectedTripId = tripIds[position]
+                // Firestore에서 항목 삭제
+                db.collection("tripdate").document(selectedTripId)
+                    .delete()
+                    .addOnSuccessListener {
+                        tripIds.removeAt(position)
+                        postList.removeAt(position)
+                        mypagetripadapter.notifyDataSetChanged()
+                        Toast.makeText(requireContext(), "일정이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                        alertDialog.dismiss()
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(requireContext(), "Error deleting document: $e", Toast.LENGTH_SHORT).show()
+                        alertDialog.dismiss()
+                    }
+            }
+
+            alertDialog.show()
+        }
+
+        // 아이템 클릭 리스너 설정
+        mypagetriplistview.setOnItemClickListener { _, _, position, _ ->
+            // 클릭된 아이템 삭제
+            showDeleteConfirmationDialog(position)
+        }
 
         // TripDate 불러오면서 사용자 정보 조회
         fetchTripDate()
