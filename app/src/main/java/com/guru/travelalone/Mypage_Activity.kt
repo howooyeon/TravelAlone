@@ -172,6 +172,9 @@ class Mypage_Activity : AppCompatActivity() {
         // 초기 tab 세팅
         binding.tabLayoutContainer.setBackgroundResource(R.color.gray)
 
+        // 기본으로 첫 번째 탭이 선택된 상태로 시작
+        supportFragmentManager.beginTransaction().replace(R.id.frame, fragment1).commit()
+
         binding.tabLayoutContainer.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
 
@@ -179,21 +182,20 @@ class Mypage_Activity : AppCompatActivity() {
                     0 -> fragment1
                     1 -> fragment2
                     2 -> fragment3
-                    else -> null
+                    else -> fragment1
                 }
 
                 if (selected != null) {
                     supportFragmentManager.beginTransaction().replace(R.id.frame, selected).commit()
                 }
-                else
-                {
-                    supportFragmentManager.beginTransaction().replace(R.id.frame, fragment1).commit()
-                }
+
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
 
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
+        // 첫 번째 탭을 선택 상태로 설정
+        binding.tabLayoutContainer.getTabAt(0)?.select()
     }
 }

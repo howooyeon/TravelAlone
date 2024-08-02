@@ -43,8 +43,8 @@ class ListViewTest_Activity : AppCompatActivity(){
         // mypagepostList---------------------------------
         mypagepostlistview = findViewById(R.id.mypagepostlistview)
         var mypagepostList = arrayListOf<MypagePostListItem>(
-            MypagePostListItem(ContextCompat.getDrawable(this, R.drawable.img_gangneung_sokcho)!!, "제목", "본문"),
-            MypagePostListItem(ContextCompat.getDrawable(this, R.drawable.img_gangneung_sokcho)!!, "제목", "본문")
+           // MypagePostListItem(ContextCompat.getDrawable(this, R.drawable.img_gangneung_sokcho)!!, "제목", "본문"),
+            //MypagePostListItem(ContextCompat.getDrawable(this, R.drawable.img_gangneung_sokcho)!!, "제목", "본문")
         )
         val mypagepostadapter = MypagePostListAdapter(this, mypagepostList)
         mypagepostlistview.adapter = mypagepostadapter

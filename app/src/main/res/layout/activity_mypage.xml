@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="#ffffff">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -33,19 +34,25 @@
                     android:textColor="@color/black"
                     android:textSize="20sp" />
 
-                <ImageButton
+                <android.widget.Button
+                    android:layout_marginTop="20sp"
+                    android:stateListAnimator="@null"
                     android:id="@+id/editButton"
+                    android:layout_gravity="center"
                     android:layout_width="wrap_content"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/rectangle_design"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:text="프로필 수정"
+                    android:textSize="13dp"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="178dp"
-                    android:layout_marginTop="17dp"
                     android:layout_marginEnd="19dp"
                     android:layout_toEndOf="@+id/textView"
-                    android:contentDescription="수정하기"
-                    android:src="@drawable/edit_profile"
-                    android:background="@android:color/transparent" />
+                    android:textColor="@color/black"/>
+
             </RelativeLayout>
 
             <LinearLayout
@@ -89,6 +96,10 @@
                     android:id="@+id/tabLayoutContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/gray"
+                    app:tabSelectedTextColor="#1D5D9B"
+                    app:tabIndicatorColor="#1D5D9B"
+                    app:tabRippleColor="#111D5D9B"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"

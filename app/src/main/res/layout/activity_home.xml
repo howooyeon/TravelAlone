@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Home_Activity">
+    tools:context=".Home_Activity"
+    android:background="#ffffff">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -82,7 +83,7 @@
                                 android:layout_height="match_parent"
                                 android:scaleType="centerCrop"
                                 android:src="@color/white"
-                                app:tint="#40000000"
+                                app:tint="#20000000"
                                 android:tintMode="src_atop"/>
 
                             <TextView
@@ -126,7 +127,7 @@
                                 android:layout_height="match_parent"
                                 android:scaleType="centerCrop"
                                 android:src="@color/white"
-                                app:tint="#40000000"
+                                app:tint="#20000000"
                                 android:tintMode="src_atop"/>
 
                             <TextView
@@ -170,7 +171,7 @@
                                 android:layout_height="match_parent"
                                 android:scaleType="centerCrop"
                                 android:src="@color/white"
-                                app:tint="#40000000"
+                                app:tint="#20000000"
                                 android:tintMode="src_atop"/>
 
                             <TextView
@@ -213,7 +214,7 @@
                                 android:layout_height="match_parent"
                                 android:scaleType="centerCrop"
                                 android:src="@color/white"
-                                app:tint="#40000000"
+                                app:tint="#20000000"
                                 android:tintMode="src_atop"/>
 
                             <TextView
@@ -257,7 +258,7 @@
                                 android:layout_height="match_parent"
                                 android:scaleType="centerCrop"
                                 android:src="@color/white"
-                                app:tint="#40000000"
+                                app:tint="#20000000"
                                 android:tintMode="src_atop"/>
 
                             <TextView

@@ -39,7 +39,7 @@ class Community_Select_Activity : AppCompatActivity() {
         // Firestore에서 데이터 가져오기
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            val userId = currentUser.email
+            val userId = currentUser.uid
             Log.d("UserID", "Current User ID: $userId")
             db.collection("tripdate")
                 .whereEqualTo("user_id", userId)
