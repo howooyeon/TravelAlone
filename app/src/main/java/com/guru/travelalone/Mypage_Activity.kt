@@ -3,9 +3,7 @@ package com.guru.travelalone
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-
 import android.widget.Toast
-
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -14,10 +12,7 @@ import com.bumptech.glide.Glide
 import com.guru.travelalone.databinding.ActivityMypageBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
-
 import com.google.firebase.firestore.FirebaseFirestore
-import com.kakao.sdk.user.Constants
-
 import com.kakao.sdk.user.UserApiClient
 
 class Mypage_Activity : AppCompatActivity() {
@@ -31,66 +26,55 @@ class Mypage_Activity : AppCompatActivity() {
         binding = ActivityMypageBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // 시스템 바 패딩 설정
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
+        // 각 버튼의 클릭 이벤트 설정
         binding.editButton.setOnClickListener {
             val intent = Intent(this, MyProEdit_Activity::class.java)
-
             startActivity(intent)
         }
 
         binding.locateButton.setOnClickListener {
-            val intent = Intent(
-                this@Mypage_Activity,
-                Locate_Activity::class.java
-            )
+            val intent = Intent(this@Mypage_Activity, Locate_Activity::class.java)
             startActivity(intent)
         }
 
         binding.travbotButton.setOnClickListener {
-            val intent = Intent(
-                this@Mypage_Activity,
-                Travbot_activity::class.java
-            )
+            val intent = Intent(this@Mypage_Activity, Travbot_activity::class.java)
             startActivity(intent)
         }
 
         binding.homeButton.setOnClickListener {
-            val intent = Intent(
-                this@Mypage_Activity,
-                Home_Activity::class.java
-            )
+            val intent = Intent(this@Mypage_Activity, Home_Activity::class.java)
             startActivity(intent)
         }
 
         binding.commuButton.setOnClickListener {
-            val intent = Intent(
-                this@Mypage_Activity,
-                Community_Activity::class.java
-            )
+            val intent = Intent(this@Mypage_Activity, Community_Activity::class.java)
             startActivity(intent)
         }
 
         binding.mypageButton.setOnClickListener {
-            val intent = Intent(
-                this@Mypage_Activity,
-                Mypage_Activity::class.java
-            )
+            val intent = Intent(this@Mypage_Activity, Mypage_Activity::class.java)
             startActivity(intent)
         }
 
+        // 사용자 프로필 정보 가져오기
         fetchUserProfile()
 
+        // 탭 레이아웃 설정
         setTabLayout()
     }
 
     private fun fetchUserProfile() {
         val currentUser = FirebaseAuth.getInstance().currentUser
         if (currentUser != null) {
+            // Firebase에서 사용자 프로필 정보 가져오기
             val email = currentUser.email
             db.collection("members")
                 .whereEqualTo("login_id", email)
@@ -123,6 +107,7 @@ class Mypage_Activity : AppCompatActivity() {
                     Toast.makeText(this, "문서 가져오기 실패", Toast.LENGTH_SHORT).show()
                 }
         } else {
+            // Kakao 사용자 프로필 정보 가져오기
             UserApiClient.instance.me { user, error ->
                 if (error != null) {
                     Log.e("Kakao", "사용자 정보 요청 실패", error)
@@ -165,9 +150,10 @@ class Mypage_Activity : AppCompatActivity() {
     }
 
     private fun setTabLayout() {
-        // 초기 tab 세팅
+        // 초기 tab 설정
         binding.tabLayoutContainer.setBackgroundResource(R.color.gray)
 
+        // 탭 선택 리스너 설정
         binding.tabLayoutContainer.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab!!.position) {
