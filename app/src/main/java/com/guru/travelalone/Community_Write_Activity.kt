@@ -214,27 +214,44 @@ class Community_Write_Activity : AppCompatActivity() {
                 }
                 userId = user?.id.toString()
                 userEmail = user?.kakaoAccount?.email
-                savePostToFirestore(title, content, isPublic, selectedImageUri?.toString(), userId, userEmail, date, location, userNickname, userProfileImageUrl)
+                processPostSubmission(title, content, isPublic, selectedImageUri, userId, userEmail, date, location, userNickname, userProfileImageUrl)
             }
             return
         }
 
-        Toast.makeText(this, "게시글 등록 중, 잠시 기다려주세요.", Toast.LENGTH_SHORT).show()
+        processPostSubmission(title, content, isPublic, selectedImageUri, userId, userEmail, date, location, userNickname, userProfileImageUrl)
+    }
 
-        if (selectedImageUri != null) {
-            val storageReference = FirebaseStorage.getInstance().reference.child("images/${UUID.randomUUID()}")
-            storageReference.putFile(selectedImageUri!!)
-                .addOnSuccessListener { taskSnapshot ->
-                    taskSnapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener { uri ->
-                        val imageUrl = uri.toString()
-                        savePostToFirestore(title, content, isPublic, imageUrl, userId, userEmail, date, location, userNickname, userProfileImageUrl)
-                    }
-                }
-                .addOnFailureListener {
-                    Toast.makeText(this, "이미지 업로드 실패", Toast.LENGTH_SHORT).show()
-                }
+    private fun processPostSubmission(
+        title: String,
+        content: String,
+        isPublic: Boolean,
+        imageUri: Uri?,
+        userId: String?,
+        userEmail: String?,
+        date: String?,
+        location: String?,
+        nickname: String?,
+        profileImageUrl: String?
+    ) {
+        val storageReference = FirebaseStorage.getInstance().reference.child("images/${UUID.randomUUID()}")
+
+        val uploadTask = if (imageUri != null) {
+            storageReference.putFile(imageUri)
         } else {
-            savePostToFirestore(title, content, isPublic, null, userId, userEmail, date, location, userNickname, userProfileImageUrl)
+            null
+        }
+
+        uploadTask?.addOnSuccessListener { taskSnapshot ->
+            taskSnapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener { uri ->
+                val imageUrl = uri.toString()
+                savePostToFirestore(title, content, isPublic, imageUrl, userId, userEmail, date, location, nickname, profileImageUrl)
+            }
+        }?.addOnFailureListener {
+            Toast.makeText(this, "이미지 업로드 실패", Toast.LENGTH_SHORT).show()
+        } ?: run {
+            // If no imageUri, continue without uploading an image
+            savePostToFirestore(title, content, isPublic, null, userId, userEmail, date, location, nickname, profileImageUrl)
         }
     }
 
