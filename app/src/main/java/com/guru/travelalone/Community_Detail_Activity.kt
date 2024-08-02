@@ -2,6 +2,7 @@ package com.guru.travelalone
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -43,7 +44,7 @@ class Community_Detail_Activity : AppCompatActivity() {
         val titleTextView: TextView = findViewById(R.id.title)
         val contentTextView: TextView = findViewById(R.id.sub)
         val textView2: TextView = findViewById(R.id.textView2)
-        val deleteButton: TextView = findViewById(R.id.textView3) // Assuming there's a delete button in the layout
+        val deleteButton: TextView = findViewById(R.id.textView3)
         val bookmarkImageView: ImageView = findViewById(R.id.bookmark)
 
         // Load post details
@@ -56,7 +57,7 @@ class Community_Detail_Activity : AppCompatActivity() {
                             // Set the data to the views
                             nameTextView.text = it.nickname
                             dateTextView.text = it.date
-                            timeTextView.text = it.createdAt // Use createdAt for the time field
+                            timeTextView.text = it.createdAt
                             titleTextView.text = it.title
                             contentTextView.text = it.content
 
@@ -67,7 +68,7 @@ class Community_Detail_Activity : AppCompatActivity() {
                                     .error(R.drawable.sample_image_placeholder)
                                     .into(imageView)
                             } else {
-                                imageView.setImageResource(R.color.gray) // or set visibility to GONE
+                                imageView.setImageResource(R.color.gray)
                             }
 
                             if (!it.profileImageUrl.isNullOrEmpty()) {
@@ -82,6 +83,12 @@ class Community_Detail_Activity : AppCompatActivity() {
 
                             // Check if the post is already bookmarked
                             checkIfBookmarked(postId)
+
+                            // Hide edit and delete buttons if the current user is not the author
+                            if (it.userId != currentUser?.uid) {
+                                textView2.visibility = View.GONE
+                                deleteButton.visibility = View.GONE
+                            }
                         }
                     }
                 }
@@ -199,13 +206,25 @@ class Community_Detail_Activity : AppCompatActivity() {
     }
 
     private fun deletePost(postId: String) {
-        firestore.collection("posts").document(postId).delete()
-            .addOnSuccessListener {
-                // Successfully deleted the document
-                finish() // Close the activity
-            }
-            .addOnFailureListener { exception ->
-                // Handle the error
-            }
+        // First, delete bookmarks related to this post
+        currentUser?.let { user ->
+            val bookmarkId = "${user.uid}_$postId"
+            firestore.collection("scrap").document(bookmarkId).delete()
+                .addOnSuccessListener {
+                    // Successfully removed the bookmark
+                    // Now delete the post
+                    firestore.collection("posts").document(postId).delete()
+                        .addOnSuccessListener {
+                            // Successfully deleted the document
+                            finish() // Close the activity
+                        }
+                        .addOnFailureListener { exception ->
+                            // Handle the error
+                        }
+                }
+                .addOnFailureListener { exception ->
+                    // Handle the error
+                }
+        }
     }
 }
