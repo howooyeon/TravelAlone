@@ -17,6 +17,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.guru.travelalone.adapter.CommunityPostListAdapter
 import com.guru.travelalone.item.CommunityPostListItem
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class Community_Activity : AppCompatActivity() {
 
@@ -125,6 +128,10 @@ class Community_Activity : AppCompatActivity() {
                     post.id = document.id // Set the Firestore document ID
                     communityPostList.add(post)
                 }
+                // Sort the list by createdAt field
+                communityPostList.sortWith(compareByDescending {
+                    it.createdAt?.let { it1 -> parseDateString(it1) }
+                })
                 val communitypostadapter = CommunityPostListAdapter(
                     this,
                     communityPostList
@@ -141,4 +148,16 @@ class Community_Activity : AppCompatActivity() {
                 // Handle the error
             }
     }
+
+    // Helper function to parse the date string
+    private fun parseDateString(dateString: String): Long {
+        val dateFormat = SimpleDateFormat("dd.MM.yy HH:mm", Locale.getDefault())
+        return try {
+            val date = dateFormat.parse(dateString)
+            date?.time ?: 0L
+        } catch (e: ParseException) {
+            0L
+        }
+    }
+
 }
