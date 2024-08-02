@@ -1,0 +1,96 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="10dp">
+
+        <ImageView
+            android:id="@+id/redIcon"
+            android:layout_width="45dp"
+            android:layout_height="175dp"
+            app:srcCompat="@drawable/budget_red"></ImageView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/redCategory"
+                    android:layout_width="60dp"
+                    android:layout_height="35dp"
+                    app:srcCompat="@drawable/budget_shopping" />
+
+                <TextView
+                    android:id="@+id/redDate"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="end"
+                    android:gravity="end"
+                    android:fontFamily="@font/inter_medium"
+                    android:text="2024.08.07"
+                    android:textSize="15sp" />
+
+
+            </LinearLayout>
+
+
+
+            <TextView
+                android:id="@+id/redstore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_bold"
+                android:textSize="23sp"
+                android:layout_marginLeft="5dp"
+                android:text = "해장국집"/>
+
+            <TextView
+                android:id="@+id/redAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_bold"
+                android:textSize="25sp"
+                android:layout_marginLeft="5dp"
+                android:text = "60,000원"/>
+
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/redMini"
+                    android:layout_width="match_parent"
+                    android:layout_height="58dp"
+                    app:srcCompat="@drawable/budget_mini" />
+
+                <TextView
+                    android:id="@+id/redDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_medium"
+                    android:text="콩나물 해장국"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginLeft="30dp"
+                    android:textSize="15sp"
+                    android:layout_gravity="left|center"/>
+            </FrameLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</LinearLayout>

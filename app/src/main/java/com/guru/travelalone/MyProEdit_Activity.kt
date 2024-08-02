@@ -15,6 +15,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.PermissionChecker
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -74,6 +75,8 @@ class MyProEdit_Activity : AppCompatActivity() {
         loadUserProfile()
 
         binding.plusBtn.setOnClickListener {
+            checkPermission()
+
             if (ContextCompat.checkSelfPermission(
                     this,
                     Manifest.permission.READ_EXTERNAL_STORAGE
@@ -157,6 +160,12 @@ class MyProEdit_Activity : AppCompatActivity() {
             }
 
             val intent = Intent(this@MyProEdit_Activity, Login_Activity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        binding.budget.setOnClickListener {
+            val intent = Intent(this@MyProEdit_Activity, Budget_Activity::class.java)
             startActivity(intent)
             finish()
         }
@@ -331,5 +340,23 @@ class MyProEdit_Activity : AppCompatActivity() {
             .addOnFailureListener { e ->
                 Log.w("Firestore", "Error writing document", e)
             }
+    }
+
+
+    private fun checkPermission() {
+        when {
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PermissionChecker.PERMISSION_GRANTED -> {
+                openGallery()
+            }
+            shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE) -> {
+                Toast.makeText(this, "갤러리 접근 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
+            }
+            else -> {
+                requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
+        }
     }
 }

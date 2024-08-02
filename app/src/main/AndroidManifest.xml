@@ -21,6 +21,18 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".Release_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Budgetcharge_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Budgetspend_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Budget_Activity"
+            android:exported="false" />
+        <activity
             android:name=".MyProEdit_Activity"
             android:exported="false" />
         <activity
