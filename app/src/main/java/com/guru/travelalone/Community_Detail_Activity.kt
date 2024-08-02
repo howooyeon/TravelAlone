@@ -121,7 +121,6 @@ class Community_Detail_Activity : AppCompatActivity() {
         postRef.update(
             mapOf(
                 "imageUrl" to null,
-                "profileImageUrl" to null
             )
         ).addOnSuccessListener {
             // Successfully updated the document
