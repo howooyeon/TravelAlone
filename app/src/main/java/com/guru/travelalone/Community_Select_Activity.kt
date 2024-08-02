@@ -85,7 +85,7 @@ class Community_Select_Activity : AppCompatActivity() {
                             }
                             postList.add(MypageTripListItem(ContextCompat.getDrawable(this, drawableRes)!!, str_title, str_date, str_location))
                             Log.d("FirestoreData", "Document data: $document")
-
+                        }
                         mypagetripadapter.notifyDataSetChanged()
                     }
                 }
