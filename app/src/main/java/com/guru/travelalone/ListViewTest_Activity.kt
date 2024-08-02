@@ -1,9 +1,9 @@
 package com.guru.travelalone
 
-import android.content.Intent
+import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.util.Log
-import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -11,14 +11,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.guru.travelalone.adapter.CommunityPostListAdapter
+import com.guru.travelalone.adapter.MypagePostListAdapter
 import com.guru.travelalone.adapter.MypageTripListAdapter
+import com.guru.travelalone.item.CommunityPostListItem
+import com.guru.travelalone.item.MypagePostListItem
 import com.guru.travelalone.item.MypageTripListItem
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class Community_Select_Activity : AppCompatActivity() {
+class ListViewTest_Activity : AppCompatActivity(){
 
-    lateinit var mypagetriplistview: ListView
+    // 리스트뷰 어뎁터 설정
+    lateinit var mypagepostlistview : ListView
+    lateinit var mypagetriplistview : ListView
+    lateinit var communitypostlistview : ListView
 
     // Firestore 인스턴스 초기화
     val db = FirebaseFirestore.getInstance()
@@ -30,7 +37,18 @@ class Community_Select_Activity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_community_select)
+        setContentView(R.layout.listview_test)
+
+
+        // mypagepostList---------------------------------
+        mypagepostlistview = findViewById(R.id.mypagepostlistview)
+        var mypagepostList = arrayListOf<MypagePostListItem>(
+           // MypagePostListItem(ContextCompat.getDrawable(this, R.drawable.img_gangneung_sokcho)!!, "제목", "본문"),
+            //MypagePostListItem(ContextCompat.getDrawable(this, R.drawable.img_gangneung_sokcho)!!, "제목", "본문")
+        )
+        val mypagepostadapter = MypagePostListAdapter(this, mypagepostList)
+        mypagepostlistview.adapter = mypagepostadapter
+
 
         // mypagetripList---------------------------------
         mypagetriplistview = findViewById(R.id.mypagetriplistview)
@@ -75,7 +93,7 @@ class Community_Select_Activity : AppCompatActivity() {
                             "포항/안동" -> R.drawable.img_pohang_andong
                             else -> R.color.gray // 기본 이미지 설정
                         }
-                        postList.add(MypageTripListItem(ContextCompat.getDrawable(this, drawableRes)!!, str_title, str_date, str_location))
+                        postList.add(MypageTripListItem(ContextCompat.getDrawable(this, drawableRes)!!, str_title, str_date))
                         Log.d("FirestoreData", "Document data: $document")
                     }
 
@@ -86,14 +104,14 @@ class Community_Select_Activity : AppCompatActivity() {
                 }
         }
 
-        // ListView 아이템 클릭 리스너 설정
-        mypagetriplistview.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            val selectedTrip = postList[position]
-            val intent = Intent(this, Community_Write_Activity::class.java)
-            intent.putExtra("title", selectedTrip.title)
-            intent.putExtra("date", selectedTrip.date)
-            intent.putExtra("location", selectedTrip.location)
-            startActivity(intent)
-        }
+
+        // communitypostlist---------------------------------
+        communitypostlistview = findViewById(R.id.communitypostlistview)
+        var communitypostList = arrayListOf<CommunityPostListItem>(
+            CommunityPostListItem(ContextCompat.getDrawable(this, R.drawable.normal_1)!!, ContextCompat.getDrawable(this, R.drawable.samplepro)!!,"이름","제목", "본문", "날짜"),
+            CommunityPostListItem(ContextCompat.getDrawable(this, R.drawable.normal_1)!!, ContextCompat.getDrawable(this, R.drawable.samplepro)!!,"이름","제목", "본문", "날짜")
+        )
+        val communitypostadapter = CommunityPostListAdapter(this, communitypostList)
+        communitypostlistview.adapter = communitypostadapter
     }
 }

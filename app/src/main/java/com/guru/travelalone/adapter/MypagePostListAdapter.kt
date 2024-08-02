@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.guru.travelalone.item.MypagePostListItem
 import com.guru.travelalone.R
 
@@ -25,7 +26,9 @@ class MypagePostListAdapter(val context: Context, val items : ArrayList<MypagePo
         val sub = view.findViewById<TextView>(R.id.sub)
 
         val item = items[position]
-        img.setImageDrawable(item.img)
+        Glide.with(context)
+            .load(item.imgUrl)
+            .into(img)
         title.text = item.title
         sub.text = item.sub
 

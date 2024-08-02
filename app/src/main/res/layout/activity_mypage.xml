@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="@color/white">
+    android:background="#ffffff">
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -17,7 +17,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical" >
 
             <RelativeLayout
@@ -36,24 +36,30 @@
                     android:textSize="20sp"
                     android:fontFamily="@font/inter_bold"/>
 
-                <ImageButton
+                <android.widget.Button
+                    android:layout_marginTop="20sp"
+                    android:stateListAnimator="@null"
                     android:id="@+id/editButton"
+                    android:layout_gravity="center"
                     android:layout_width="wrap_content"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/rectangle_design"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:text="프로필 수정"
+                    android:textSize="13dp"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="178dp"
-                    android:layout_marginTop="17dp"
                     android:layout_marginEnd="19dp"
                     android:layout_toEndOf="@+id/textView"
-                    android:contentDescription="수정하기"
-                    android:src="@drawable/edit_profile"
-                    android:background="@android:color/transparent" />
+                    android:textColor="@color/black"/>
+
             </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:gravity="center_horizontal">
 
@@ -86,15 +92,22 @@
                     android:id="@+id/introduction"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_marginTop="5sp"
-                    android:text="나를 대표하는 소개를 입력해주세요" />
+                    android:text="나를 대표하는 소개를 입력해주세요"
+                    android:gravity="center" />
 
                 <com.google.android.material.tabs.TabLayout
+                    android:layout_marginTop="20dp"
                     android:id="@+id/tabLayoutContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp">
+                    android:background="@color/gray"
+                    app:tabSelectedTextColor="#1D5D9B"
+                    app:tabIndicatorColor="#1D5D9B"
+                    app:tabRippleColor="#111D5D9B"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.tabs.TabItem
                         android:layout_width="match_parent"
@@ -113,14 +126,109 @@
 
                 </com.google.android.material.tabs.TabLayout>
 
+                <FrameLayout
+                    android:id="@+id/frame"
+                    android:layout_width="match_parent"
+                    android:layout_height="1500dp">
+                </FrameLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
+    <!-- 하단 네비게이션 바 -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/scrollView">
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="428dp"
+            android:layout_height="83dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.529"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/nav_background"
+            tools:ignore="SpeakableTextPresentCheck"
+            android:importantForAccessibility="no"/>
+
+        <ImageButton
+            android:id="@+id/locateButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginBottom="4dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@+id/imageView3"
+            app:layout_constraintStart_toStartOf="@+id/imageView3"
+            app:srcCompat="@drawable/nav_locate_size"
+            tools:ignore="SpeakableTextPresentCheck"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:importantForAccessibility="no"/>
+
+        <ImageButton
+            android:id="@+id/travbotButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="112dp"
+            android:layout_marginBottom="4dp"
+            android:background="@android:color/transparent"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+            app:layout_constraintStart_toStartOf="@+id/imageView3"
+            app:srcCompat="@drawable/nav_travbot_size"
+            tools:ignore="SpeakableTextPresentCheck"
+            android:importantForAccessibility="no"/>
+
+        <ImageButton
+            android:id="@+id/homeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="192dp"
+            android:layout_marginBottom="4dp"
+            android:background="@android:color/transparent"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+            app:layout_constraintStart_toStartOf="@+id/imageView3"
+            app:srcCompat="@drawable/nav_home_size"
+            tools:ignore="SpeakableTextPresentCheck"
+            android:importantForAccessibility="no"/>
+
+        <ImageButton
+            android:id="@+id/mypageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="4dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+            app:layout_constraintEnd_toEndOf="@+id/imageView3"
+            app:srcCompat="@drawable/nav_mypage_blue_size"
+            tools:ignore="SpeakableTextPresentCheck"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:importantForAccessibility="no"/>
+
+        <ImageButton
+            android:id="@+id/commuButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="112dp"
+            android:layout_marginBottom="4dp"
+            android:background="@android:color/transparent"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+            app:layout_constraintEnd_toEndOf="@+id/imageView3"
+            app:srcCompat="@drawable/nav_commu_size"
+            tools:ignore="SpeakableTextPresentCheck"
+            android:importantForAccessibility="no"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ListView
             android:id="@+id/listView"

@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.guru.travelalone.databinding.ActivityMypageBinding
 import com.google.android.material.tabs.TabLayout
@@ -19,6 +20,7 @@ class Mypage_Activity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMypageBinding
     private val db = FirebaseFirestore.getInstance()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -149,23 +151,37 @@ class Mypage_Activity : AppCompatActivity() {
         }
     }
 
+    val fragment1: Fragment = Fragment1()
+    val fragment2: Fragment = Fragment2()
+    val fragment3: Fragment = Fragment3()
     private fun setTabLayout() {
         // 초기 tab 설정
         binding.tabLayoutContainer.setBackgroundResource(R.color.gray)
 
-        // 탭 선택 리스너 설정
+        // 기본으로 첫 번째 탭이 선택된 상태로 시작
+        supportFragmentManager.beginTransaction().replace(R.id.frame, fragment1).commit()
+
         binding.tabLayoutContainer.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                when (tab!!.position) {
-                    0 -> binding.tabLayoutContainer.setBackgroundResource(R.color.gray)
-                    1 -> binding.tabLayoutContainer.setBackgroundResource(R.color.gray)
-                    2 -> binding.tabLayoutContainer.setBackgroundResource(R.color.gray)
+
+                val selected: Fragment? = when (tab!!.position) {
+                    0 -> fragment1
+                    1 -> fragment2
+                    2 -> fragment3
+                    else -> fragment1
                 }
+
+                if (selected != null) {
+                    supportFragmentManager.beginTransaction().replace(R.id.frame, selected).commit()
+                }
+
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
 
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
+        // 첫 번째 탭을 선택 상태로 설정
+        binding.tabLayoutContainer.getTabAt(0)?.select()
     }
 }

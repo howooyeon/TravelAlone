@@ -3,12 +3,14 @@ package com.guru.travelalone
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.AdapterView
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ListView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.guru.travelalone.adapter.MypageTripListAdapter
@@ -16,10 +18,7 @@ import com.guru.travelalone.item.MypageTripListItem
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class Community_Select_Activity : AppCompatActivity() {
-
-    lateinit var mypagetriplistview: ListView
-
+class Fragment2 : Fragment() {
     // Firestore 인스턴스 초기화
     val db = FirebaseFirestore.getInstance()
     val auth = FirebaseAuth.getInstance()
@@ -27,15 +26,15 @@ class Community_Select_Activity : AppCompatActivity() {
     // 데이터 포맷
     private val dateFormat = SimpleDateFormat("yyyy.MM.dd", Locale.KOREAN)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_community_select)
-
-        // mypagetripList---------------------------------
-        mypagetriplistview = findViewById(R.id.mypagetriplistview)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_2, container, false)
+        var mypagetriplistview : ListView = view.findViewById(R.id.mypagetriplistview)
         val postList = arrayListOf<MypageTripListItem>()
-        val mypagetripadapter = MypageTripListAdapter(this, postList)
+        val mypagetripadapter = MypageTripListAdapter(requireContext(), postList)
         mypagetriplistview.adapter = mypagetripadapter
 
         // Firestore에서 데이터 가져오기
@@ -75,25 +74,23 @@ class Community_Select_Activity : AppCompatActivity() {
                             "포항/안동" -> R.drawable.img_pohang_andong
                             else -> R.color.gray // 기본 이미지 설정
                         }
-                        postList.add(MypageTripListItem(ContextCompat.getDrawable(this, drawableRes)!!, str_title, str_date, str_location))
+                        postList.add(MypageTripListItem(ContextCompat.getDrawable(requireContext(), drawableRes)!!, str_title, str_date))
                         Log.d("FirestoreData", "Document data: $document")
                     }
 
                     mypagetripadapter.notifyDataSetChanged()
                 }
                 .addOnFailureListener { exception ->
-                    Toast.makeText(this, "Error getting documents: $exception", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Error getting documents: $exception", Toast.LENGTH_SHORT).show()
                 }
         }
 
-        // ListView 아이템 클릭 리스너 설정
-        mypagetriplistview.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            val selectedTrip = postList[position]
-            val intent = Intent(this, Community_Write_Activity::class.java)
-            intent.putExtra("title", selectedTrip.title)
-            intent.putExtra("date", selectedTrip.date)
-            intent.putExtra("location", selectedTrip.location)
+        var bt_trip_add : Button = view.findViewById(R.id.bt_add)
+        bt_trip_add.setOnClickListener {
+            val intent = Intent(requireContext(), TripDate_Activity::class.java)
             startActivity(intent)
         }
+
+        return view
     }
 }

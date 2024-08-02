@@ -43,6 +43,7 @@ class Home_Activity : AppCompatActivity() {
     lateinit var communityButton: ImageButton
     //하단바 ----------
 
+    lateinit var pigButton: ImageButton
     lateinit var viewFlipper: ViewFlipper
 
     // 날씨 api ----------------
@@ -90,6 +91,17 @@ class Home_Activity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+
+        // pig button ----------------
+        pigButton = findViewById(R.id.bt_pig)
+
+        pigButton.setOnClickListener {
+            val intent = Intent(
+                this@Home_Activity,
+                TripDate_Activity::class.java
+            )
+            startActivity(intent)
         }
 
         // viewFlipper -----------
@@ -145,7 +157,7 @@ class Home_Activity : AppCompatActivity() {
         // Firestore에서 데이터 가져오기
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            val userId = currentUser.email
+            val userId = currentUser.uid
             Log.d("UserID", "Current User ID: $userId")
             db.collection("tripdate")
                 .whereEqualTo("user_id", userId)
