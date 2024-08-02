@@ -84,9 +84,6 @@
             android:name=".TripDate_Activity"
             android:exported="false" />
         <activity
-            android:name=".ListViewTest_Activity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="true" />
         <activity

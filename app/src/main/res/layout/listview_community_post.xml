@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <ImageView
+        android:visibility="invisible"
         android:id="@+id/bookmark"
         android:layout_width="25dp"
         android:layout_height="35dp"
@@ -13,7 +14,6 @@
         android:layout_marginLeft="330dp"/>
 
     <androidx.cardview.widget.CardView
-        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         app:cardCornerRadius="16dp"
