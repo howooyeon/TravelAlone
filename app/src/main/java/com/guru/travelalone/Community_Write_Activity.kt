@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.text.format.DateFormat
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
@@ -50,12 +51,13 @@ class Community_Write_Activity : AppCompatActivity() {
             selectedImageUri = it
             selectedImageView.setImageURI(it)
             selectedImageView.visibility = View.VISIBLE
-            selectedImageView.visibility = View.VISIBLE
             imageButton.visibility = View.GONE
         }
     }
 
     private var postId: String? = null
+    private var date: String? = null
+    private var location: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,8 +78,8 @@ class Community_Write_Activity : AppCompatActivity() {
         }
 
         val title = intent.getStringExtra("title")
-        val date = intent.getStringExtra("date")
-        val location = intent.getStringExtra("location")
+        date = intent.getStringExtra("date")
+        location = intent.getStringExtra("location")
 
         if (savedInstanceState == null) {
             val fragment = CommunityWriteFragment.newInstance(title, date, location)
@@ -132,6 +134,8 @@ class Community_Write_Activity : AppCompatActivity() {
                     titleEditText.setText(document.getString("title"))
                     contentEditText.setText(document.getString("content"))
                     publicSwitch.isChecked = document.getBoolean("isPublic") ?: false
+                    date = document.getString("date")
+                    location = document.getString("location")
                     val imageUrl = document.getString("imageUrl")
                     if (imageUrl != null && imageUrl != getUriFromDrawable(R.drawable.sample_image_placeholder).toString()) {
                         selectedImageView.visibility = View.VISIBLE
@@ -178,13 +182,10 @@ class Community_Write_Activity : AppCompatActivity() {
         val title = titleEditText.text.toString()
         val content = contentEditText.text.toString()
         val isPublic = publicSwitch.isChecked
-        var userId: String?
-        var userEmail: String?
+        var userId: String? = currentUser?.uid
+        var userEmail: String? = currentUser?.email
 
-        if (currentUser != null) {
-            userId = currentUser?.uid
-            userEmail = currentUser?.email
-        } else {
+        if (userId == null) {
             UserApiClient.instance.me { user, error ->
                 if (error != null) {
                     Toast.makeText(this, "Kakao 로그인 실패", Toast.LENGTH_SHORT).show()
@@ -192,7 +193,7 @@ class Community_Write_Activity : AppCompatActivity() {
                 }
                 userId = user?.id.toString()
                 userEmail = user?.kakaoAccount?.email
-                savePostToFirestore(title, content, isPublic, null, userId, userEmail, date, location, userNickname, userProfileImageUrl)
+                savePostToFirestore(title, content, isPublic, selectedImageUri?.toString(), userId, userEmail, date, location, userNickname, userProfileImageUrl)
             }
             return
         }
@@ -274,6 +275,17 @@ class Community_Write_Activity : AppCompatActivity() {
                     Toast.makeText(this, "게시글 등록 실패", Toast.LENGTH_SHORT).show()
                 }
         }
+
+        //        val postId = FirebaseFirestore.getInstance().collection("posts").document().id
+//        FirebaseFirestore.getInstance().collection("posts").document(postId)
+//            .set(post)
+//            .addOnSuccessListener {
+//                Toast.makeText(this, "게시글이 성공적으로 저장되었습니다.", Toast.LENGTH_SHORT).show()
+//                finish()
+//            }
+//            .addOnFailureListener {
+//                Toast.makeText(this, "게시글 저장 실패", Toast.LENGTH_SHORT).show()
+//            }
     }
 
     private fun getUriFromDrawable(drawableId: Int): Uri {
