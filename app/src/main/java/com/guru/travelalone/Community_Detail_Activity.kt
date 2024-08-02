@@ -2,6 +2,7 @@ package com.guru.travelalone
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -14,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.guru.travelalone.item.CommunityPostListItem
+import com.kakao.sdk.user.UserApiClient
 
 class Community_Detail_Activity : AppCompatActivity() {
 
@@ -21,6 +23,7 @@ class Community_Detail_Activity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private var isBookmarked: Boolean = false
     private var currentUser: FirebaseUser? = null
+    private var currentKakaoUserId: String? = null // 카카오 사용자 ID 저장 변수
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +49,9 @@ class Community_Detail_Activity : AppCompatActivity() {
         val textView2: TextView = findViewById(R.id.textView2)
         val deleteButton: TextView = findViewById(R.id.textView3)
         val bookmarkImageView: ImageView = findViewById(R.id.bookmark)
+
+        // Load user profile and get Kakao user ID if necessary
+        loadUserProfile()
 
         // Load post details
         postId?.let {
@@ -84,8 +90,11 @@ class Community_Detail_Activity : AppCompatActivity() {
                             // Check if the post is already bookmarked
                             checkIfBookmarked(postId)
 
-                            // Hide edit and delete buttons if the current user is not the author
-                            if (it.userId != currentUser?.uid) {
+                            // Show or hide edit and delete buttons based on user ID match
+                            if (it.userId == currentKakaoUserId) {
+                                textView2.visibility = View.VISIBLE
+                                deleteButton.visibility = View.VISIBLE
+                            } else {
                                 textView2.visibility = View.GONE
                                 deleteButton.visibility = View.GONE
                             }
@@ -127,6 +136,22 @@ class Community_Detail_Activity : AppCompatActivity() {
                         bookmarkImageView.setImageResource(R.drawable.bookmark)
                         removeBookmark(user.uid, id)
                     }
+                }
+            }
+        }
+    }
+
+    private fun loadUserProfile() {
+        currentUser?.let { user ->
+            // Firebase 로그인 유저 정보 가져오기
+            currentKakaoUserId = user.uid // Firebase ID 저장
+        } ?: run {
+            // Kakao 로그인 유저 정보 가져오기
+            UserApiClient.instance.me { user, error ->
+                if (error != null) {
+                    Log.e("Kakao", "사용자 정보 요청 실패", error)
+                } else if (user != null) {
+                    currentKakaoUserId = user.id.toString() // 카카오 ID 저장
                 }
             }
         }
