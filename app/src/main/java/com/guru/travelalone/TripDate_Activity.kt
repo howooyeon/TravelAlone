@@ -2,6 +2,7 @@ package com.guru.travelalone
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Button
@@ -112,6 +113,7 @@ class TripDate_Activity: AppCompatActivity() {
 
                 // Firestore에 저장할 데이터
                 val currentUser = auth.currentUser
+                Log.d("UserID", "No valid documents found for user_id: $currentUser")
                 if (currentUser != null) {
                     val userId = currentUser.uid
 

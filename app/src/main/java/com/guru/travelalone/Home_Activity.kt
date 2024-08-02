@@ -99,7 +99,7 @@ class Home_Activity : AppCompatActivity() {
         pigButton.setOnClickListener {
             val intent = Intent(
                 this@Home_Activity,
-                TripDate_Activity::class.java
+                Budget_Activity::class.java
             )
             startActivity(intent)
         }
