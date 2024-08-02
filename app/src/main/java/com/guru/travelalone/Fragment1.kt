@@ -14,6 +14,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.guru.travelalone.adapter.MypagePostListAdapter
 import com.guru.travelalone.item.MypagePostListItem
 import com.guru.travelalone.item.MypageTripListItem
+import com.kakao.sdk.user.UserApiClient
 
 class Fragment1 : Fragment() {
     // Firestore 인스턴스 초기화
@@ -26,25 +27,17 @@ class Fragment1 : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_1, container, false)
-
         var mypagepostlistview : ListView = view.findViewById(R.id.mypagepostlistview)
-        // add한 내용은 이 밑에 list에 들어갑니다
-        var mypagepostList = arrayListOf<MypagePostListItem>(
-
-        )
-        // add
-        //mypagepostList.add(MypagePostListItem(ContextCompat.getDrawable(requireContext(), R.drawable.img_gangneung_sokcho)!!, "제목", "본문"),)
-
-
-
+        var mypagepostList = arrayListOf<MypagePostListItem>()
         val mypagepostadapter = MypagePostListAdapter(requireContext(), mypagepostList)
         mypagepostlistview.adapter = mypagepostadapter
 
-        // Firestore에서 데이터 가져오기
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            val userId = currentUser.uid
-            Log.d("UserID", "Current User ID: $userId")
+
+        fun handleNoValidPost(userId: String) {
+            Log.d("UserID", "No valid documents found for user_id: $userId")
+        }
+
+        fun fetchPostFromFirebase(userId : String) {
             db.collection("posts")
                 .whereEqualTo("userId", userId)
                 .get()
@@ -72,8 +65,54 @@ class Fragment1 : Fragment() {
                 .addOnFailureListener { exception ->
                     Toast.makeText(requireContext(), "Error getting documents: $exception", Toast.LENGTH_SHORT).show()
                 }
+
         }
 
+        fun fetchKakaoUserProfileAndPost() {
+            UserApiClient.instance.me { user, error ->
+                if (error != null) {
+                    Log.e("Kakao", "사용자 정보 요청 실패", error)
+                    Toast.makeText(requireContext(), "사용자 정보 요청 실패", Toast.LENGTH_SHORT).show()
+                } else if (user != null) {
+                    val kakaoNickname = user.kakaoAccount?.profile?.nickname ?: ""
+                    db.collection("members")
+                        .whereEqualTo("nickname", kakaoNickname)
+                        .get()
+                        .addOnSuccessListener { documents ->
+                            if (documents != null && !documents.isEmpty) {
+                                val email = documents.firstOrNull()?.getString("login_id")
+                                if (email != null) {
+                                    fetchPostFromFirebase(email)  // Firebase에서 tripdate 가져오기
+                                } else {
+                                    handleNoValidPost("Kakao")  // 이메일이 없는 경우 처리
+                                }
+                            } else {
+                                handleNoValidPost("Kakao")  // 사용자 정보가 없는 경우 처리
+                            }
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w("Kakao", "문서 가져오기 실패: ", e)
+                            handleNoValidPost("Kakao")
+                        }
+                }
+            }
+        }
+
+        fun fetchPost() {
+            val auth = FirebaseAuth.getInstance()
+            val currentUser = auth.currentUser
+
+            if (currentUser != null) {
+                // Firebase 사용자로부터 데이터 가져오기
+                fetchPostFromFirebase(currentUser.uid)
+            } else {
+                // Kakao 사용자로부터 데이터 가져오기
+                fetchKakaoUserProfileAndPost()
+            }
+        }
+
+        // TripDate 불러오면서 사용자 정보 조회
+        fetchPost()
         return view
     }
 }
