@@ -153,26 +153,47 @@ class Community_Write_Activity : AppCompatActivity() {
 
     private fun fetchUserProfile() {
         if (currentUser != null) {
+            // Handle general login members
             val email = currentUser?.email
             FirebaseFirestore.getInstance().collection("members")
                 .whereEqualTo("login_id", email)
                 .get()
                 .addOnSuccessListener { documents ->
-                    for (document in documents) {
-                        userNickname = document.getString("editnickname") ?: "닉네임 없음"
-                        userProfileImageUrl = document.getString("profileImageUrl") ?: ""
+                    if (documents.isEmpty) {
+                        Toast.makeText(this, "프로필 정보가 존재하지 않습니다.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        for (document in documents) {
+                            userNickname = document.getString("editnickname") ?: "닉네임 없음"
+                            userProfileImageUrl = document.getString("profileImageUrl") ?: ""
+                        }
                     }
                 }
                 .addOnFailureListener { e ->
                     Toast.makeText(this, "프로필 정보 가져오기 실패", Toast.LENGTH_SHORT).show()
                 }
         } else {
+            // Handle Kakao login members
             UserApiClient.instance.me { user, error ->
                 if (error != null) {
                     Toast.makeText(this, "Kakao 로그인 실패", Toast.LENGTH_SHORT).show()
                 } else if (user != null) {
-                    userNickname = user.kakaoAccount?.profile?.nickname ?: "닉네임 없음"
-                    // Kakao SDK에는 프로필 이미지 URL을 제공하지 않으므로 별도의 처리 필요
+                    val kakaoNickname = user.kakaoAccount?.profile?.nickname
+                    FirebaseFirestore.getInstance().collection("members")
+                        .whereEqualTo("editnickname", kakaoNickname)
+                        .get()
+                        .addOnSuccessListener { documents ->
+                            if (documents.isEmpty) {
+                                Toast.makeText(this, "프로필 정보가 존재하지 않습니다.", Toast.LENGTH_SHORT).show()
+                            } else {
+                                for (document in documents) {
+                                    userNickname = document.getString("editnickname") ?: "닉네임 없음"
+                                    userProfileImageUrl = document.getString("profileImageUrl") ?: ""
+                                }
+                            }
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(this, "프로필 정보 가져오기 실패", Toast.LENGTH_SHORT).show()
+                        }
                 }
             }
         }
