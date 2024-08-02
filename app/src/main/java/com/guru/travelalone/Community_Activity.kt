@@ -104,6 +104,7 @@ class Community_Activity : AppCompatActivity() {
 
     private fun loadPosts() {
         firestore.collection("posts")
+            .whereEqualTo("isPublic", true) // 공개된 게시글만 가져오기
             .get()
             .addOnSuccessListener { result ->
                 val communityPostList = arrayListOf<CommunityPostListItem>()
