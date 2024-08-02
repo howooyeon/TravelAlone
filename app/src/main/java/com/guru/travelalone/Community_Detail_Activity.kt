@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +15,7 @@ import com.guru.travelalone.item.CommunityPostListItem
 class Community_Detail_Activity : AppCompatActivity() {
 
     private lateinit var firestore: FirebaseFirestore
+    private var isBookmarked: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,8 +30,7 @@ class Community_Detail_Activity : AppCompatActivity() {
 
         // Find views
         val imageView: ImageView = findViewById(R.id.image)
-        val profileImageView: de.hdodenhof.circleimageview.CircleImageView =
-            findViewById(R.id.image_profile)
+        val profileImageView: de.hdodenhof.circleimageview.CircleImageView = findViewById(R.id.image_profile)
         val nameTextView: TextView = findViewById(R.id.name)
         val dateTextView: TextView = findViewById(R.id.date)
         val timeTextView: TextView = findViewById(R.id.time)
@@ -37,6 +38,7 @@ class Community_Detail_Activity : AppCompatActivity() {
         val contentTextView: TextView = findViewById(R.id.sub)
         val textView2: TextView = findViewById(R.id.textView2)
         val deleteButton: TextView = findViewById(R.id.textView3) // Assuming there's a delete button in the layout
+        val bookmarkImageView: ImageView = findViewById(R.id.bookmark)
 
         // Load post details
         postId?.let {
@@ -93,6 +95,17 @@ class Community_Detail_Activity : AppCompatActivity() {
             postId?.let { id ->
                 // Show confirmation dialog
                 showDeleteConfirmationDialog(id)
+            }
+        }
+
+        // Set click listener for bookmark image view
+        bookmarkImageView.setOnClickListener {
+            isBookmarked = !isBookmarked
+            if (isBookmarked) {
+                bookmarkImageView.setImageResource(R.drawable.scrap)
+                Toast.makeText(this, "게시글이 저장되었습니다.", Toast.LENGTH_SHORT).show()
+            } else {
+                bookmarkImageView.setImageResource(R.drawable.bookmark)
             }
         }
     }
