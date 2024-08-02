@@ -199,13 +199,25 @@ class Community_Detail_Activity : AppCompatActivity() {
     }
 
     private fun deletePost(postId: String) {
-        firestore.collection("posts").document(postId).delete()
-            .addOnSuccessListener {
-                // Successfully deleted the document
-                finish() // Close the activity
-            }
-            .addOnFailureListener { exception ->
-                // Handle the error
-            }
+        // First, delete bookmarks related to this post
+        currentUser?.let { user ->
+            val bookmarkId = "${user.uid}_$postId"
+            firestore.collection("scrap").document(bookmarkId).delete()
+                .addOnSuccessListener {
+                    // Successfully removed the bookmark
+                    // Now delete the post
+                    firestore.collection("posts").document(postId).delete()
+                        .addOnSuccessListener {
+                            // Successfully deleted the document
+                            finish() // Close the activity
+                        }
+                        .addOnFailureListener { exception ->
+                            // Handle the error
+                        }
+                }
+                .addOnFailureListener { exception ->
+                    // Handle the error
+                }
+        }
     }
 }
