@@ -2,6 +2,7 @@ package com.guru.travelalone
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.widget.AdapterView
 import android.widget.ListView
@@ -47,40 +48,46 @@ class Community_Select_Activity : AppCompatActivity() {
                 .whereEqualTo("user_id", userId)
                 .get()
                 .addOnSuccessListener { result ->
-                    postList.clear() // 데이터가 중복되지 않도록 리스트를 초기화
-                    for (document in result) {
-                        val str_title = document.getString("title") ?: ""
-                        val str_location = document.getString("location") ?: ""
-                        val long_start_date = document.getLong("start_date") ?: 0L
-                        val long_end_date = document.getLong("end_date")
+                    if (result.isEmpty) {
+                        // No documents found
+                        Toast.makeText(this, "여행 일정이 없어요! \n일정을 먼저 생성해 주세요.", Toast.LENGTH_SHORT).show()
+                        Handler().postDelayed({
+                            finish() // Close the activity
+                        }, 1000)
+                    } else {
+                        postList.clear() // 데이터가 중복되지 않도록 리스트를 초기화
+                        for (document in result) {
+                            val str_title = document.getString("title") ?: ""
+                            val str_location = document.getString("location") ?: ""
+                            val long_start_date = document.getLong("start_date") ?: 0L
+                            val long_end_date = document.getLong("end_date")
 
-                        val str_date = if (long_end_date != null && long_end_date.toInt() != 0) {
-                            "${dateFormat.format(long_start_date)} ~ ${dateFormat.format(long_end_date)}"
-                        } else {
-                            "${dateFormat.format(long_start_date)}"
-                        }
+                            val str_date = if (long_end_date != null && long_end_date.toInt() != 0) {
+                                "${dateFormat.format(long_start_date)} ~ ${dateFormat.format(long_end_date)}"
+                            } else {
+                                "${dateFormat.format(long_start_date)}"
+                            }
 
-                        val drawableRes = when (str_location) {
-                            "가평/양평" -> R.drawable.img_gapyeong_yangpyeong
-                            "강릉/속초" -> R.drawable.img_gangneung_sokcho
-                            "경주" -> R.drawable.img_gyeongju
-                            "부산" -> R.drawable.img_busan
-                            "서울" -> R.drawable.img_seoul
-                            "여수" -> R.drawable.img_yeosu
-                            "인천" -> R.drawable.img_incheon
-                            "전주" -> R.drawable.img_jeonju
-                            "제주" -> R.drawable.img_jeju
-                            "춘천/홍천" -> R.drawable.img_chuncheon_hongcheon
-                            "태안" -> R.drawable.img_taean
-                            "통영/거제/남해" -> R.drawable.img_tongyeong_geoje_namhae
-                            "포항/안동" -> R.drawable.img_pohang_andong
-                            else -> R.color.gray // 기본 이미지 설정
-                        }
-                        postList.add(MypageTripListItem(ContextCompat.getDrawable(this, drawableRes)!!, str_title, str_date, str_location))
-                        Log.d("FirestoreData", "Document data: $document")
+                            val drawableRes = when (str_location) {
+                                "가평/양평" -> R.drawable.img_gapyeong_yangpyeong
+                                "강릉/속초" -> R.drawable.img_gangneung_sokcho
+                                "경주" -> R.drawable.img_gyeongju
+                                "부산" -> R.drawable.img_busan
+                                "여수" -> R.drawable.img_yeosu
+                                "인천" -> R.drawable.img_incheon
+                                "전주" -> R.drawable.img_jeonju
+                                "제주" -> R.drawable.img_jeju
+                                "춘천/홍천" -> R.drawable.img_chuncheon_hongcheon
+                                "태안" -> R.drawable.img_taean
+                                "통영/거제/남해" -> R.drawable.img_tongyeong_geoje_namhae
+                                "포항/안동" -> R.drawable.img_pohang_andong
+                                else -> R.color.gray // 기본 이미지 설정
+                            }
+                            postList.add(MypageTripListItem(ContextCompat.getDrawable(this, drawableRes)!!, str_title, str_date, str_location))
+                            Log.d("FirestoreData", "Document data: $document")
+
+                        mypagetripadapter.notifyDataSetChanged()
                     }
-
-                    mypagetripadapter.notifyDataSetChanged()
                 }
                 .addOnFailureListener { exception ->
                     Toast.makeText(this, "Error getting documents: $exception", Toast.LENGTH_SHORT).show()
