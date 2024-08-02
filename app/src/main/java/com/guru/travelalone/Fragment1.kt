@@ -7,13 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.guru.travelalone.adapter.MypagePostListAdapter
 import com.guru.travelalone.item.MypagePostListItem
-import com.guru.travelalone.item.MypageTripListItem
 import com.kakao.sdk.user.UserApiClient
 
 class Fragment1 : Fragment() {
@@ -32,7 +30,6 @@ class Fragment1 : Fragment() {
         val mypagepostadapter = MypagePostListAdapter(requireContext(), mypagepostList)
         mypagepostlistview.adapter = mypagepostadapter
 
-
         fun handleNoValidPost(userId: String) {
             Log.d("UserID", "No valid documents found for user_id: $userId")
         }
@@ -47,25 +44,19 @@ class Fragment1 : Fragment() {
                         val str_title = document.getString("title") ?: ""
                         val str_content = document.getString("content") ?: ""
                         val str_image = document.getString("imageUrl") ?: ""
-                        if(str_image == "android.resource://com.guru.travelalone/drawable/sample_image_placeholder")
-                        {
+                        if(str_image == "android.resource://com.guru.travelalone/drawable/sample_image_placeholder") {
                             // str_image 가 흰색 사진이도록 해야함
                             mypagepostList.add(MypagePostListItem(str_image, str_title, str_content))
+                        } else {
+                            mypagepostList.add(MypagePostListItem(str_image, str_title, str_content))
                         }
-                        else
-                        {
-                            mypagepostList.add(MypagePostListItem(str_image, str_title, str_content),)
-                        }
-
                         Log.d("FirestoreData", "Document data: $document")
                     }
-
                     mypagepostadapter.notifyDataSetChanged()
                 }
                 .addOnFailureListener { exception ->
                     Toast.makeText(requireContext(), "Error getting documents: $exception", Toast.LENGTH_SHORT).show()
                 }
-
         }
 
         fun fetchKakaoUserProfileAndPost() {
@@ -74,26 +65,8 @@ class Fragment1 : Fragment() {
                     Log.e("Kakao", "사용자 정보 요청 실패", error)
                     Toast.makeText(requireContext(), "사용자 정보 요청 실패", Toast.LENGTH_SHORT).show()
                 } else if (user != null) {
-                    val kakaoNickname = user.kakaoAccount?.profile?.nickname ?: ""
-                    db.collection("members")
-                        .whereEqualTo("nickname", kakaoNickname)
-                        .get()
-                        .addOnSuccessListener { documents ->
-                            if (documents != null && !documents.isEmpty) {
-                                val email = documents.firstOrNull()?.getString("login_id")
-                                if (email != null) {
-                                    fetchPostFromFirebase(email)  // Firebase에서 tripdate 가져오기
-                                } else {
-                                    handleNoValidPost("Kakao")  // 이메일이 없는 경우 처리
-                                }
-                            } else {
-                                handleNoValidPost("Kakao")  // 사용자 정보가 없는 경우 처리
-                            }
-                        }
-                        .addOnFailureListener { e ->
-                            Log.w("Kakao", "문서 가져오기 실패: ", e)
-                            handleNoValidPost("Kakao")
-                        }
+                    val kakaoUserId = user.id.toString()  // Kakao 사용자의 id를 가져옴
+                    fetchPostFromFirebase(kakaoUserId)  // Firebase에서 post 가져오기
                 }
             }
         }
