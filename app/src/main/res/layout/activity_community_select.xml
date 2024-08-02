@@ -14,7 +14,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_margin="20sp">
+            android:layout_marginTop="20sp"
+            android:layout_marginRight="20sp"
+            android:layout_marginLeft="20sp"
+            >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -33,7 +36,6 @@
 
                 <ListView
                     android:layout_marginTop="20sp"
-                    android:layout_marginBottom="50sp"
                     android:id="@+id/mypagetriplistview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

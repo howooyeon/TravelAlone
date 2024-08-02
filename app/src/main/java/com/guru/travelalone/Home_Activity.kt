@@ -19,6 +19,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QueryDocumentSnapshot
+import com.google.firebase.firestore.QuerySnapshot
+import com.kakao.sdk.user.UserApiClient
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -43,6 +45,7 @@ class Home_Activity : AppCompatActivity() {
     lateinit var communityButton: ImageButton
     //하단바 ----------
 
+    lateinit var pigButton: ImageButton
     lateinit var viewFlipper: ViewFlipper
 
     // 날씨 api ----------------
@@ -90,6 +93,17 @@ class Home_Activity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+
+        // pig button ----------------
+        pigButton = findViewById(R.id.bt_pig)
+
+        pigButton.setOnClickListener {
+            val intent = Intent(
+                this@Home_Activity,
+                Budget_Activity::class.java
+            )
+            startActivity(intent)
         }
 
         // viewFlipper -----------
@@ -141,83 +155,8 @@ class Home_Activity : AppCompatActivity() {
         }
         // FAB -----------------
 
-
-        // Firestore에서 데이터 가져오기
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            val userId = currentUser.email
-            Log.d("UserID", "Current User ID: $userId")
-            db.collection("tripdate")
-                .whereEqualTo("user_id", userId)
-                .get()
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val documents = task.result
-                        if (documents != null && !documents.isEmpty) {
-                            fab.hide()
-                            var validDocument: QueryDocumentSnapshot? = null
-                            for (document in documents) {
-                                val longStartDate = document.getLong("start_date") ?: continue
-                                val longEndDate = document.getLong("end_date") ?: Long.MAX_VALUE // 종료일이 null이면 최대값으로 설정
-
-                                // 현재 날짜 계산
-                                val currentDate = Calendar.getInstance().timeInMillis
-
-                                // 현재 날짜가 일정의 시작일과 종료일 사이에 있는지 확인
-                                val isCurrentDateInRange = currentDate in longStartDate..longEndDate
-
-                                // 일정이 유효한 경우
-                                if (isCurrentDateInRange || longEndDate > currentDate) {
-                                    validDocument = document
-                                    break // 가장 먼저 발견된 유효한 일정으로 설정
-                                }
-                            }
-
-                            if (validDocument != null) {
-                                val strTitle = validDocument.getString("title") ?: "Unknown Title"
-                                trip_title.text = strTitle
-
-                                val strLocation = validDocument.getString("location") ?: "Unknown Location"
-                                trip_location.text = strLocation
-
-                                val longStartDate = validDocument.getLong("start_date") ?: 0L
-                                val longEndDate = validDocument.getLong("end_date")
-
-                                if (longEndDate != null && longEndDate != 0L) {
-                                    trip_date.text = "${dateFormat.format(longStartDate)} ~ ${dateFormat.format(longEndDate)}"
-                                } else {
-                                    trip_date.text = dateFormat.format(longStartDate)
-                                }
-
-                                trip_cd.visibility = CardView.VISIBLE
-                                trip_bt.visibility = Button.VISIBLE
-                            } else {
-                                fab.show()
-                                trip_cd.visibility = CardView.GONE
-                                trip_bt.visibility = Button.GONE
-                                Log.d("UserID", "No valid documents found for user_id: $userId")
-                            }
-                        } else {
-                            fab.show()
-                            trip_cd.visibility = CardView.GONE
-                            trip_bt.visibility = Button.GONE
-                            Log.d("UserID", "No documents found for user_id: $userId")
-                        }
-                    } else {
-                        Log.d("UserID", "Error getting documents: ", task.exception)
-                        fab.show()
-                        trip_cd.visibility = CardView.GONE
-                        trip_bt.visibility = Button.GONE
-                    }
-                }
-        }
-        else {
-            // 사용자 인증이 되어 있지 않은 경우 처리
-            Toast.makeText(this, "사용자가 로그인되어 있지 않습니다.", Toast.LENGTH_SHORT).show()
-        }
-
-
-
+        // TripDate 불러오면서 사용자 정보 조회
+        fetchTripDate()
 
         //하단바 ----------
         homeButton = findViewById(R.id.homeButton)
@@ -422,6 +361,117 @@ class Home_Activity : AppCompatActivity() {
             }
         })
     }
+
+    private fun fetchTripDate() {
+        val auth = FirebaseAuth.getInstance()
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            // Firebase 사용자로부터 데이터 가져오기
+            fetchTripDateFromFirebase(currentUser.uid)
+        } else {
+            // Kakao 사용자로부터 데이터 가져오기
+            fetchKakaoUserProfileAndTripDate()
+        }
+    }
+
+    private fun fetchTripDateFromFirebase(userId: String) {
+        Log.d("UserID", "Current User ID: $userId")
+        db.collection("tripdate")
+            .whereEqualTo("user_id", userId)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val documents = task.result
+                    if (documents != null && !documents.isEmpty) {
+                        handleTripDateDocuments(documents)
+                    } else {
+                        handleNoValidTripDate(userId)
+                    }
+                } else {
+                    Log.d("UserID", "Error getting documents: ", task.exception)
+                    handleNoValidTripDate(userId)
+                }
+            }
+    }
+
+    private fun fetchKakaoUserProfileAndTripDate() {
+        UserApiClient.instance.me { user, error ->
+            if (error != null) {
+                Log.e("Kakao", "사용자 정보 요청 실패", error)
+                Toast.makeText(this, "사용자 정보 요청 실패", Toast.LENGTH_SHORT).show()
+            } else if (user != null) {
+                val kakaoNickname = user.kakaoAccount?.profile?.nickname ?: ""
+                db.collection("members")
+                    .whereEqualTo("nickname", kakaoNickname)
+                    .get()
+                    .addOnSuccessListener { documents ->
+                        if (documents != null && !documents.isEmpty) {
+                            val email = documents.firstOrNull()?.getString("login_id")
+                            if (email != null) {
+                                fetchTripDateFromFirebase(email)  // Firebase에서 tripdate 가져오기
+                            } else {
+                                handleNoValidTripDate("Kakao")  // 이메일이 없는 경우 처리
+                            }
+                        } else {
+                            handleNoValidTripDate("Kakao")  // 사용자 정보가 없는 경우 처리
+                        }
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w("Kakao", "문서 가져오기 실패: ", e)
+                        handleNoValidTripDate("Kakao")
+                    }
+            }
+        }
+    }
+
+    // tripDate에서 유효한 여행일정 있는지 확인
+    private fun handleTripDateDocuments(documents: QuerySnapshot) {
+        var validDocument: QueryDocumentSnapshot? = null
+        val currentDate = Calendar.getInstance().timeInMillis
+
+        for (document in documents) {
+            val longStartDate = document.getLong("start_date") ?: continue
+            val longEndDate = document.getLong("end_date") ?: Long.MAX_VALUE
+
+            val isCurrentDateInRange = currentDate in longStartDate..longEndDate
+
+            if (isCurrentDateInRange || longEndDate > currentDate) {
+                validDocument = document
+                break
+            }
+        }
+
+        if (validDocument != null) {
+            val strTitle = validDocument.getString("title") ?: "알 수 없는 제목"
+            trip_title.text = strTitle
+
+            val strLocation = validDocument.getString("location") ?: "알 수 없는 위치"
+            trip_location.text = strLocation
+
+            val longStartDate = validDocument.getLong("start_date") ?: 0L
+            val longEndDate = validDocument.getLong("end_date")
+
+            trip_date.text = if (longEndDate != null && longEndDate != 0L) {
+                "${dateFormat.format(longStartDate)} ~ ${dateFormat.format(longEndDate)}"
+            } else {
+                dateFormat.format(longStartDate)
+            }
+
+            trip_cd.visibility = CardView.VISIBLE
+            trip_bt.visibility = Button.VISIBLE
+        } else {
+            handleNoValidTripDate("UserID")
+        }
+    }
+
+    private fun handleNoValidTripDate(userId: String) {
+        fab.show()
+        trip_cd.visibility = CardView.GONE
+        trip_bt.visibility = Button.GONE
+        Log.d("UserID", "No valid documents found for user_id: $userId")
+    }
+
 
 
 }
