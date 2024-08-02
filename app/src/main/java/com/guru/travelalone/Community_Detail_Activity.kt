@@ -24,6 +24,8 @@ class Community_Detail_Activity : AppCompatActivity() {
     private var isBookmarked: Boolean = false
     private var currentUser: FirebaseUser? = null
     private var currentKakaoUserId: String? = null // 카카오 사용자 ID 저장 변수
+    private var currentFirebaseUserId: String? = null // Firebase 사용자 ID 저장 변수
+    private var isKakaoUser: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +36,9 @@ class Community_Detail_Activity : AppCompatActivity() {
         firestore = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
         currentUser = auth.currentUser
+
+        // Load user profile and get user ID if necessary
+        loadUserProfile()
 
         // Get post ID from intent
         val postId = intent.getStringExtra("POST_ID")
@@ -49,9 +54,6 @@ class Community_Detail_Activity : AppCompatActivity() {
         val textView2: TextView = findViewById(R.id.textView2)
         val deleteButton: TextView = findViewById(R.id.textView3)
         val bookmarkImageView: ImageView = findViewById(R.id.bookmark)
-
-        // Load user profile and get Kakao user ID if necessary
-        loadUserProfile()
 
         // Load post details
         postId?.let {
@@ -91,7 +93,7 @@ class Community_Detail_Activity : AppCompatActivity() {
                             checkIfBookmarked(postId)
 
                             // Show or hide edit and delete buttons based on user ID match
-                            if (it.userId == currentKakaoUserId) {
+                            if (it.userId == currentKakaoUserId || it.userId == currentFirebaseUserId) {
                                 textView2.visibility = View.VISIBLE
                                 deleteButton.visibility = View.VISIBLE
                             } else {
@@ -126,15 +128,15 @@ class Community_Detail_Activity : AppCompatActivity() {
         // Set click listener for bookmark image view
         bookmarkImageView.setOnClickListener {
             postId?.let { id ->
-                currentUser?.let { user ->
+                if (isKakaoUser || currentUser != null) {
                     isBookmarked = !isBookmarked
                     if (isBookmarked) {
                         bookmarkImageView.setImageResource(R.drawable.scrap)
                         Toast.makeText(this, "게시글이 저장되었습니다.", Toast.LENGTH_SHORT).show()
-                        addBookmark(user.uid, id)
+                        addBookmark(id)
                     } else {
                         bookmarkImageView.setImageResource(R.drawable.bookmark)
-                        removeBookmark(user.uid, id)
+                        removeBookmark(id)
                     }
                 }
             }
@@ -144,22 +146,24 @@ class Community_Detail_Activity : AppCompatActivity() {
     private fun loadUserProfile() {
         currentUser?.let { user ->
             // Firebase 로그인 유저 정보 가져오기
-            currentKakaoUserId = user.uid // Firebase ID 저장
+            currentFirebaseUserId = user.uid
         } ?: run {
             // Kakao 로그인 유저 정보 가져오기
             UserApiClient.instance.me { user, error ->
                 if (error != null) {
                     Log.e("Kakao", "사용자 정보 요청 실패", error)
                 } else if (user != null) {
-                    currentKakaoUserId = user.id.toString() // 카카오 ID 저장
+                    currentKakaoUserId = user.id.toString()
+                    isKakaoUser = true
                 }
             }
         }
     }
 
     private fun checkIfBookmarked(postId: String) {
-        currentUser?.let { user ->
-            val bookmarkId = "${user.uid}_$postId"
+        val userId = if (isKakaoUser) currentKakaoUserId else currentFirebaseUserId
+        userId?.let { id ->
+            val bookmarkId = "${id}_$postId"
             firestore.collection("scrap").document(bookmarkId).get()
                 .addOnSuccessListener { document ->
                     if (document.exists()) {
@@ -176,28 +180,34 @@ class Community_Detail_Activity : AppCompatActivity() {
         }
     }
 
-    private fun addBookmark(userId: String, postId: String) {
-        val bookmarkId = "${userId}_$postId"
-        val bookmarkRef = firestore.collection("scrap").document(bookmarkId)
-        bookmarkRef.set(mapOf("postId" to postId))
-            .addOnSuccessListener {
-                // Successfully added the bookmark
-            }
-            .addOnFailureListener { exception ->
-                // Handle the error
-            }
+    private fun addBookmark(postId: String) {
+        val userId = if (isKakaoUser) currentKakaoUserId else currentFirebaseUserId
+        userId?.let { id ->
+            val bookmarkId = "${id}_$postId"
+            val bookmarkRef = firestore.collection("scrap").document(bookmarkId)
+            bookmarkRef.set(mapOf("postId" to postId))
+                .addOnSuccessListener {
+                    // Successfully added the bookmark
+                }
+                .addOnFailureListener { exception ->
+                    // Handle the error
+                }
+        }
     }
 
-    private fun removeBookmark(userId: String, postId: String) {
-        val bookmarkId = "${userId}_$postId"
-        val bookmarkRef = firestore.collection("scrap").document(bookmarkId)
-        bookmarkRef.delete()
-            .addOnSuccessListener {
-                // Successfully removed the bookmark
-            }
-            .addOnFailureListener { exception ->
-                // Handle the error
-            }
+    private fun removeBookmark(postId: String) {
+        val userId = if (isKakaoUser) currentKakaoUserId else currentFirebaseUserId
+        userId?.let { id ->
+            val bookmarkId = "${id}_$postId"
+            val bookmarkRef = firestore.collection("scrap").document(bookmarkId)
+            bookmarkRef.delete()
+                .addOnSuccessListener {
+                    // Successfully removed the bookmark
+                }
+                .addOnFailureListener { exception ->
+                    // Handle the error
+                }
+        }
     }
 
     private fun openEditPostActivity(postId: String) {
@@ -231,9 +241,9 @@ class Community_Detail_Activity : AppCompatActivity() {
     }
 
     private fun deletePost(postId: String) {
-        // First, delete bookmarks related to this post
-        currentUser?.let { user ->
-            val bookmarkId = "${user.uid}_$postId"
+        val userId = if (isKakaoUser) currentKakaoUserId else currentFirebaseUserId
+        userId?.let { id ->
+            val bookmarkId = "${id}_$postId"
             firestore.collection("scrap").document(bookmarkId).delete()
                 .addOnSuccessListener {
                     // Successfully removed the bookmark
