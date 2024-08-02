@@ -3,7 +3,7 @@ package com.guru.travelalone.item
 data class CommunityPostListItem(
     val title: String? = null,
     val content: String? = null,
-    val isPrivate: Boolean? = null,
+    val isPublic: Boolean? = null,
     val imageUrl: String? = null,
     val userId: String? = null,
     val userEmail: String? = null,

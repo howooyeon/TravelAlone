@@ -36,7 +36,7 @@ class Community_Write_Activity : AppCompatActivity() {
     private lateinit var selectedImageView: ImageView
     private lateinit var titleEditText: TextInputEditText
     private lateinit var contentEditText: TextInputEditText
-    private lateinit var privacySwitch: Switch
+    private lateinit var publicSwitch: Switch
     private lateinit var submitButton: Button
     private var selectedImageUri: Uri? = null
 
@@ -49,6 +49,7 @@ class Community_Write_Activity : AppCompatActivity() {
         uri?.let {
             selectedImageUri = it
             selectedImageView.setImageURI(it)
+            selectedImageView.visibility = View.VISIBLE
             selectedImageView.visibility = View.VISIBLE
             imageButton.visibility = View.GONE
         }
@@ -89,7 +90,7 @@ class Community_Write_Activity : AppCompatActivity() {
         selectedImageView = findViewById(R.id.selectedImageView)
         titleEditText = findViewById(R.id.titleEditText)
         contentEditText = findViewById(R.id.contentEditText)
-        privacySwitch = findViewById(R.id.switch2)
+        publicSwitch = findViewById(R.id.switch2)
         submitButton = findViewById(R.id.bt_reg)
 
         auth = FirebaseAuth.getInstance()
@@ -114,8 +115,8 @@ class Community_Write_Activity : AppCompatActivity() {
             }
         }
 
-        privacySwitch.setOnCheckedChangeListener { _, isChecked ->
-            privacySwitch.text = if (isChecked) "공개" else "비공개"
+        publicSwitch.setOnCheckedChangeListener { _, isChecked ->
+            publicSwitch.text = if (isChecked) "공개" else "비공개"
         }
 
         submitButton.setOnClickListener {
@@ -130,7 +131,7 @@ class Community_Write_Activity : AppCompatActivity() {
                 if (document != null) {
                     titleEditText.setText(document.getString("title"))
                     contentEditText.setText(document.getString("content"))
-                    privacySwitch.isChecked = document.getBoolean("isPrivate") ?: false
+                    publicSwitch.isChecked = document.getBoolean("isPublic") ?: false
                     val imageUrl = document.getString("imageUrl")
                     if (imageUrl != null && imageUrl != getUriFromDrawable(R.drawable.sample_image_placeholder).toString()) {
                         selectedImageView.visibility = View.VISIBLE
@@ -176,7 +177,7 @@ class Community_Write_Activity : AppCompatActivity() {
     private fun submitPost(date: String?, location: String?) {
         val title = titleEditText.text.toString()
         val content = contentEditText.text.toString()
-        val isPrivate = privacySwitch.isChecked
+        val isPublic = publicSwitch.isChecked
         var userId: String?
         var userEmail: String?
 
@@ -191,7 +192,7 @@ class Community_Write_Activity : AppCompatActivity() {
                 }
                 userId = user?.id.toString()
                 userEmail = user?.kakaoAccount?.email
-                savePostToFirestore(title, content, isPrivate, null, userId, userEmail, date, location, userNickname, userProfileImageUrl)
+                savePostToFirestore(title, content, isPublic, null, userId, userEmail, date, location, userNickname, userProfileImageUrl)
             }
             return
         }
@@ -204,21 +205,21 @@ class Community_Write_Activity : AppCompatActivity() {
                 .addOnSuccessListener { taskSnapshot ->
                     taskSnapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener { uri ->
                         val imageUrl = uri.toString()
-                        savePostToFirestore(title, content, isPrivate, imageUrl, userId, userEmail, date, location, userNickname, userProfileImageUrl)
+                        savePostToFirestore(title, content, isPublic, imageUrl, userId, userEmail, date, location, userNickname, userProfileImageUrl)
                     }
                 }
                 .addOnFailureListener {
                     Toast.makeText(this, "이미지 업로드 실패", Toast.LENGTH_SHORT).show()
                 }
         } else {
-            savePostToFirestore(title, content, isPrivate, null, userId, userEmail, date, location, userNickname, userProfileImageUrl)
+            savePostToFirestore(title, content, isPublic, null, userId, userEmail, date, location, userNickname, userProfileImageUrl)
         }
     }
 
     private fun savePostToFirestore(
         title: String,
         content: String,
-        isPrivate: Boolean,
+        isPublic: Boolean,
         imageUrl: String?,
         userId: String?,
         userEmail: String?,
@@ -235,7 +236,7 @@ class Community_Write_Activity : AppCompatActivity() {
         val post = hashMapOf(
             "title" to title,
             "content" to content,
-            "isPrivate" to isPrivate,
+            "isPublic" to isPublic,
             "imageUrl" to finalImageUrl,
             "timestamp" to System.currentTimeMillis(),
             "userId" to userId,
