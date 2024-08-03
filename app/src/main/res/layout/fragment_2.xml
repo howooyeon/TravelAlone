@@ -6,16 +6,19 @@
     android:layout_marginTop="20sp"
     android:layout_marginRight="20sp"
     android:layout_marginLeft="20sp">
-
     <ListView
         android:id="@+id/mypagetriplistview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:dividerHeight="50px"
         android:divider="@null"
+        android:scrollbars="none"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         />
     <android.widget.Button
         android:layout_marginTop="20sp"
+        android:layout_marginBottom="30dp"
         android:stateListAnimator="@null"
         android:id="@+id/bt_add"
         android:layout_gravity="center"
@@ -27,7 +30,5 @@
         android:text="일정 추가"
         android:textSize="13dp"
         android:textColor="@color/black"/>
-
-
 
 </LinearLayout>
