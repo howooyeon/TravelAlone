@@ -117,6 +117,8 @@ class Home_Activity : AppCompatActivity() {
 
         // 첫번째 배너 클릭 시 트래봇으로 이동
         banner = findViewById(R.id.bannar)
+
+        fab = findViewById(R.id.fab)
         fab.setOnClickListener {
             val intent = Intent(
                 this@Home_Activity,
