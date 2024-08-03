@@ -237,7 +237,7 @@ class Community_Write_Activity : AppCompatActivity() {
         val userEmail = currentUser?.email
 
         val currentTime = System.currentTimeMillis()
-        val sdf = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val sdf = java.text.SimpleDateFormat("yy.MM.dd HH:mm", Locale.getDefault())
         val formattedDate = sdf.format(Date(currentTime))
 
         processPostSubmission(
