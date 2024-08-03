@@ -27,6 +27,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.kakao.sdk.user.UserApiClient
+import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.UUID
@@ -247,7 +248,7 @@ class Community_Write_Activity : AppCompatActivity() {
         val userEmail = currentUser?.email
 
         val currentTime = System.currentTimeMillis()
-        val sdf = java.text.SimpleDateFormat("yy.MM.dd HH:mm", Locale.getDefault())
+        val sdf = SimpleDateFormat("yy.MM.dd HH:mm", Locale.getDefault())
         val formattedDate = sdf.format(Date(currentTime))
 
         processPostSubmission(
