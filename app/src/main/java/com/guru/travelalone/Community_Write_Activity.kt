@@ -125,6 +125,10 @@ class Community_Write_Activity : AppCompatActivity() {
         }
 
         submitButton.setOnClickListener {
+            // Display the Toast message
+            Toast.makeText(this, "게시글 등록 중, 잠시 기다려주세요.", Toast.LENGTH_SHORT).show()
+
+            // Proceed with submitting the post
             submitPost(date, location, existingImageUrl) // 기존 이미지 URL을 추가로 전달
         }
     }
