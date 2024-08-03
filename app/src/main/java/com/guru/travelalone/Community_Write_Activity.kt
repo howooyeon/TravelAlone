@@ -155,18 +155,18 @@ class Community_Write_Activity : AppCompatActivity() {
                     location = document.getString("location")
                     val imageUrl = document.getString("imageUrl")
 
-                    // 이미지 URL이 있을 경우 이미지 로드
-                    if (imageUrl != null && imageUrl.isNotEmpty()) {
-                        try {
-                            val uri = Uri.parse(imageUrl)
-                            selectedImageView.load(uri)  // Coil 라이브러리 사용
-                            selectedImageView.visibility = View.VISIBLE
-                            cardView.visibility = View.VISIBLE
-                        } catch (e: Exception) {
-                            Log.e("Community_Write_Activity", "Error parsing image URL", e)
-                            selectedImageView.setImageResource(R.drawable.sample_image_placeholder)
-                            cardView.visibility = View.GONE
-                        }
+                    // 기존 이미지 URL을 유지하기 위한 변수
+                    selectedImageUri = if (imageUrl != null && imageUrl.isNotEmpty()) {
+                        Uri.parse(imageUrl)
+                    } else {
+                        null
+                    }
+
+                    // 이미지 로드 및 UI 업데이트
+                    if (selectedImageUri != null) {
+                        selectedImageView.load(selectedImageUri)
+                        selectedImageView.visibility = View.VISIBLE
+                        cardView.visibility = View.VISIBLE
                     } else {
                         selectedImageView.setImageResource(R.drawable.sample_image_placeholder)
                         cardView.visibility = View.GONE
@@ -264,11 +264,11 @@ class Community_Write_Activity : AppCompatActivity() {
                 savePostToFirestore(title, content, isPublic, uri.toString(), userId, userEmail, date, location, nickname, profileImageUrl, currentTime)
             }
         }?.addOnFailureListener {
-            savePostToFirestore(title, content, isPublic, null, userId, userEmail, date, location, nickname, profileImageUrl, currentTime)
+            // 실패 시 기존 이미지 URL을 사용하여 저장
+            savePostToFirestore(title, content, isPublic, selectedImageUri?.toString(), userId, userEmail, date, location, nickname, profileImageUrl, currentTime)
         } ?: run {
-            // If no image is selected, use the placeholder image URL
-            val placeholderUrl = "android.resource://com.guru.travelalone/drawable/sample_image_placeholder"
-            savePostToFirestore(title, content, isPublic, placeholderUrl, userId, userEmail, date, location, nickname, profileImageUrl, currentTime)
+            // 이미지가 선택되지 않은 경우 기존 이미지 URL을 사용
+            savePostToFirestore(title, content, isPublic, selectedImageUri?.toString(), userId, userEmail, date, location, nickname, profileImageUrl, currentTime)
         }
     }
 
