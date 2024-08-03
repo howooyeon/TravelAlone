@@ -264,14 +264,13 @@ class Community_Write_Activity : AppCompatActivity() {
                 savePostToFirestore(title, content, isPublic, uri.toString(), userId, userEmail, date, location, nickname, profileImageUrl, currentTime)
             }
         }?.addOnFailureListener {
-            // 실패 시 기존 이미지 URL을 사용하여 저장
-            savePostToFirestore(title, content, isPublic, selectedImageUri?.toString(), userId, userEmail, date, location, nickname, profileImageUrl, currentTime)
+            // Failure case: use the placeholder URL
+            savePostToFirestore(title, content, isPublic, "android.resource://com.guru.travelalone/drawable/sample_image_placeholder", userId, userEmail, date, location, nickname, profileImageUrl, currentTime)
         } ?: run {
-            // 이미지가 선택되지 않은 경우 기존 이미지 URL을 사용
-            savePostToFirestore(title, content, isPublic, selectedImageUri?.toString(), userId, userEmail, date, location, nickname, profileImageUrl, currentTime)
+            // No image selected: use the placeholder URL
+            savePostToFirestore(title, content, isPublic, "android.resource://com.guru.travelalone/drawable/sample_image_placeholder", userId, userEmail, date, location, nickname, profileImageUrl, currentTime)
         }
     }
-
 
     private fun savePostToFirestore(
         title: String,
@@ -286,11 +285,13 @@ class Community_Write_Activity : AppCompatActivity() {
         profileImageUrl: String?,
         currentTime: String
     ) {
+        val finalImageUrl = imageUrl ?: "android.resource://com.guru.travelalone/drawable/sample_image_placeholder"
+
         val postData = hashMapOf(
             "title" to title,
             "content" to content,
             "isPublic" to isPublic,
-            "imageUrl" to imageUrl,
+            "imageUrl" to finalImageUrl,
             "userId" to userId,
             "userEmail" to userEmail,
             "date" to date,
@@ -315,6 +316,7 @@ class Community_Write_Activity : AppCompatActivity() {
                 Log.e("Community_Write_Activity", "Error saving post", e)
             }
     }
+
 
     companion object {
         private const val PERMISSION_REQUEST_CODE = 1001
