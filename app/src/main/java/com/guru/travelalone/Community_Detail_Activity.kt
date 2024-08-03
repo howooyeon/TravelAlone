@@ -99,13 +99,23 @@ class Community_Detail_Activity : AppCompatActivity() {
 
                             checkIfBookmarked(postId)
 
-                            // Show edit and delete buttons only if the nicknames match
-                            if (it.nickname == currentUserNickname) {
-                                textView2.visibility = View.VISIBLE
-                                deleteButton.visibility = View.VISIBLE
+                            // Hide edit and delete buttons if the current user is not the author
+                            if (isKakaoUser) {
+                                if (it.nickname == currentUserNickname) {
+                                    textView2.visibility = View.VISIBLE
+                                    deleteButton.visibility = View.VISIBLE
+                                } else {
+                                    textView2.visibility = View.GONE
+                                    deleteButton.visibility = View.GONE
+                                }
                             } else {
-                                textView2.visibility = View.GONE
-                                deleteButton.visibility = View.GONE
+                                if (it.userId == currentUser?.uid) {
+                                    textView2.visibility = View.VISIBLE
+                                    deleteButton.visibility = View.VISIBLE
+                                } else {
+                                    textView2.visibility = View.GONE
+                                    deleteButton.visibility = View.GONE
+                                }
                             }
                         }
                     }
