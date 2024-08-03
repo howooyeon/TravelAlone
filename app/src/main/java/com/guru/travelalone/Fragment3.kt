@@ -13,10 +13,10 @@ import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import com.guru.travelalone.adapter.MypagePostScrapListAdapter
 import com.guru.travelalone.item.MypagePostScrapListItem
+import com.kakao.sdk.user.UserApiClient
 
 class Fragment3 : Fragment() {
 
-    // Firestore 인스턴스 초기화
     private val db = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
 
@@ -29,40 +29,82 @@ class Fragment3 : Fragment() {
 
         val mypagePostScrapListView: ListView = view.findViewById(R.id.mypagescraplistview)
         val mypagePostScrapList = arrayListOf<MypagePostScrapListItem>()
-        val mypagePostScrapAdapter =
-            MypagePostScrapListAdapter(requireContext(), mypagePostScrapList)
+        val mypagePostScrapAdapter = MypagePostScrapListAdapter(requireContext(), mypagePostScrapList)
         mypagePostScrapListView.adapter = mypagePostScrapAdapter
 
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            val userId = currentUser.uid
-            Log.d("UserID", "Current User ID: $userId")
-            db.collection("scrap")
-                .whereEqualTo("userId", userId)
-                .get()
-                .addOnSuccessListener { result ->
-                    mypagePostScrapList.clear() // 데이터가 중복되지 않도록 리스트를 초기화
-                    val postIds = mutableListOf<String>()
-                    for (document in result) {
-                        val postId = document.getString("postId") ?: ""
-                        if (postId.isNotEmpty()) {
-                            postIds.add(postId)
-                        }
-                    }
-
-                    // 각 postId에 대해 포스트 데이터 가져오기
-                    fetchPostsFromIds(postIds, mypagePostScrapList, mypagePostScrapAdapter)
+            Log.d("UserCheck", "Firebase user detected")
+            loadFirebaseUserData(currentUser.uid, mypagePostScrapList, mypagePostScrapAdapter)
+        } else {
+            Log.d("UserCheck", "Checking Kakao user")
+            UserApiClient.instance.me { user, error ->
+                if (error != null) {
+                    Log.e("Kakao", "사용자 정보 요청 실패", error)
+                    Toast.makeText(requireContext(), "사용자 정보 요청 실패", Toast.LENGTH_SHORT).show()
+                } else if (user != null) {
+                    val kakaoUserId = user.id.toString()
+                    Log.d("UserCheck", "Kakao user detected with ID: $kakaoUserId")
+                    loadKakaoUserData(kakaoUserId, mypagePostScrapList, mypagePostScrapAdapter)
                 }
-                .addOnFailureListener { exception ->
-                    Toast.makeText(
-                        requireContext(),
-                        "Error getting documents: $exception",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+            }
         }
 
         return view
+    }
+
+    private fun loadFirebaseUserData(
+        userId: String,
+        mypagePostScrapList: ArrayList<MypagePostScrapListItem>,
+        mypagePostScrapAdapter: MypagePostScrapListAdapter
+    ) {
+        Log.d("Firestore", "Loading data for Firebase user ID: $userId")
+        db.collection("scrap")
+            .whereEqualTo("userId", userId)
+            .get()
+            .addOnSuccessListener { result ->
+                mypagePostScrapList.clear()
+                val postIds = mutableListOf<String>()
+                for (document in result) {
+                    val postId = document.getString("postId") ?: ""
+                    if (postId.isNotEmpty()) {
+                        postIds.add(postId)
+                    }
+                }
+                Log.d("Firestore", "Post IDs: $postIds")
+                fetchPostsFromIds(postIds, mypagePostScrapList, mypagePostScrapAdapter)
+            }
+            .addOnFailureListener { exception ->
+                Log.e("Firestore", "Error getting documents", exception)
+                Toast.makeText(requireContext(), "Error getting documents: $exception", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun loadKakaoUserData(
+        kakaoUserId: String,
+        mypagePostScrapList: ArrayList<MypagePostScrapListItem>,
+        mypagePostScrapAdapter: MypagePostScrapListAdapter
+    ) {
+        Log.d("Firestore", "Loading data for Kakao user ID: $kakaoUserId")
+        db.collection("scrap")
+            .whereEqualTo("userId", kakaoUserId)
+            .get()
+            .addOnSuccessListener { result ->
+                mypagePostScrapList.clear()
+                val postIds = mutableListOf<String>()
+                for (document in result) {
+                    val postId = document.getString("postId") ?: ""
+                    if (postId.isNotEmpty()) {
+                        postIds.add(postId)
+                    }
+                }
+                Log.d("Firestore", "Post IDs: $postIds")
+                fetchPostsFromIds(postIds, mypagePostScrapList, mypagePostScrapAdapter)
+            }
+            .addOnFailureListener { exception ->
+                Log.e("Firestore", "Error getting documents", exception)
+                Toast.makeText(requireContext(), "Error getting documents: $exception", Toast.LENGTH_SHORT).show()
+            }
     }
 
     private fun fetchPostsFromIds(
@@ -71,9 +113,11 @@ class Fragment3 : Fragment() {
         mypagePostScrapAdapter: MypagePostScrapListAdapter
     ) {
         if (postIds.isEmpty()) {
+            Log.d("Firestore", "No post IDs found")
             return
         }
 
+        Log.d("Firestore", "Fetching posts with IDs: $postIds")
         db.collection("posts")
             .whereIn(FieldPath.documentId(), postIds)
             .get()
@@ -84,15 +128,12 @@ class Fragment3 : Fragment() {
                     val str_image = document.getString("imageUrl") ?: ""
                     mypagePostScrapList.add(MypagePostScrapListItem(str_image, str_title, str_content))
                 }
-
+                Log.d("Firestore", "Fetched posts: $mypagePostScrapList")
                 mypagePostScrapAdapter.notifyDataSetChanged()
             }
             .addOnFailureListener { exception ->
-                Toast.makeText(
-                    requireContext(),
-                    "Error getting documents: $exception",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Log.e("Firestore", "Error fetching posts", exception)
+                Toast.makeText(requireContext(), "Error getting documents: $exception", Toast.LENGTH_SHORT).show()
             }
     }
 }
