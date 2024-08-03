@@ -53,6 +53,7 @@ class TripDate_Activity : AppCompatActivity() {
         rangeTextView = findViewById(R.id.rangeTextView)
         bt_reg = findViewById(R.id.bt_reg)
 
+        // 뒤로가기 버튼 클릭 리스너
         bt_back.setOnClickListener {
             val intent = Intent(this, Home_Activity::class.java)
             startActivity(intent)
@@ -74,24 +75,30 @@ class TripDate_Activity : AppCompatActivity() {
             }
             val selectedDateInMillis = selectedDate.timeInMillis
 
+            // 시작 날짜가 설정되지 않았거나 시작 날짜와 종료 날짜가 모두 설정된 경우
             if (startDate == null || (startDate != null && endDate != null)) {
                 startDate = selectedDateInMillis
                 endDate = null
                 rangeTextView.text = "${dateFormat.format(startDate)}"
-            } else if (startDate != null && endDate == null) {
+            }
+            // 시작 날짜가 설정되어 있고 종료 날짜가 설정되지 않은 경우
+            else if (startDate != null && endDate == null) {
                 if (selectedDateInMillis > startDate!!) {
                     endDate = selectedDateInMillis
                     rangeTextView.text = "${dateFormat.format(startDate)}   ~   ${dateFormat.format(endDate)}"
                 } else {
+                    // 선택한 종료 날짜가 시작 날짜보다 이전일 경우, 시작 날짜를 업데이트
                     startDate = selectedDateInMillis
                     rangeTextView.text = "${dateFormat.format(startDate)}"
                 }
             }
         }
 
+        // 등록 버튼 클릭 리스너: 입력값 검증 및 데이터 저장
         bt_reg.setOnClickListener {
             val str_title = et_title.text.toString()
 
+            // 모든 필드가 입력된 경우
             if (str_title.isNotEmpty() && str_spinner != "여행, 어디로 떠나시나요?" && startDate != null) {
                 val currentUser = auth.currentUser
                 if (currentUser != null) {

@@ -45,12 +45,11 @@ class Home_Activity : AppCompatActivity() {
     lateinit var communityButton: ImageButton
     //하단바 ----------
 
-    lateinit var pigButton: ImageButton
+    lateinit var pigButton: ImageButton // 예산 관리 버튼
     lateinit var viewFlipper: ViewFlipper
 
     // 날씨 api ----------------
     lateinit var weatherText : TextView
-
     private val apiKey = com.guru.travelalone.BuildConfig.WEATHER_API_KEY
     private val city = "Seoul"
     lateinit var image1 : ImageView
@@ -77,11 +76,13 @@ class Home_Activity : AppCompatActivity() {
     lateinit var trip_title : TextView
     lateinit var trip_date : TextView
     lateinit var trip_location : TextView
+    // FAB ---------------------
 
     // Firestore 인스턴스 초기화
     val db = FirebaseFirestore.getInstance()
     val auth = FirebaseAuth.getInstance()
 
+    // 데이터 포맷
     private val dateFormat = SimpleDateFormat("MM.dd(E)", Locale.KOREAN)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -209,6 +210,7 @@ class Home_Activity : AppCompatActivity() {
 
     // 날씨 API 호출
     private fun getWeatherData() {
+        // 로그 인터셉터 설정 (HTTP 요청 및 응답 로깅)
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
         val client = OkHttpClient.Builder()
@@ -217,10 +219,11 @@ class Home_Activity : AppCompatActivity() {
             .readTimeout(30, TimeUnit.SECONDS)
             .build()
 
+        // Retrofit 설정
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.openweathermap.org/")
+            .baseUrl("https://api.openweathermap.org/")  // 기본 URL 설정
             .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())  // JSON 변환기 설정
             .build()
 
         val api = retrofit.create(OpenWeatherApi::class.java)
@@ -228,8 +231,8 @@ class Home_Activity : AppCompatActivity() {
             override fun onResponse(call: Call<WeatherResponse>, response: Response<WeatherResponse>) {
                 if (response.isSuccessful) {
                     response.body()?.let {
-                        val weatherCondition = it.weather.first().description
-                        val temperature = it.main.temp - 273.15 // Convert from Kelvin to Celsius
+                        val weatherCondition = it.weather.first().description  // 날씨 상태
+                        val temperature = it.main.temp - 273.15 // 켈빈 온도를 섭씨로 변환
                         // 온도, 비 여부에 따라 문구 바뀌게 설정
                         val weather_id = when {
                             // rain
@@ -254,6 +257,7 @@ class Home_Activity : AppCompatActivity() {
                             }
                         }
 
+                        // 날씨 상태에 따른 UI 업데이트
                         if(weather_id == "rain")
                         {
                             weatherText.text = "비오는날${String(Character.toChars(0x1F302))},\n따뜻한 실내에서 즐기는 힐링 타임!"
@@ -357,6 +361,7 @@ class Home_Activity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
+                // API 호출 실패 시 텍스트 업데이트
                 weatherText.text = "날씨 정보를 가져오는데 실패했습니다."
             }
         })
@@ -412,20 +417,24 @@ class Home_Activity : AppCompatActivity() {
     // tripDate에서 유효한 여행일정 있는지 확인
     private fun handleTripDateDocuments(documents: QuerySnapshot) {
         var validDocument: QueryDocumentSnapshot? = null
-        val currentDate = Calendar.getInstance().timeInMillis
+        val currentDate = Calendar.getInstance().timeInMillis // 현재 시간 가져오기
 
+        // 문서들을 순회하면서 유효한 여행 날짜를 찾습니다.
         for (document in documents) {
-            val longStartDate = document.getLong("start_date") ?: continue
-            val longEndDate = document.getLong("end_date") ?: Long.MAX_VALUE
+            val longStartDate = document.getLong("start_date") ?: continue // 시작 날짜 가져오기 (없으면 다음 문서로)
+            val longEndDate = document.getLong("end_date") ?: Long.MAX_VALUE // 종료 날짜 가져오기 (없으면 최대값으로 설정)
 
+            // 현재 날짜가 여행 날짜 범위에 있는지 확인
             val isCurrentDateInRange = currentDate in longStartDate..longEndDate
 
             if (isCurrentDateInRange || longEndDate > currentDate) {
+                // 유효한 여행 날짜 문서를 찾으면 변수에 저장하고 루프 종료
                 validDocument = document
                 break
             }
         }
 
+        // 유효한 여행 날짜 문서가 있는 경우
         if (validDocument != null) {
             val strTitle = validDocument.getString("title") ?: "알 수 없는 제목"
             trip_title.text = strTitle
@@ -436,15 +445,18 @@ class Home_Activity : AppCompatActivity() {
             val longStartDate = validDocument.getLong("start_date") ?: 0L
             val longEndDate = validDocument.getLong("end_date")
 
+            // 날짜 포맷팅하여 UI 업데이트
             trip_date.text = if (longEndDate != null && longEndDate != 0L) {
                 "${dateFormat.format(longStartDate)} ~ ${dateFormat.format(longEndDate)}"
             } else {
                 dateFormat.format(longStartDate)
             }
 
+            // 유효한 여행 정보가 있으므로 관련 UI 요소들을 표시
             trip_cd.visibility = CardView.VISIBLE
             trip_bt.visibility = Button.VISIBLE
         } else {
+            // 유효한 여행 날짜 문서가 없는 경우 처리
             handleNoValidTripDate("UserID")
         }
     }

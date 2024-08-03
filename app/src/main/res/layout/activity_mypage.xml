@@ -8,6 +8,7 @@
     tools:context=".MainActivity"
     android:background="#ffffff">
 
+
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
@@ -143,7 +144,7 @@
                 <FrameLayout
                     android:id="@+id/frame"
                     android:layout_width="match_parent"
-                    android:layout_height="1500dp">
+                    android:layout_height="2000dp">
                 </FrameLayout>
             </LinearLayout>
         </LinearLayout>
