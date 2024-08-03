@@ -62,14 +62,12 @@ class Community_Detail_Activity : AppCompatActivity() {
                     if (document != null) {
                         val post = document.toObject(CommunityPostListItem::class.java)
                         post?.let {
-                            // Set the data to the views
                             nameTextView.text = it.nickname
                             dateTextView.text = it.date
-                            timeTextView.text = it.createdAt
+                            timeTextView.text = it.createdAt // Set the creation time here
                             titleTextView.text = it.title
                             contentTextView.text = it.content
 
-                            // Check if the imageUrl equals the placeholder URL
                             if (it.imageUrl == "android.resource://com.guru.travelalone/drawable/sample_image_placeholder") {
                                 imageView.visibility = View.GONE
                             } else {
@@ -91,10 +89,8 @@ class Community_Detail_Activity : AppCompatActivity() {
                                 profileImageView.setImageResource(R.drawable.samplepro)
                             }
 
-                            // Check if the post is already bookmarked
                             checkIfBookmarked(postId)
 
-                            // Show or hide edit and delete buttons based on user ID match
                             if (it.userId == currentKakaoUserId || it.userId == currentFirebaseUserId) {
                                 textView2.visibility = View.VISIBLE
                                 deleteButton.visibility = View.VISIBLE
@@ -109,7 +105,6 @@ class Community_Detail_Activity : AppCompatActivity() {
                     // Handle the error
                 }
         }
-
         textView2.setOnClickListener {
             postId?.let { id ->
                 // Update the post to set image URLs to null

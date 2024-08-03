@@ -26,6 +26,8 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.kakao.sdk.user.UserApiClient
+import java.util.Date
+import java.util.Locale
 import java.util.UUID
 
 class Community_Write_Activity : AppCompatActivity() {
@@ -228,23 +230,14 @@ class Community_Write_Activity : AppCompatActivity() {
         val title = titleEditText.text.toString()
         val content = contentEditText.text.toString()
         val isPublic = publicSwitch.isChecked
-        var userId: String? = currentUser?.uid
-        var userEmail: String? = currentUser?.email
+        val userId = currentUser?.uid
+        val userEmail = currentUser?.email
 
-        if (userId == null) {
-            UserApiClient.instance.me { user, error ->
-                if (error != null) {
-                    Toast.makeText(this, "Kakao 로그인 실패", Toast.LENGTH_SHORT).show()
-                    return@me
-                }
-                userId = user?.id.toString()
-                userEmail = user?.kakaoAccount?.email
-                processPostSubmission(title, content, isPublic, selectedImageUri, userId, userEmail, date, location, userNickname, userProfileImageUrl)
-            }
-            return
-        }
+        val currentTime = System.currentTimeMillis()
+        val sdf = java.text.SimpleDateFormat("yy.MM.dd HH:mm", Locale.getDefault())
+        val currentTimeFormatted = sdf.format(Date(currentTime))
 
-        processPostSubmission(title, content, isPublic, selectedImageUri, userId, userEmail, date, location, userNickname, userProfileImageUrl)
+        processPostSubmission(title, content, isPublic, selectedImageUri, userId, userEmail, date, location, userNickname, userProfileImageUrl, currentTimeFormatted)
     }
 
     private fun processPostSubmission(
@@ -257,24 +250,21 @@ class Community_Write_Activity : AppCompatActivity() {
         date: String?,
         location: String?,
         nickname: String?,
-        profileImageUrl: String?
+        profileImageUrl: String?,
+        currentTime: String
     ) {
         val storageReference = FirebaseStorage.getInstance().reference.child("images/${UUID.randomUUID()}")
 
-        val uploadTask = if (imageUri != null) {
-            storageReference.putFile(imageUri)
-        } else {
-            null
-        }
+        val uploadTask = imageUri?.let { storageReference.putFile(it) }
 
         uploadTask?.addOnSuccessListener { taskSnapshot ->
             taskSnapshot.storage.downloadUrl.addOnSuccessListener { uri ->
-                savePostToFirestore(title, content, isPublic, uri.toString(), userId, userEmail, date, location, nickname, profileImageUrl)
+                savePostToFirestore(title, content, isPublic, uri.toString(), userId, userEmail, date, location, nickname, profileImageUrl, currentTime)
             }
         }?.addOnFailureListener {
-            savePostToFirestore(title, content, isPublic, null, userId, userEmail, date, location, nickname, profileImageUrl)
+            savePostToFirestore(title, content, isPublic, null, userId, userEmail, date, location, nickname, profileImageUrl, currentTime)
         } ?: run {
-            savePostToFirestore(title, content, isPublic, null, userId, userEmail, date, location, nickname, profileImageUrl)
+            savePostToFirestore(title, content, isPublic, null, userId, userEmail, date, location, nickname, profileImageUrl, currentTime)
         }
     }
 
@@ -288,7 +278,8 @@ class Community_Write_Activity : AppCompatActivity() {
         date: String?,
         location: String?,
         nickname: String?,
-        profileImageUrl: String?
+        profileImageUrl: String?,
+        currentTime: String
     ) {
         val postData = hashMapOf(
             "title" to title,
@@ -300,7 +291,8 @@ class Community_Write_Activity : AppCompatActivity() {
             "date" to date,
             "location" to location,
             "nickname" to nickname,
-            "profileImageUrl" to profileImageUrl
+            "profileImageUrl" to profileImageUrl,
+            "createdAt" to currentTime
         )
 
         val firestore = FirebaseFirestore.getInstance()
@@ -309,9 +301,9 @@ class Community_Write_Activity : AppCompatActivity() {
         document.set(postData)
             .addOnSuccessListener {
                 Toast.makeText(this, "게시글이 저장되었습니다.", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, Community_Activity::class.java) // CommunityActivity로 변경
+                val intent = Intent(this, Community_Activity::class.java)
                 startActivity(intent)
-                finish() // 현재 Activity 종료
+                finish()
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "게시글 저장 실패", Toast.LENGTH_SHORT).show()
