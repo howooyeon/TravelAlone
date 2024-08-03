@@ -11,6 +11,32 @@
         android:layout_height="702dp"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/back"
+                android:layout_width="12dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="60dp"
+                android:background="#00ff0000"
+                android:scaleType="fitCenter"
+                android:src="@drawable/btn_back" />
+
+            <ImageView
+                android:id="@+id/bookmark"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="330dp"
+                android:layout_marginTop="55dp"
+                android:src="@drawable/bookmark" />
+        </LinearLayout>
+
         <ImageView
             android:id="@+id/image"
             android:layout_width="match_parent"
@@ -100,16 +126,6 @@
         </ScrollView>
 
     </LinearLayout>
-
-    <ImageView
-        android:id="@+id/bookmark"
-        android:layout_width="25dp"
-        android:layout_height="35dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="46dp"
-        android:layout_marginEnd="46dp"
-        android:src="@drawable/bookmark" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
