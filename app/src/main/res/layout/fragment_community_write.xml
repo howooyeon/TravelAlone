@@ -18,7 +18,4 @@
         android:layout_marginTop="10dp"
         android:textSize="16sp"
         android:textColor="@color/black" />
-
-    <!-- Add other UI elements as needed -->
-
 </LinearLayout>

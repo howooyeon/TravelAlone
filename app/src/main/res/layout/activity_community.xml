@@ -26,6 +26,7 @@
                 android:textSize="20sp" />
 
             <!-- 밑에서 부터 LinearLayout 추가해서 코드 작성하시면 됩니다 -->
+            <!-- 지역 스피너-->
             <Spinner
                 android:id="@+id/location_spinner"
                 android:layout_width="160dp"
@@ -54,6 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!-- 게시글 작성 fab 버튼-->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"

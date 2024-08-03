@@ -84,10 +84,10 @@ class Community_Select_Activity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { result ->
                 if (result.isEmpty) {
-                    // No documents found
+                    // 생성된 여행 일정이 없을시
                     Toast.makeText(this, "여행 일정이 없어요! \n일정을 먼저 생성해 주세요.", Toast.LENGTH_SHORT).show()
                     Handler().postDelayed({
-                        finish() // Close the activity
+                        finish()
                     }, 1000)
                 } else {
                     postList.clear() // 데이터가 중복되지 않도록 리스트를 초기화

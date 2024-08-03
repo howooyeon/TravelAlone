@@ -34,6 +34,7 @@ class CommunityPostListAdapter(
             contentTextView.text = it.content
             dateTextView.text = it.date
 
+            // 이미지 첨부시 가져오기
             if (!it.imageUrl.isNullOrEmpty()) {
                 Glide.with(context)
                     .load(it.imageUrl)
@@ -44,6 +45,7 @@ class CommunityPostListAdapter(
                 imageView.visibility = View.GONE
             }
 
+            // 프로필 사진 존재시, 글라이더로 가져오기
             if (!it.profileImageUrl.isNullOrEmpty()) {
                 Glide.with(context)
                     .load(it.profileImageUrl)
@@ -54,10 +56,10 @@ class CommunityPostListAdapter(
                 profileImageView.setImageResource(R.drawable.samplepro)
             }
 
-            // Set the post item as the tag of the view
+            // post item set하기
             view.tag = it
 
-            // Use the tag to get the post item when the view is clicked
+            // 뷰 클릭시, 태그 사용해서 post 가져오기
             view.setOnClickListener {
                 val clickedPost = view.tag as? CommunityPostListItem
                 clickedPost?.let { itemClickListener(it) }
