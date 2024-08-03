@@ -27,10 +27,16 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.kakao.sdk.user.UserApiClient
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.UUID
+import kotlin.coroutines.resumeWithException
 
 class Community_Write_Activity : AppCompatActivity() {
 
@@ -60,7 +66,7 @@ class Community_Write_Activity : AppCompatActivity() {
     private var postId: String? = null
     private var date: String? = null
     private var location: String? = null
-    private var existingImageUrl: String? = null // 새로 추가된 변수
+    private var existingImageUrl: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,10 +78,8 @@ class Community_Write_Activity : AppCompatActivity() {
             insets
         }
 
-        // Intent에서 데이터 받기
-        postId = intent.getStringExtra("postId") // 게시글 ID를 받아옵니다.
+        postId = intent.getStringExtra("postId")
 
-        // 기존 게시글 데이터를 불러옵니다.
         if (postId != null) {
             fetchPostData(postId!!)
         }
@@ -97,12 +101,11 @@ class Community_Write_Activity : AppCompatActivity() {
         contentEditText = findViewById(R.id.contentEditText)
         publicSwitch = findViewById(R.id.switch2)
         submitButton = findViewById(R.id.bt_reg)
-        cardView = findViewById(R.id.cardView) // Ensure cardView is initialized
+        cardView = findViewById(R.id.cardView)
 
         auth = FirebaseAuth.getInstance()
         currentUser = auth.currentUser
 
-        // 닉네임과 프로필 이미지 URL을 가져오는 메서드 호출
         fetchUserProfile()
 
         imageButton.setOnClickListener {
@@ -121,22 +124,18 @@ class Community_Write_Activity : AppCompatActivity() {
             }
         }
 
-
         submitButton.setOnClickListener {
             val title = titleEditText.text.toString()
             val content = contentEditText.text.toString()
 
-            // 제목과 내용이 모두 입력되었는지 확인
             if (title.isBlank() || content.isBlank()) {
                 Toast.makeText(this, "제목과 내용을 모두 입력해 주세요.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // 게시글 등록 진행 중 Toast 메시지 표시
             Toast.makeText(this, "게시글 등록 중, 잠시 기다려주세요.", Toast.LENGTH_SHORT).show()
 
-            // Proceed with submitting the post
-            submitPost(date, location, existingImageUrl) // 기존 이미지 URL을 추가로 전달
+            submitPost(date, location, existingImageUrl)
         }
     }
 
@@ -165,16 +164,14 @@ class Community_Write_Activity : AppCompatActivity() {
                     publicSwitch.isChecked = document.getBoolean("isPublic") ?: false
                     date = document.getString("date")
                     location = document.getString("location")
-                    existingImageUrl = document.getString("imageUrl") // 기존 이미지 URL 저장
+                    existingImageUrl = document.getString("imageUrl")
 
-                    // 기존 이미지 URL을 유지하기 위한 변수
                     selectedImageUri = if (existingImageUrl != null && existingImageUrl!!.isNotEmpty()) {
                         Uri.parse(existingImageUrl)
                     } else {
                         null
                     }
 
-                    // 이미지 로드 및 UI 업데이트
                     if (selectedImageUri != null) {
                         selectedImageView.load(selectedImageUri)
                         selectedImageView.visibility = View.VISIBLE
@@ -194,7 +191,6 @@ class Community_Write_Activity : AppCompatActivity() {
 
     private fun fetchUserProfile() {
         if (currentUser != null) {
-            // Handle general login members
             val email = currentUser?.email
             FirebaseFirestore.getInstance().collection("members")
                 .whereEqualTo("login_id", email)
@@ -213,7 +209,6 @@ class Community_Write_Activity : AppCompatActivity() {
                     Toast.makeText(this, "프로필 정보 가져오기 실패", Toast.LENGTH_SHORT).show()
                 }
         } else {
-            // Handle Kakao login members
             UserApiClient.instance.me { user, error ->
                 if (error != null) {
                     Toast.makeText(this, "Kakao 로그인 실패", Toast.LENGTH_SHORT).show()
@@ -240,13 +235,30 @@ class Community_Write_Activity : AppCompatActivity() {
         }
     }
 
+    private suspend fun getKakaoUserId(): String? = suspendCancellableCoroutine { continuation ->
+        UserApiClient.instance.me { user, error ->
+            if (error != null) {
+                continuation.resumeWithException(error)
+            } else {
+                continuation.resume(user?.id.toString()) {
+                    // onCancellation 작업 처리
+                    UserApiClient.instance.logout { logoutError ->
+                        if (logoutError != null) {
+                            Log.e("Kakao", "Logout error: $logoutError")
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // 기존 submitPost 메서드 내에서 userId 설정
     private fun submitPost(date: String?, location: String?, existingImageUrl: String?) {
         val title = titleEditText.text.toString()
         val content = contentEditText.text.toString()
         val isPublic = publicSwitch.isChecked
-        var userId : String =""
-        var userEmail : String = ""
-
+        var userId: String = ""
+        var userEmail: String = ""
 
         // Firebase Auth 초기화
         auth = FirebaseAuth.getInstance()
@@ -257,38 +269,19 @@ class Community_Write_Activity : AppCompatActivity() {
             // Firebase 로그인 유저 정보 가져오기
             userId = currentUser?.uid.toString()
             userEmail = currentUser?.email.toString()
-        }
-            else {
+            continuePostSubmission(date, location, existingImageUrl, title, content, isPublic, userId, userEmail)
+        } else {
             // Kakao 로그인 유저 정보 가져오기
-            UserApiClient.instance.me { user, error ->
-                if (error != null) {
-                    Log.e("Kakao", "사용자 정보 요청 실패", error)
-                } else if (user != null) {
-                    userId = user.id.toString()
-                    Log.d("Check", "카카오 유저 확인: $userId")
+            CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    userId = getKakaoUserId() ?: ""
+                    continuePostSubmission(date, location, existingImageUrl, title, content, isPublic, userId, userEmail)
+                } catch (e: Exception) {
+                    Log.e("Kakao", "사용자 정보 요청 실패", e)
+                    Toast.makeText(this@Community_Write_Activity, "Kakao 사용자 정보를 가져오는 데 실패했습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
-
-
-        val currentTime = System.currentTimeMillis()
-        val sdf = SimpleDateFormat("yy.MM.dd HH:mm", Locale.getDefault())
-        val formattedDate = sdf.format(Date(currentTime))
-
-        processPostSubmission(
-            title,
-            content,
-            isPublic,
-            selectedImageUri,
-            userId,
-            userEmail,
-            date,
-            location,
-            userNickname,
-            userProfileImageUrl,
-            formattedDate,
-            existingImageUrl // 기존 이미지 URL을 추가로 전달
-        )
     }
 
     private fun processPostSubmission(
@@ -303,10 +296,9 @@ class Community_Write_Activity : AppCompatActivity() {
         nickname: String?,
         profileImageUrl: String?,
         currentTime: String,
-        existingImageUrl: String? // 기존 이미지 URL을 추가로 전달
+        existingImageUrl: String?
     ) {
         if (imageUri != null) {
-            // 새로운 이미지가 선택된 경우
             val storageReference = FirebaseStorage.getInstance().reference.child("images/${UUID.randomUUID()}")
             val uploadTask = storageReference.putFile(imageUri)
 
@@ -315,11 +307,9 @@ class Community_Write_Activity : AppCompatActivity() {
                     savePostToFirestore(title, content, isPublic, uri.toString(), userId, userEmail, date, location, nickname, profileImageUrl, currentTime)
                 }
             }.addOnFailureListener {
-                // 이미지 업로드 실패 시 기존 이미지 URL을 사용
                 savePostToFirestore(title, content, isPublic, existingImageUrl, userId, userEmail, date, location, nickname, profileImageUrl, currentTime)
             }
         } else {
-            // 이미지가 변경되지 않은 경우 기존 이미지 URL 사용
             savePostToFirestore(title, content, isPublic, existingImageUrl, userId, userEmail, date, location, nickname, profileImageUrl, currentTime)
         }
     }
@@ -365,11 +355,35 @@ class Community_Write_Activity : AppCompatActivity() {
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "게시글 저장 실패", Toast.LENGTH_SHORT).show()
-                Log.e("Community_Write_Activity", "Error saving post", e)
+                Log.e("Community_Write_Activity", "게시글 저장 실패", e)
             }
     }
 
     companion object {
         private const val PERMISSION_REQUEST_CODE = 100
     }
+
+    private fun continuePostSubmission(date: String?, location: String?, existingImageUrl: String?, title: String, content: String, isPublic: Boolean, userId: String, userEmail: String) {
+        val currentTime = System.currentTimeMillis()
+        val sdf = SimpleDateFormat("yy.MM.dd HH:mm", Locale.getDefault())
+        val formattedDate = sdf.format(Date(currentTime))
+
+        processPostSubmission(
+            title,
+            content,
+            isPublic,
+            selectedImageUri,
+            userId,
+            userEmail,
+            date,
+            location,
+            userNickname,
+            userProfileImageUrl,
+            formattedDate,
+            existingImageUrl
+        )
+    }
 }
+
+
+
