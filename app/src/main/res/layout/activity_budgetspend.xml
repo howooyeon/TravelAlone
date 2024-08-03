@@ -7,12 +7,6 @@
     android:background="@color/white"
     android:fitsSystemWindows="true">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:scrollbars="none"
-        android:paddingBottom="90dp"> <!-- 하단 패딩 추가 -->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -41,7 +35,7 @@
                 android:textSize="30dp"
                 android:inputType="number"
                 app:layout_constraintTop_toTopOf="parent"
-                android:fontFamily="@font/inter_bold"/>
+                android:fontFamily="@font/inter_medium"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -67,7 +61,7 @@
 
                 <ImageButton
                     android:id="@+id/chargebtn"
-                    android:layout_width="130dp"
+                    android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginLeft="10dp"
                     android:background="@android:color/transparent"
@@ -162,7 +156,6 @@
 
             </LinearLayout>
         </LinearLayout>
-    </ScrollView>
 
     <ImageButton
         android:id="@+id/saveButton"
