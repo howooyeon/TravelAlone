@@ -47,6 +47,7 @@ class Home_Activity : AppCompatActivity() {
 
     lateinit var pigButton: ImageButton // 예산 관리 버튼
     lateinit var viewFlipper: ViewFlipper
+    lateinit var banner: Button
 
     // 날씨 api ----------------
     lateinit var weatherText : TextView
@@ -114,6 +115,15 @@ class Home_Activity : AppCompatActivity() {
         viewFlipper.inAnimation = AnimationUtils.loadAnimation(this, R.anim.slide_in_right)
         viewFlipper.outAnimation = AnimationUtils.loadAnimation(this, R.anim.slide_out_left)
 
+        // 첫번째 배너 클릭 시 트래봇으로 이동
+        banner = findViewById(R.id.bannar)
+        fab.setOnClickListener {
+            val intent = Intent(
+                this@Home_Activity,
+                Travbot_activity::class.java
+            )
+            startActivity(intent)
+        }
 
         // 날씨 api ----------------
         weatherText = findViewById(R.id.weather_text)
