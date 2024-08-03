@@ -1,6 +1,7 @@
 package com.guru.travelalone
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -308,7 +309,9 @@ class Community_Write_Activity : AppCompatActivity() {
         document.set(postData)
             .addOnSuccessListener {
                 Toast.makeText(this, "게시글이 저장되었습니다.", Toast.LENGTH_SHORT).show()
-                finish()
+                val intent = Intent(this, Community_Activity::class.java) // CommunityActivity로 변경
+                startActivity(intent)
+                finish() // 현재 Activity 종료
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "게시글 저장 실패", Toast.LENGTH_SHORT).show()
