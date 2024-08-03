@@ -17,6 +17,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -34,6 +35,7 @@ import java.util.UUID
 class Community_Write_Activity : AppCompatActivity() {
 
     private lateinit var imageButton: ImageButton
+    private lateinit var cardView: CardView
     private lateinit var selectedImageView: ImageView
     private lateinit var titleEditText: TextInputEditText
     private lateinit var contentEditText: TextInputEditText
@@ -50,8 +52,9 @@ class Community_Write_Activity : AppCompatActivity() {
         uri?.let {
             selectedImageUri = it
             selectedImageView.setImageURI(it)
+            cardView.visibility = View.VISIBLE
             selectedImageView.visibility = View.VISIBLE
-            imageButton.visibility = View.GONE
+            //imageButton.visibility = View.GONE
         }
     }
 
@@ -89,6 +92,7 @@ class Community_Write_Activity : AppCompatActivity() {
         }
 
         imageButton = findViewById(R.id.imageButton)
+
         selectedImageView = findViewById(R.id.selectedImageView)
         titleEditText = findViewById(R.id.titleEditText)
         contentEditText = findViewById(R.id.contentEditText)

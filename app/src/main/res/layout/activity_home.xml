@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -28,11 +28,17 @@
                     android:layout_height="40sp"
                     app:srcCompat="@drawable/logo_home"
                     android:layout_marginBottom="20sp" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    />
 
                 <ImageButton
                     android:id="@+id/bt_pig"
                     android:layout_marginTop="3dp"
-                    android:layout_marginLeft="160dp"
+                    android:layout_marginRight="20dp"
+
                     android:layout_width="35dp"
                     android:layout_height="30dp"
                     app:srcCompat="@drawable/bt_pig"
@@ -365,7 +371,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="30dp">
                     <FrameLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -573,6 +580,8 @@
             app:layout_constraintEnd_toEndOf="@id/nav"
             app:tint="@null"
             tools:ignore="MissingConstraints"
+            app:maxImageSize="30dp"
+            app:fabCustomSize="65dp"
             android:contentDescription="fab button"/>
 
         <androidx.cardview.widget.CardView
@@ -727,4 +736,4 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

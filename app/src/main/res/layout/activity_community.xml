@@ -64,6 +64,8 @@
             android:src="@drawable/pen"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:maxImageSize="40dp"
+            app:fabCustomSize="65dp"
             app:tint="@null" />
 
         <ImageView
