@@ -6,7 +6,7 @@
     android:layout_margin="20sp">
 
     <ListView
-        android:id="@+id/mypagepostlistview"
+        android:id="@+id/mypagescraplistview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:dividerHeight="50px"

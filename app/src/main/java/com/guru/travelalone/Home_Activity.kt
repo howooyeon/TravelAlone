@@ -395,35 +395,19 @@ class Home_Activity : AppCompatActivity() {
             }
     }
 
+
     private fun fetchKakaoUserProfileAndTripDate() {
         UserApiClient.instance.me { user, error ->
             if (error != null) {
                 Log.e("Kakao", "사용자 정보 요청 실패", error)
                 Toast.makeText(this, "사용자 정보 요청 실패", Toast.LENGTH_SHORT).show()
             } else if (user != null) {
-                val kakaoNickname = user.kakaoAccount?.profile?.nickname ?: ""
-                db.collection("members")
-                    .whereEqualTo("nickname", kakaoNickname)
-                    .get()
-                    .addOnSuccessListener { documents ->
-                        if (documents != null && !documents.isEmpty) {
-                            val email = documents.firstOrNull()?.getString("login_id")
-                            if (email != null) {
-                                fetchTripDateFromFirebase(email)  // Firebase에서 tripdate 가져오기
-                            } else {
-                                handleNoValidTripDate("Kakao")  // 이메일이 없는 경우 처리
-                            }
-                        } else {
-                            handleNoValidTripDate("Kakao")  // 사용자 정보가 없는 경우 처리
-                        }
-                    }
-                    .addOnFailureListener { e ->
-                        Log.w("Kakao", "문서 가져오기 실패: ", e)
-                        handleNoValidTripDate("Kakao")
-                    }
+                val kakaoUserId = user.id.toString()  // Kakao 사용자의 id를 가져옴
+                fetchTripDateFromFirebase(kakaoUserId)  // Firebase에서 tripdate 가져오기
             }
         }
     }
+
 
     // tripDate에서 유효한 여행일정 있는지 확인
     private fun handleTripDateDocuments(documents: QuerySnapshot) {

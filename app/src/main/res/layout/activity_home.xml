@@ -32,7 +32,7 @@
                 <ImageButton
                     android:id="@+id/bt_pig"
                     android:layout_marginTop="3dp"
-                    android:layout_marginLeft="190dp"
+                    android:layout_marginLeft="160dp"
                     android:layout_width="35dp"
                     android:layout_height="30dp"
                     app:srcCompat="@drawable/bt_pig"
