@@ -52,6 +52,7 @@
             android:layout_gravity="center_vertical"
             android:background="@drawable/spinner_design"
             android:spinnerMode="dropdown"
+            android:textSize="15sp"
             android:paddingStart="8dp"/>
 
         <TextView
@@ -69,7 +70,7 @@
             android:id="@+id/calendarView"
             android:background="@drawable/rectangle_design"
             android:layout_width="match_parent"
-            android:layout_height="330dp"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true" />
 
     </LinearLayout>

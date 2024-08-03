@@ -17,45 +17,44 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="83dp">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
 
                 <TextView
+                    android:layout_margin="20dp"
                     android:id="@+id/textView"
+                    android:layout_marginLeft="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginLeft="19sp"
-                    android:layout_marginTop="25dp"
                     android:text="마이페이지"
+                    android:fontFamily="@font/inter_medium"
                     android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:fontFamily="@font/inter_bold"/>
+                    android:textSize="20sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    />
 
                 <android.widget.Button
-                    android:layout_marginTop="20sp"
                     android:stateListAnimator="@null"
-                    android:id="@+id/editButton"
-                    android:layout_gravity="center"
+                    android:id="@+id/logout"
+                    android:layout_marginTop="15dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:background="@drawable/rectangle_design"
-                    android:paddingStart="15dp"
-                    android:paddingEnd="15dp"
-                    android:text="프로필 수정"
-                    android:textSize="13dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginStart="178dp"
-                    android:layout_marginEnd="19dp"
-                    android:layout_toEndOf="@+id/textView"
-                    android:textColor="@color/black"/>
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#FFFFFF"
+                    android:text="로그아웃"
+                    android:textSize="13sp"
+                    android:textColor="#55000000"/>
 
-            </RelativeLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -94,6 +93,21 @@
                     android:layout_height="wrap_content"
                     android:text="나를 대표하는 소개를 입력해주세요"
                     android:gravity="center" />
+
+                <android.widget.Button
+                    android:layout_marginTop="15sp"
+                    android:stateListAnimator="@null"
+                    android:id="@+id/editButton"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:background="@drawable/rectangle_design"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:text="프로필 수정"
+                    android:textSize="13dp"
+                    android:layout_toEndOf="@+id/textView"
+                    android:textColor="@color/black"/>
 
                 <com.google.android.material.tabs.TabLayout
                     android:layout_marginTop="20dp"
