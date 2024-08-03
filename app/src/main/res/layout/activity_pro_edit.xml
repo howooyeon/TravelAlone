@@ -63,13 +63,16 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="20dp"
+                android:fontFamily="@font/inter_medium"
                 android:gravity="center"
                 android:hint="닉네임"
                 android:textColor="@color/black"
                 android:textSize="30dp"
                 android:textStyle="normal"
-                app:layout_constraintTop_toTopOf="parent"
-                android:fontFamily="@font/inter_medium"/>
+                android:singleLine="true"
+                android:maxLines="1"
+                android:inputType="text"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
                 android:id="@+id/Introduce"
@@ -80,6 +83,9 @@
                 android:layout_margin="20dp"
                 android:hint="나를 대표하는 소개를 입력해 주세요"
                 android:fontFamily="@font/inter_medium"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:inputType="text"
                 android:gravity="center"
                 android:maxLength="20"/>
 

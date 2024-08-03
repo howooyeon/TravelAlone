@@ -54,11 +54,13 @@ class Budgetspend_Activity : AppCompatActivity() {
 
         setupSpinner()
 
+        //충전 버튼 클릭시
         binding.chargebtn.setOnClickListener {
             val intent = Intent(this@Budgetspend_Activity, Budgetcharge_Activity::class.java)
             startActivity(intent)
         }
 
+        //저장하기 버튼 클릭시
         binding.saveButton.setOnClickListener {
             val spendMoney = binding.spendMoney.text.toString()
             val spendStore = binding.spendStore.text.toString()
@@ -80,6 +82,7 @@ class Budgetspend_Activity : AppCompatActivity() {
         }
     }
 
+    //카테고리
     private fun setupSpinner() {
         val categories = resources.getStringArray(R.array.spending)
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
@@ -102,6 +105,7 @@ class Budgetspend_Activity : AppCompatActivity() {
         }
     }
 
+    //지출 생성
     private suspend fun createSpend(spendMoney: String, spendCategory: SpendCategory?, spendStore: String, spendMemo: String) {
         val currentUser = auth.currentUser
         var userId: String = ""
@@ -124,9 +128,8 @@ class Budgetspend_Activity : AppCompatActivity() {
         }
 
         val id = CounterHelper.getSpendId()
-        val budgetId = 123L // 예산 ID를 적절히 설정
+        val budgetId = 123L // 예산 ID 임의 설정
         val currentDate = Date()
-//        val formattedDate = getFormattedDate(currentDate)
 
         val budgetSpend = BudgetSpend(
             id = id,
@@ -153,6 +156,7 @@ class Budgetspend_Activity : AppCompatActivity() {
         }
     }
 
+    //현재 로그인한 유저 정보
     private fun loadUserProfile() {
         if (currentUser != null) {
             // Firebase 로그인 유저 정보 가져오기
@@ -181,10 +185,5 @@ class Budgetspend_Activity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    fun getFormattedDate(timestamp: Date): String {
-        val sdf = SimpleDateFormat("yyyy.MM.dd.HH.mm", Locale.getDefault())
-        return sdf.format(timestamp)
     }
 }

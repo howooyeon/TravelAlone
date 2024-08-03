@@ -22,7 +22,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.guru.travelalone.databinding.ActivityMyProEditBinding
-import com.guru.travelalone.databinding.ActivityProEditBinding
 import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -44,6 +43,7 @@ class MyProEdit_Activity : AppCompatActivity() {
 
     private var imageUri: Uri? = null
 
+    // 갤러리 접근 권한 요청 런처
     private val requestPermissionLauncher: ActivityResultLauncher<String> =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
@@ -53,6 +53,7 @@ class MyProEdit_Activity : AppCompatActivity() {
             }
         }
 
+    // 갤러리에서 사진 가져오기 런처
     private val pickImageLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
@@ -74,6 +75,7 @@ class MyProEdit_Activity : AppCompatActivity() {
 
         loadUserProfile()
 
+        // 프로필 사진 변경 버튼 클릭 리스너
         binding.plusBtn.setOnClickListener {
             checkPermission()
 
@@ -88,6 +90,7 @@ class MyProEdit_Activity : AppCompatActivity() {
             }
         }
 
+        // 프로필 저장 버튼 클릭 리스너
         binding.saveButton.setOnClickListener {
             if (currentUser != null) {
                 val email = currentUser?.email
@@ -101,7 +104,7 @@ class MyProEdit_Activity : AppCompatActivity() {
                                 try {
                                     normal_edit_save(documentId)
                                 } catch (e: Exception) {
-                                    Log.e("MyProEdit_Activity", "Error saving profile", e)
+                                    Log.e("MyProEdit_Activity", "프로필 저장 중 오류", e)
                                     Toast.makeText(
                                         this@MyProEdit_Activity,
                                         "프로필 저장 중 오류가 발생했습니다.",
@@ -129,7 +132,7 @@ class MyProEdit_Activity : AppCompatActivity() {
                                         try {
                                             kakao_edit_save(documentId, kakaoNickname)
                                         } catch (e: Exception) {
-                                            Log.e("MyProEdit_Activity", "Error saving profile", e)
+                                            Log.e("MyProEdit_Activity", "프로필 저장 중 오류", e)
                                             Toast.makeText(
                                                 this@MyProEdit_Activity,
                                                 "프로필 저장 중 오류가 발생했습니다.",
@@ -144,33 +147,16 @@ class MyProEdit_Activity : AppCompatActivity() {
             }
         }
 
-        //로그아웃 버튼
-        binding.logoutbtn2.setOnClickListener {
-            // Firebase 로그아웃
-            FirebaseAuth.getInstance().signOut()
 
-            // Kakao 로그아웃
-            UserApiClient.instance.logout { error ->
-                if (error != null) {
-                    Log.e("KakaoLogout", "카카오 로그아웃 실패", error)
-                } else {
-                    Log.i("KakaoLogout", "카카오 로그아웃 성공")
-
-                }
-            }
-
-            val intent = Intent(this@MyProEdit_Activity, Login_Activity::class.java)
-            startActivity(intent)
-            finish()
-        }
-
-        binding.budget.setOnClickListener {
-            val intent = Intent(this@MyProEdit_Activity, Budget_Activity::class.java)
+        //뒤로 가기 버튼 클릭 리스너
+        binding.back.setOnClickListener {
+            val intent = Intent(this@MyProEdit_Activity, Mypage_Activity::class.java)
             startActivity(intent)
             finish()
         }
     }
 
+    // 유저 프로필 정보 로드
     private fun loadUserProfile() {
         if (currentUser != null) {
             val email = currentUser?.email
@@ -193,7 +179,7 @@ class MyProEdit_Activity : AppCompatActivity() {
                     }
                 }
                 .addOnFailureListener { exception ->
-                    Log.w("Firestore", "Error getting documents: ", exception)
+                    Log.w("Firestore", "문서 가져오기 오류: ", exception)
                 }
         } else {
             UserApiClient.instance.me { user, error ->
@@ -201,9 +187,7 @@ class MyProEdit_Activity : AppCompatActivity() {
                     Log.e("Kakao", "사용자 정보 요청 실패", error)
                 } else if (user != null) {
                     val kakaoNickname = user.kakaoAccount?.profile?.nickname ?: ""
-                    //val kakaoProfileImageUrl = user.kakaoAccount?.profile?.profileImageUrl ?: ""
                     Log.d("MyProEdit_Activity", "Kakao 로그인 유저 닉네임: $kakaoNickname")
-                    //Log.d("MyProEdit_Activity", "Kakao 로그인 유저 프로필 이미지 URL: $kakaoProfileImageUrl")
                     db.collection("members")
                         .whereEqualTo("nickname", kakaoNickname)
                         .get()
@@ -222,18 +206,20 @@ class MyProEdit_Activity : AppCompatActivity() {
                             }
                         }
                         .addOnFailureListener { exception ->
-                            Log.w("Firestore", "Error getting documents: ", exception)
+                            Log.w("Firestore", "문서 가져오기 오류: ", exception)
                         }
                 }
             }
         }
     }
 
+    // 갤러리 열기
     private fun openGallery() {
         val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
         pickImageLauncher.launch(gallery)
     }
 
+    // 이미지 스토리지에 업로드
     private suspend fun uploadImageToStorage(uri: Uri): String {
         return withContext(Dispatchers.IO) {
             val file = Uri.fromFile(File(uri.path))
@@ -243,6 +229,7 @@ class MyProEdit_Activity : AppCompatActivity() {
         }
     }
 
+    // 비트맵 이미지를 스토리지에 업로드
     private suspend fun uploadBitmapToStorage(bitmap: Bitmap): String {
         return withContext(Dispatchers.IO) {
             val baos = ByteArrayOutputStream()
@@ -254,6 +241,7 @@ class MyProEdit_Activity : AppCompatActivity() {
         }
     }
 
+    // 일반 유저 프로필 저장
     private suspend fun normal_edit_save(documentId: String) {
         val editnickname = binding.txtNickName.text.toString().trim()
         val memberIntroduce = binding.Introduce.text.toString().trim()
@@ -279,6 +267,7 @@ class MyProEdit_Activity : AppCompatActivity() {
         }
     }
 
+    // 카카오 유저 프로필 저장
     private suspend fun kakao_edit_save(documentId: String, kakaoNickname: String) {
         val editnickname = binding.txtNickName.text.toString().trim()
         val memberIntroduce = binding.Introduce.text.toString().trim()
@@ -297,13 +286,21 @@ class MyProEdit_Activity : AppCompatActivity() {
                     ""
                 }
             }
-            kakaosaveUserProfile(documentId, nickname, editnickname, memberIntroduce, profileImageUrl)
+            kakaosaveUserProfile(
+                documentId,
+                nickname,
+                editnickname,
+                memberIntroduce,
+                profileImageUrl
+            )
             val intent = Intent(this@MyProEdit_Activity, Mypage_Activity::class.java)
             startActivity(intent)
         } else {
             Toast.makeText(this, "정보를 다 입력해주세요", Toast.LENGTH_SHORT).show()
         }
     }
+
+    // Firebase Firestore에 일반 유저 프로필 저장
     private fun saveUserProfile(
         documentId: String,
         editNickname: String,
@@ -316,13 +313,14 @@ class MyProEdit_Activity : AppCompatActivity() {
         db.collection("members").document(documentId)
             .set(member)
             .addOnSuccessListener {
-                Log.d("Firestore", "DocumentSnapshot successfully written!")
+                Log.d("Firestore", "문서가 성공적으로 작성되었습니다!")
             }
             .addOnFailureListener { e ->
-                Log.w("Firestore", "Error writing document", e)
+                Log.w("Firestore", "문서 작성 실패", e)
             }
     }
 
+    // Firebase Firestore에 카카오 유저 프로필 저장
     private fun kakaosaveUserProfile(
         documentId: String,
         nickname: String,
@@ -330,19 +328,25 @@ class MyProEdit_Activity : AppCompatActivity() {
         memberIntroduce: String,
         profileImageUrl: String
     ) {
-        val member =
-            Member(documentId.toLong(), nickname, editNickname, profileImageUrl, memberIntroduce, "")
+        val member = Member(
+            documentId.toLong(),
+            nickname,
+            editNickname,
+            profileImageUrl,
+            memberIntroduce,
+            ""
+        )
         db.collection("members").document(documentId)
             .set(member)
             .addOnSuccessListener {
-                Log.d("Firestore", "DocumentSnapshot successfully written!")
+                Log.d("Firestore", "문서가 성공적으로 작성되었습니다!")
             }
             .addOnFailureListener { e ->
-                Log.w("Firestore", "Error writing document", e)
+                Log.w("Firestore", "문서 작성 실패", e)
             }
     }
 
-
+    // 권한 체크 및 요청
     private fun checkPermission() {
         when {
             ContextCompat.checkSelfPermission(
@@ -351,9 +355,11 @@ class MyProEdit_Activity : AppCompatActivity() {
             ) == PermissionChecker.PERMISSION_GRANTED -> {
                 openGallery()
             }
+
             shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE) -> {
                 Toast.makeText(this, "갤러리 접근 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
             }
+
             else -> {
                 requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
             }
