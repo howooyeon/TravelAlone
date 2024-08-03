@@ -109,6 +109,7 @@ class Community_Select_Activity : AppCompatActivity() {
                             "경주" -> R.drawable.img_gyeongju
                             "부산" -> R.drawable.img_busan
                             "여수" -> R.drawable.img_yeosu
+                            "서울" -> R.drawable.img_seoul
                             "인천" -> R.drawable.img_incheon
                             "전주" -> R.drawable.img_jeonju
                             "제주" -> R.drawable.img_jeju
