@@ -1,15 +1,13 @@
 package com.guru.travelalone
 
 import android.Manifest
-import android.content.ContentResolver
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.text.format.DateFormat
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Switch
@@ -22,14 +20,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.kakao.sdk.user.UserApiClient
-import java.text.SimpleDateFormat
-import java.util.Locale
 import java.util.UUID
 
 class Community_Write_Activity : AppCompatActivity() {
@@ -37,8 +32,8 @@ class Community_Write_Activity : AppCompatActivity() {
     private lateinit var imageButton: ImageButton
     private lateinit var cardView: CardView
     private lateinit var selectedImageView: ImageView
-    private lateinit var titleEditText: TextInputEditText
-    private lateinit var contentEditText: TextInputEditText
+    private lateinit var titleEditText: EditText
+    private lateinit var contentEditText: EditText
     private lateinit var publicSwitch: Switch
     private lateinit var submitButton: Button
     private var selectedImageUri: Uri? = null
@@ -54,7 +49,6 @@ class Community_Write_Activity : AppCompatActivity() {
             selectedImageView.setImageURI(it)
             cardView.visibility = View.VISIBLE
             selectedImageView.visibility = View.VISIBLE
-            //imageButton.visibility = View.GONE
         }
     }
 
@@ -92,7 +86,6 @@ class Community_Write_Activity : AppCompatActivity() {
         }
 
         imageButton = findViewById(R.id.imageButton)
-
         selectedImageView = findViewById(R.id.selectedImageView)
         titleEditText = findViewById(R.id.titleEditText)
         contentEditText = findViewById(R.id.contentEditText)
@@ -141,10 +134,14 @@ class Community_Write_Activity : AppCompatActivity() {
                     date = document.getString("date")
                     location = document.getString("location")
                     val imageUrl = document.getString("imageUrl")
-                    if (imageUrl != null && imageUrl != getUriFromDrawable(R.drawable.sample_image_placeholder).toString()) {
+                    if (imageUrl != null && imageUrl.isNotEmpty()) {
                         selectedImageView.visibility = View.VISIBLE
                         imageButton.visibility = View.GONE
                         selectedImageView.setImageURI(Uri.parse(imageUrl))
+                        cardView.visibility = View.VISIBLE
+                    } else {
+                        selectedImageView.setImageResource(R.drawable.sample_image_placeholder)
+                        cardView.visibility = View.GONE
                     }
                 } else {
                     Toast.makeText(this, "게시글을 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
@@ -247,14 +244,12 @@ class Community_Write_Activity : AppCompatActivity() {
         }
 
         uploadTask?.addOnSuccessListener { taskSnapshot ->
-            taskSnapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener { uri ->
-                val imageUrl = uri.toString()
-                savePostToFirestore(title, content, isPublic, imageUrl, userId, userEmail, date, location, nickname, profileImageUrl)
+            taskSnapshot.storage.downloadUrl.addOnSuccessListener { uri ->
+                savePostToFirestore(title, content, isPublic, uri.toString(), userId, userEmail, date, location, nickname, profileImageUrl)
             }
         }?.addOnFailureListener {
-            Toast.makeText(this, "이미지 업로드 실패", Toast.LENGTH_SHORT).show()
+            savePostToFirestore(title, content, isPublic, null, userId, userEmail, date, location, nickname, profileImageUrl)
         } ?: run {
-            // If no imageUri, continue without uploading an image
             savePostToFirestore(title, content, isPublic, null, userId, userEmail, date, location, nickname, profileImageUrl)
         }
     }
@@ -271,90 +266,34 @@ class Community_Write_Activity : AppCompatActivity() {
         nickname: String?,
         profileImageUrl: String?
     ) {
-        val finalImageUrl = imageUrl ?: getUriFromDrawable(R.drawable.sample_image_placeholder).toString()
-
-        val dateFormat = SimpleDateFormat("yy.MM.dd HH:mm", Locale.getDefault())
-        val currentDateTime = dateFormat.format(System.currentTimeMillis())
-
-        val post = hashMapOf(
+        val postData = hashMapOf(
             "title" to title,
             "content" to content,
             "isPublic" to isPublic,
-            "imageUrl" to finalImageUrl,
-            "timestamp" to System.currentTimeMillis(),
+            "imageUrl" to imageUrl,
             "userId" to userId,
             "userEmail" to userEmail,
             "date" to date,
             "location" to location,
             "nickname" to nickname,
-            "profileImageUrl" to profileImageUrl,
-            "createdAt" to currentDateTime
+            "profileImageUrl" to profileImageUrl
         )
 
         val firestore = FirebaseFirestore.getInstance()
-        if (postId != null) {
-            firestore.collection("posts").document(postId!!)
-                .set(post)
-                .addOnSuccessListener {
-                    Toast.makeText(this, "게시글이 수정되었습니다.", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, Community_Activity::class.java)
-                    startActivity(intent)
-                    finish()
-                }
-                .addOnFailureListener {
-                    Toast.makeText(this, "게시글 수정 실패", Toast.LENGTH_SHORT).show()
-                }
-        } else {
-            firestore.collection("posts")
-                .add(post)
-                .addOnSuccessListener {
-                    Toast.makeText(this, "게시글이 등록되었습니다.", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, Community_Activity::class.java)
-                    startActivity(intent)
-                    finish()
-                }
-                .addOnFailureListener {
-                    Toast.makeText(this, "게시글 등록 실패", Toast.LENGTH_SHORT).show()
-                }
-        }
-
-        //        val postId = FirebaseFirestore.getInstance().collection("posts").document().id
-//        FirebaseFirestore.getInstance().collection("posts").document(postId)
-//            .set(post)
-//            .addOnSuccessListener {
-//                Toast.makeText(this, "게시글이 성공적으로 저장되었습니다.", Toast.LENGTH_SHORT).show()
-//                finish()
-//            }
-//            .addOnFailureListener {
-//                Toast.makeText(this, "게시글 저장 실패", Toast.LENGTH_SHORT).show()
-//            }
-    }
-
-    private fun getUriFromDrawable(drawableId: Int): Uri {
-        val resources = resources
-        return Uri.parse(
-            ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
-                    resources.getResourcePackageName(drawableId) + '/' +
-                    resources.getResourceTypeName(drawableId) + '/' +
-                    resources.getResourceEntryName(drawableId))
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == PERMISSION_REQUEST_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openGalleryLauncher.launch("image/*")
-            } else {
-                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
+        val collection = firestore.collection("posts")
+        val document = if (postId == null) collection.document() else collection.document(postId!!)
+        document.set(postData)
+            .addOnSuccessListener {
+                Toast.makeText(this, "게시글이 저장되었습니다.", Toast.LENGTH_SHORT).show()
+                finish()
             }
-        }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "게시글 저장 실패", Toast.LENGTH_SHORT).show()
+                Log.e("Community_Write_Activity", "Error saving post", e)
+            }
     }
 
     companion object {
-        private const val PERMISSION_REQUEST_CODE = 2
+        private const val PERMISSION_REQUEST_CODE = 1001
     }
 }
