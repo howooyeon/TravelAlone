@@ -1,6 +1,16 @@
 package com.guru.travelalone.item
 
-import android.graphics.drawable.Drawable
-
-data class CommunityPostListItem(var img : Drawable, var profile : Drawable,
-                                 var name : String, var title : String, var sub : String, var date : String)
+data class CommunityPostListItem(
+    val title: String? = null,
+    val content: String? = null,
+    val isPublic: Boolean? = null,
+    val imageUrl: String? = null,
+    val userId: String? = null,
+    val userEmail: String? = null,
+    val date: String? = null,
+    val location: String? = null,
+    val nickname: String? = null,        // 닉네임 필드
+    val profileImageUrl: String? = null,  // 프로필 이미지 URL 필드
+    val createdAt: String? = null,
+    var id: String = "", // Add an ID field
+)

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Home_Activity">
+    tools:context=".Home_Activity"
+    android:background="#ffffff">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -17,14 +18,34 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="20sp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_marginLeft="20dp"
+                    android:layout_width="140sp"
+                    android:layout_height="40sp"
+                    app:srcCompat="@drawable/logo_home"
+                    android:layout_marginBottom="20sp" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    />
 
+                <ImageButton
+                    android:id="@+id/bt_pig"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginRight="20dp"
 
-            <ImageView
-                android:layout_marginLeft="20dp"
-                android:layout_width="140sp"
-                android:layout_height="40sp"
-                app:srcCompat="@drawable/logo_home"
-                android:layout_marginBottom="20sp" />
+                    android:layout_width="35dp"
+                    android:layout_height="30dp"
+                    app:srcCompat="@drawable/bt_pig"
+                    android:scaleType="centerCrop"
+                    android:background="@android:color/transparent"/>
+            </LinearLayout>
+
 
             <TextView
                 android:layout_marginLeft="20dp"
@@ -68,7 +89,7 @@
                                 android:layout_height="match_parent"
                                 android:scaleType="centerCrop"
                                 android:src="@color/white"
-                                app:tint="#40000000"
+                                app:tint="#20000000"
                                 android:tintMode="src_atop"/>
 
                             <TextView
@@ -112,7 +133,7 @@
                                 android:layout_height="match_parent"
                                 android:scaleType="centerCrop"
                                 android:src="@color/white"
-                                app:tint="#40000000"
+                                app:tint="#20000000"
                                 android:tintMode="src_atop"/>
 
                             <TextView
@@ -156,7 +177,7 @@
                                 android:layout_height="match_parent"
                                 android:scaleType="centerCrop"
                                 android:src="@color/white"
-                                app:tint="#40000000"
+                                app:tint="#20000000"
                                 android:tintMode="src_atop"/>
 
                             <TextView
@@ -199,7 +220,7 @@
                                 android:layout_height="match_parent"
                                 android:scaleType="centerCrop"
                                 android:src="@color/white"
-                                app:tint="#40000000"
+                                app:tint="#20000000"
                                 android:tintMode="src_atop"/>
 
                             <TextView
@@ -243,7 +264,7 @@
                                 android:layout_height="match_parent"
                                 android:scaleType="centerCrop"
                                 android:src="@color/white"
-                                app:tint="#40000000"
+                                app:tint="#20000000"
                                 android:tintMode="src_atop"/>
 
                             <TextView
@@ -350,7 +371,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="30dp">
                     <FrameLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -558,6 +580,8 @@
             app:layout_constraintEnd_toEndOf="@id/nav"
             app:tint="@null"
             tools:ignore="MissingConstraints"
+            app:maxImageSize="30dp"
+            app:fabCustomSize="65dp"
             android:contentDescription="fab button"/>
 
         <androidx.cardview.widget.CardView
@@ -712,4 +736,4 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

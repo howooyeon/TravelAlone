@@ -21,13 +21,27 @@
             android:orientation="vertical"
             android:layout_margin="20sp">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="프로필 수정"
-                android:textSize="20sp"
-                android:textColor="@color/black"
-                android:fontFamily="@font/inter_bold"/>
+                android:orientation="horizontal">
+                <ImageButton
+                    android:id="@+id/back"
+                    android:layout_marginTop="3dp"
+                    android:scaleType="fitCenter"
+                    android:layout_width="12dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/btn_back"
+                    android:background="#00ff0000"/>
+                <TextView
+                    android:layout_marginLeft="14dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="프로필 수정"
+                    android:fontFamily="@font/inter_medium"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+            </LinearLayout>
 
             <Button
                 android:id="@+id/logoutbtn2"
@@ -57,7 +71,7 @@
                     android:layout_height="100dp"
                     android:layout_gravity="center"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ic_launcher_background" />
+                    android:src="@drawable/samplepro" />
 
                 <ImageButton
                     android:id="@+id/plusBtn"
@@ -124,13 +138,14 @@
         </LinearLayout>
     </ScrollView>
 
-    <ImageButton
+    <android.widget.Button
         android:id="@+id/saveButton"
         android:layout_width="match_parent"
         android:layout_height="75dp"
-        android:layout_alignParentBottom="true"
-        android:background="@android:color/transparent"
-        android:scaleType="fitXY"
-        android:text="저장"
-        app:srcCompat="@drawable/profile_save_btn" />
+        android:background="@drawable/btn_round_main"
+        android:text="프로필 저장"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        android:layout_alignParentBottom="true" />
+
 </RelativeLayout>

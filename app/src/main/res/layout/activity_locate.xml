@@ -41,19 +41,21 @@
 
         <TextView
             android:id="@+id/addressTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:gravity="center"/>
 
         <TextView
             android:id="@+id/latitudeTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -71,7 +73,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/latitudeTextView" />
+            app:layout_constraintTop_toBottomOf="@id/latitudeTextView"
+            android:gravity="center"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView

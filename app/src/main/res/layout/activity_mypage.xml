@@ -5,11 +5,13 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="#ffffff">
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:fillViewport="true"
         android:scrollbars="none">
 
@@ -18,39 +20,45 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="83dp">
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginLeft="19sp"
-                    android:layout_marginTop="25dp"
-                    android:text="마이페이지"
-                    android:textColor="@color/black"
-                    android:textSize="20sp" />
-
-                <ImageButton
-                    android:id="@+id/editButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginStart="178dp"
-                    android:layout_marginTop="17dp"
-                    android:layout_marginEnd="19dp"
-                    android:layout_toEndOf="@+id/textView"
-                    android:contentDescription="수정하기"
-                    android:src="@drawable/edit_profile"
-                    android:background="@android:color/transparent" />
-            </RelativeLayout>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:layout_margin="20dp"
+                    android:id="@+id/textView"
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="마이페이지"
+                    android:fontFamily="@font/inter_medium"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    />
+
+                <android.widget.Button
+                    android:stateListAnimator="@null"
+                    android:id="@+id/logout"
+                    android:layout_marginTop="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#FFFFFF"
+                    android:text="로그아웃"
+                    android:textSize="13sp"
+                    android:textColor="#55000000"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:gravity="center_horizontal">
 
@@ -75,7 +83,9 @@
                     android:layout_height="wrap_content"
                     android:text="닉네임"
                     android:textSize="20sp"
-                    android:gravity="center" />
+                    android:gravity="center"
+                    android:layout_marginTop="5sp"
+                    android:fontFamily="@font/inter_bold" />
 
                 <TextView
                     android:id="@+id/introduction"
@@ -84,112 +94,30 @@
                     android:text="나를 대표하는 소개를 입력해주세요"
                     android:gravity="center" />
 
-            </LinearLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
-
-            </RelativeLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/imageView3"
-                    android:layout_width="428dp"
-                    android:layout_height="83dp"
-                    android:importantForAccessibility="no"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.529"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:srcCompat="@drawable/nav_background"
-                    tools:ignore="SpeakableTextPresentCheck" />
-
-                <ImageButton
-                    android:id="@+id/locateButton"
+                <android.widget.Button
+                    android:layout_marginTop="15sp"
+                    android:stateListAnimator="@null"
+                    android:id="@+id/editButton"
+                    android:layout_gravity="center"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginBottom="4dp"
-                    android:background="@android:color/transparent"
-                    android:importantForAccessibility="no"
-                    android:minWidth="48dp"
-                    android:minHeight="48dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-                    app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintStart_toEndOf="@+id/imageView3"
-                    app:layout_constraintStart_toStartOf="@+id/imageView3"
-                    app:srcCompat="@drawable/nav_locate_size"
-                    tools:ignore="SpeakableTextPresentCheck" />
-
-                <ImageButton
-                    android:id="@+id/travbotButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="112dp"
-                    android:layout_marginBottom="4dp"
-                    android:background="@android:color/transparent"
-                    android:importantForAccessibility="no"
-                    android:minWidth="48dp"
-                    android:minHeight="48dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-                    app:layout_constraintStart_toStartOf="@+id/imageView3"
-                    app:srcCompat="@drawable/nav_travbot_size"
-                    tools:ignore="SpeakableTextPresentCheck" />
-
-                <ImageButton
-                    android:id="@+id/homeButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="192dp"
-                    android:layout_marginBottom="4dp"
-                    android:background="@android:color/transparent"
-                    android:importantForAccessibility="no"
-                    android:minWidth="48dp"
-                    android:minHeight="48dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-                    app:layout_constraintStart_toStartOf="@+id/imageView3"
-                    app:srcCompat="@drawable/nav_home_size"
-                    tools:ignore="SpeakableTextPresentCheck" />
-
-                <ImageButton
-                    android:id="@+id/mypageButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="32dp"
-                    android:layout_marginBottom="4dp"
-                    android:background="@android:color/transparent"
-                    android:importantForAccessibility="no"
-                    android:minWidth="48dp"
-                    android:minHeight="48dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-                    app:layout_constraintEnd_toEndOf="@+id/imageView3"
-                    app:srcCompat="@drawable/nav_mypage_blue_size"
-                    tools:ignore="SpeakableTextPresentCheck" />
-
-                <ImageButton
-                    android:id="@+id/commuButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="112dp"
-                    android:layout_marginBottom="4dp"
-                    android:background="@android:color/transparent"
-                    android:importantForAccessibility="no"
-                    android:minWidth="48dp"
-                    android:minHeight="48dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-                    app:layout_constraintEnd_toEndOf="@+id/imageView3"
-                    app:srcCompat="@drawable/nav_commu_size"
-                    tools:ignore="SpeakableTextPresentCheck" />
+                    android:layout_height="40dp"
+                    android:background="@drawable/rectangle_design"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:text="프로필 수정"
+                    android:textSize="13dp"
+                    android:layout_toEndOf="@+id/textView"
+                    android:textColor="@color/black"/>
 
                 <com.google.android.material.tabs.TabLayout
+                    android:layout_marginTop="20dp"
                     android:id="@+id/tabLayoutContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/gray"
+                    app:tabSelectedTextColor="#1D5D9B"
+                    app:tabIndicatorColor="#1D5D9B"
+                    app:tabRippleColor="#111D5D9B"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
@@ -211,11 +139,109 @@
                         android:text="저장됨" />
 
                 </com.google.android.material.tabs.TabLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <FrameLayout
+                    android:id="@+id/frame"
+                    android:layout_width="match_parent"
+                    android:layout_height="1500dp">
+                </FrameLayout>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
     <!-- 하단 네비게이션 바 -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="428dp"
+            android:layout_height="83dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.529"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/nav_background"
+            tools:ignore="SpeakableTextPresentCheck"
+            android:importantForAccessibility="no"/>
+
+        <ImageButton
+            android:id="@+id/locateButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginBottom="4dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@+id/imageView3"
+            app:layout_constraintStart_toStartOf="@+id/imageView3"
+            app:srcCompat="@drawable/nav_locate_size"
+            tools:ignore="SpeakableTextPresentCheck"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:importantForAccessibility="no"/>
+
+        <ImageButton
+            android:id="@+id/travbotButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="112dp"
+            android:layout_marginBottom="4dp"
+            android:background="@android:color/transparent"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+            app:layout_constraintStart_toStartOf="@+id/imageView3"
+            app:srcCompat="@drawable/nav_travbot_size"
+            tools:ignore="SpeakableTextPresentCheck"
+            android:importantForAccessibility="no"/>
+
+        <ImageButton
+            android:id="@+id/homeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="192dp"
+            android:layout_marginBottom="4dp"
+            android:background="@android:color/transparent"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+            app:layout_constraintStart_toStartOf="@+id/imageView3"
+            app:srcCompat="@drawable/nav_home_size"
+            tools:ignore="SpeakableTextPresentCheck"
+            android:importantForAccessibility="no"/>
+
+        <ImageButton
+            android:id="@+id/mypageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="4dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+            app:layout_constraintEnd_toEndOf="@+id/imageView3"
+            app:srcCompat="@drawable/nav_mypage_blue_size"
+            tools:ignore="SpeakableTextPresentCheck"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:importantForAccessibility="no"/>
+
+        <ImageButton
+            android:id="@+id/commuButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="112dp"
+            android:layout_marginBottom="4dp"
+            android:background="@android:color/transparent"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+            app:layout_constraintEnd_toEndOf="@+id/imageView3"
+            app:srcCompat="@drawable/nav_commu_size"
+            tools:ignore="SpeakableTextPresentCheck"
+            android:importantForAccessibility="no"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>

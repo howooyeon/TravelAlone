@@ -113,7 +113,9 @@ dependencies {
     implementation("com.kakao.sdk:v2-common:2.7.0")
     implementation("com.kakao.sdk:v2-talk:2.7.0")
 
-
+    implementation("androidx.fragment:fragment:1.5.7")
+    implementation("com.squareup.picasso:picasso:2.71828")
+    implementation("io.coil-kt:coil:2.4.0")
 }
 
 
