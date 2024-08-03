@@ -2,23 +2,23 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:padding="10dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/left_chat_view"
-        android:background="@drawable/rounded_corner"
-        android:backgroundTint="@color/gray"
-        android:layout_marginEnd="80dp"
-        android:padding="8dp">
+        android:background="@drawable/nine_left_chat"
+        android:layout_marginEnd="80dp">
 
         <TextView
             android:id="@+id/left_chat_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Hello World"
-            android:textColor="#393939"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="2dp"
+            android:textColor="#000000"
             android:textSize="17sp" />
 
     </LinearLayout>
@@ -27,15 +27,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/right_chat_view"
-        android:background="@drawable/rounded_corner"
-        android:backgroundTint="@color/babyblue"
+        android:background="@drawable/nine_right_chat"
         android:layout_marginStart="80dp"
-        android:layout_alignParentEnd="true"
-        android:padding="8dp">
+        android:layout_alignParentEnd="true">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="2dp"
             android:id="@+id/right_chat_tv"
             android:textColor="@color/white"
             android:textSize="17sp"

@@ -67,7 +67,7 @@ class Fragment2 : Fragment() {
                             "가평/양평" -> R.drawable.img_gapyeong_yangpyeong
                             "강릉/속초" -> R.drawable.img_gangneung_sokcho
                             "경주" -> R.drawable.img_gyeongju
-                            "부산" -> R.drawable.img_busan
+                            "부산/울산" -> R.drawable.img_busan
                             "서울" -> R.drawable.img_seoul
                             "여수" -> R.drawable.img_yeosu
                             "인천" -> R.drawable.img_incheon
