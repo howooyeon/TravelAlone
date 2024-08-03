@@ -83,7 +83,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/inter_medium"
                     android:text="콩나물 해장국"
-                    android:layout_marginBottom="3dp"
+                    android:layout_marginBottom="4dp"
                     android:layout_marginLeft="30dp"
                     android:textSize="15sp"
                     android:layout_gravity="left|center"/>

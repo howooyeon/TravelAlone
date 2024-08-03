@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#FFFFFF">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,34 +14,38 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="65dp"
             android:orientation="horizontal">
 
             <ImageButton
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
                 android:id="@+id/back"
                 android:layout_width="12dp"
                 android:layout_height="24dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="60dp"
                 android:background="#00ff0000"
                 android:scaleType="fitCenter"
                 android:src="@drawable/btn_back" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                />
 
             <ImageView
                 android:id="@+id/bookmark"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="330dp"
-                android:layout_marginTop="55dp"
+                android:layout_marginTop="17dp"
+                android:layout_marginRight="20dp"
                 android:src="@drawable/bookmark" />
         </LinearLayout>
 
         <ImageView
             android:id="@+id/image"
             android:layout_width="match_parent"
-            android:layout_height="368dp"
+            android:layout_height="300dp"
             android:scaleType="centerCrop"
             android:src="@color/gray"
             android:visibility="visible" />
@@ -99,7 +104,6 @@
             android:text="Title"
             android:textColor="@color/black"
             android:textSize="16sp"
-
             android:textStyle="bold" />
 
         <ScrollView
@@ -136,7 +140,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="71dp"
+            android:layout_marginBottom="30dp"
             android:text="수정"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -147,7 +151,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
-            android:layout_marginBottom="70dp"
+            android:layout_marginBottom="30dp"
             android:text="삭제"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
