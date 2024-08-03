@@ -39,6 +39,15 @@
                     android:layout_marginLeft="20dp"
                     android:textColor="@color/black"
                     android:textSize="20sp" />
+
+                <ImageButton
+                    android:id="@+id/resetbtn"
+                    android:layout_width="match_parent"
+                    android:layout_height = "30dp"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/budget_reset_size"/>
+
+
             </LinearLayout>
 
             <LinearLayout
