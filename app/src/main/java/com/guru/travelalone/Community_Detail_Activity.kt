@@ -246,7 +246,7 @@ class Community_Detail_Activity : AppCompatActivity() {
         userId?.let { id ->
             val bookmarkId = "${id}_$postId"
             val bookmarkRef = firestore.collection("scrap").document(bookmarkId)
-            bookmarkRef.set(mapOf("postId" to postId))
+            bookmarkRef.set(mapOf("userId" to id, "postId" to postId))
                 .addOnSuccessListener {
                     // Successfully added the bookmark
                 }
