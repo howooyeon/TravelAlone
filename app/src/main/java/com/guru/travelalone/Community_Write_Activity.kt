@@ -21,6 +21,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import coil.load
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -153,12 +154,13 @@ class Community_Write_Activity : AppCompatActivity() {
                     date = document.getString("date")
                     location = document.getString("location")
                     val imageUrl = document.getString("imageUrl")
+
+                    // 이미지 URL이 있을 경우 이미지 로드
                     if (imageUrl != null && imageUrl.isNotEmpty()) {
                         try {
                             val uri = Uri.parse(imageUrl)
-                            selectedImageView.setImageURI(uri)
+                            selectedImageView.load(uri)  // Coil 라이브러리 사용
                             selectedImageView.visibility = View.VISIBLE
-                            imageButton.visibility = View.GONE
                             cardView.visibility = View.VISIBLE
                         } catch (e: Exception) {
                             Log.e("Community_Write_Activity", "Error parsing image URL", e)
@@ -269,6 +271,7 @@ class Community_Write_Activity : AppCompatActivity() {
             savePostToFirestore(title, content, isPublic, placeholderUrl, userId, userEmail, date, location, nickname, profileImageUrl, currentTime)
         }
     }
+
 
     private fun savePostToFirestore(
         title: String,

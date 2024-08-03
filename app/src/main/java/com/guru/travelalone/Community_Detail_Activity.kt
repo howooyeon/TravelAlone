@@ -107,8 +107,6 @@ class Community_Detail_Activity : AppCompatActivity() {
         }
         textView2.setOnClickListener {
             postId?.let { id ->
-                // Update the post to set image URLs to null
-                updatePostImagesToNull(id)
 
                 // Start the edit activity
                 openEditPostActivity(id)
@@ -211,19 +209,6 @@ class Community_Detail_Activity : AppCompatActivity() {
         val intent = Intent(this, Community_Write_Activity::class.java)
         intent.putExtra("postId", postId)
         startActivity(intent)
-    }
-
-    private fun updatePostImagesToNull(postId: String) {
-        val postRef = firestore.collection("posts").document(postId)
-        postRef.update(
-            mapOf(
-                "imageUrl" to null,
-            )
-        ).addOnSuccessListener {
-            // Successfully updated the document
-        }.addOnFailureListener { exception ->
-            // Handle the error
-        }
     }
 
     private fun showDeleteConfirmationDialog(postId: String) {

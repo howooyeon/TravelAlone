@@ -115,6 +115,7 @@ dependencies {
 
     implementation("androidx.fragment:fragment:1.5.7")
     implementation("com.squareup.picasso:picasso:2.71828")
+    implementation("io.coil-kt:coil:2.4.0")
 }
 
 
