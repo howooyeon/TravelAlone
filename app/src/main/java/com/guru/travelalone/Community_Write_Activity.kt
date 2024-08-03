@@ -59,6 +59,7 @@ class Community_Write_Activity : AppCompatActivity() {
     private var postId: String? = null
     private var date: String? = null
     private var location: String? = null
+    private var existingImageUrl: String? = null // 새로 추가된 변수
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -124,7 +125,7 @@ class Community_Write_Activity : AppCompatActivity() {
         }
 
         submitButton.setOnClickListener {
-            submitPost(date, location)
+            submitPost(date, location, existingImageUrl) // 기존 이미지 URL을 추가로 전달
         }
     }
 
@@ -153,11 +154,11 @@ class Community_Write_Activity : AppCompatActivity() {
                     publicSwitch.isChecked = document.getBoolean("isPublic") ?: false
                     date = document.getString("date")
                     location = document.getString("location")
-                    val imageUrl = document.getString("imageUrl")
+                    existingImageUrl = document.getString("imageUrl") // 기존 이미지 URL 저장
 
                     // 기존 이미지 URL을 유지하기 위한 변수
-                    selectedImageUri = if (imageUrl != null && imageUrl.isNotEmpty()) {
-                        Uri.parse(imageUrl)
+                    selectedImageUri = if (existingImageUrl != null && existingImageUrl!!.isNotEmpty()) {
+                        Uri.parse(existingImageUrl)
                     } else {
                         null
                     }
@@ -228,7 +229,7 @@ class Community_Write_Activity : AppCompatActivity() {
         }
     }
 
-    private fun submitPost(date: String?, location: String?) {
+    private fun submitPost(date: String?, location: String?, existingImageUrl: String?) {
         val title = titleEditText.text.toString()
         val content = contentEditText.text.toString()
         val isPublic = publicSwitch.isChecked
@@ -236,10 +237,23 @@ class Community_Write_Activity : AppCompatActivity() {
         val userEmail = currentUser?.email
 
         val currentTime = System.currentTimeMillis()
-        val sdf = java.text.SimpleDateFormat("yy.MM.dd HH:mm", Locale.getDefault())
-        val currentTimeFormatted = sdf.format(Date(currentTime))
+        val sdf = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val formattedDate = sdf.format(Date(currentTime))
 
-        processPostSubmission(title, content, isPublic, selectedImageUri, userId, userEmail, date, location, userNickname, userProfileImageUrl, currentTimeFormatted)
+        processPostSubmission(
+            title,
+            content,
+            isPublic,
+            selectedImageUri,
+            userId,
+            userEmail,
+            date,
+            location,
+            userNickname,
+            userProfileImageUrl,
+            formattedDate,
+            existingImageUrl // 기존 이미지 URL을 추가로 전달
+        )
     }
 
     private fun processPostSubmission(
@@ -253,22 +267,25 @@ class Community_Write_Activity : AppCompatActivity() {
         location: String?,
         nickname: String?,
         profileImageUrl: String?,
-        currentTime: String
+        currentTime: String,
+        existingImageUrl: String? // 기존 이미지 URL을 추가로 전달
     ) {
-        val storageReference = FirebaseStorage.getInstance().reference.child("images/${UUID.randomUUID()}")
+        if (imageUri != null) {
+            // 새로운 이미지가 선택된 경우
+            val storageReference = FirebaseStorage.getInstance().reference.child("images/${UUID.randomUUID()}")
+            val uploadTask = storageReference.putFile(imageUri)
 
-        val uploadTask = imageUri?.let { storageReference.putFile(it) }
-
-        uploadTask?.addOnSuccessListener { taskSnapshot ->
-            taskSnapshot.storage.downloadUrl.addOnSuccessListener { uri ->
-                savePostToFirestore(title, content, isPublic, uri.toString(), userId, userEmail, date, location, nickname, profileImageUrl, currentTime)
+            uploadTask.addOnSuccessListener { taskSnapshot ->
+                taskSnapshot.storage.downloadUrl.addOnSuccessListener { uri ->
+                    savePostToFirestore(title, content, isPublic, uri.toString(), userId, userEmail, date, location, nickname, profileImageUrl, currentTime)
+                }
+            }.addOnFailureListener {
+                // 이미지 업로드 실패 시 기존 이미지 URL을 사용
+                savePostToFirestore(title, content, isPublic, existingImageUrl, userId, userEmail, date, location, nickname, profileImageUrl, currentTime)
             }
-        }?.addOnFailureListener {
-            // Failure case: use the placeholder URL
-            savePostToFirestore(title, content, isPublic, "android.resource://com.guru.travelalone/drawable/sample_image_placeholder", userId, userEmail, date, location, nickname, profileImageUrl, currentTime)
-        } ?: run {
-            // No image selected: use the placeholder URL
-            savePostToFirestore(title, content, isPublic, "android.resource://com.guru.travelalone/drawable/sample_image_placeholder", userId, userEmail, date, location, nickname, profileImageUrl, currentTime)
+        } else {
+            // 이미지가 변경되지 않은 경우 기존 이미지 URL 사용
+            savePostToFirestore(title, content, isPublic, existingImageUrl, userId, userEmail, date, location, nickname, profileImageUrl, currentTime)
         }
     }
 
@@ -317,8 +334,7 @@ class Community_Write_Activity : AppCompatActivity() {
             }
     }
 
-
     companion object {
-        private const val PERMISSION_REQUEST_CODE = 1001
+        private const val PERMISSION_REQUEST_CODE = 100
     }
 }
