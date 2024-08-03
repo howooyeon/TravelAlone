@@ -117,10 +117,16 @@ class Community_Activity : AppCompatActivity() {
     }
 
     private fun loadPosts(selectedRegion: String) {
-        firestore.collection("posts")
-            .whereEqualTo("isPublic", true)
-            .whereEqualTo("location", selectedRegion)
-            .get()
+        val query = if (selectedRegion == "전체") {
+            firestore.collection("posts")
+                .whereEqualTo("isPublic", true)
+        } else {
+            firestore.collection("posts")
+                .whereEqualTo("isPublic", true)
+                .whereEqualTo("location", selectedRegion)
+        }
+
+        query.get()
             .addOnSuccessListener { result ->
                 val communityPostList = arrayListOf<CommunityPostListItem>()
                 for (document: QueryDocumentSnapshot in result) {
