@@ -23,11 +23,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-<!--<Button-->
-<!--    android:id = "@+id/release"-->
-<!--    android:layout_width="wrap_content"-->
-<!--    android:layout_height="wrap_content"-->
-<!--    android:text="릴리즈"/>-->
+        <!--<Button-->
+        <!--    android:id = "@+id/release"-->
+        <!--    android:layout_width="wrap_content"-->
+        <!--    android:layout_height="wrap_content"-->
+        <!--    android:text="릴리즈"/>-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,66 +35,71 @@
             android:orientation="vertical"
             android:layout_marginTop="20dp">
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-            app:boxBackgroundColor="@color/white"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            app:boxCornerRadiusTopEnd="17dp"
-            app:boxCornerRadiusBottomEnd="17dp"
-            app:boxCornerRadiusTopStart="17dp"
-            app:boxCornerRadiusBottomStart="17dp"
-            android:alpha="0.7">
-
-            <EditText
-                android:id="@+id/email_edt"
-                android:layout_width="289dp"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                app:boxBackgroundColor="@color/white"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:hint="이메일을 입력하세요"
-                android:fontFamily="@font/inter_bold"/>
+                android:gravity="center"
+                app:boxCornerRadiusTopEnd="17dp"
+                app:boxCornerRadiusBottomEnd="17dp"
+                app:boxCornerRadiusTopStart="17dp"
+                app:boxCornerRadiusBottomStart="17dp"
+                android:alpha="0.7">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <EditText
+                    android:id="@+id/email_edt"
+                    android:layout_width="289dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="이메일을 입력하세요"
+                    android:fontFamily="@font/inter_bold"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:inputType="textEmailAddress"/>
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-            app:boxBackgroundColor="@color/white"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="5dp"
-            android:gravity="center"
-            app:endIconMode="password_toggle"
-            app:boxCornerRadiusTopEnd="17dp"
-            app:boxCornerRadiusBottomEnd="17dp"
-            app:boxCornerRadiusTopStart="17dp"
-            app:boxCornerRadiusBottomStart="17dp"
-            android:alpha="0.7">
+            </com.google.android.material.textfield.TextInputLayout>
 
-
-            <EditText
-                android:id="@+id/pw_edt"
-                android:layout_width="289dp"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                app:boxBackgroundColor="@color/white"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:hint="비밀번호를 입력하세요"
-                android:inputType="textPassword"
-                android:fontFamily="@font/inter_bold"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                app:endIconMode="password_toggle"
+                app:boxCornerRadiusTopEnd="17dp"
+                app:boxCornerRadiusBottomEnd="17dp"
+                app:boxCornerRadiusTopStart="17dp"
+                app:boxCornerRadiusBottomStart="17dp"
+                android:alpha="0.7">
 
 
-        <ImageButton
-            android:id="@+id/email_login_btn"
-            android:layout_width="331dp"
-            android:layout_height="52dp"
-            android:layout_gravity="center"
-            android:background="@drawable/normal_login"
-            android:layout_margin="10dp"
-            >
+                <EditText
+                    android:id="@+id/pw_edt"
+                    android:layout_width="289dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="비밀번호를 입력하세요"
+                    android:inputType="textPassword"
+                    android:fontFamily="@font/inter_bold"
+                    android:singleLine="true"
+                    android:maxLines="1"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-        </ImageButton>
+
+            <ImageButton
+                android:id="@+id/email_login_btn"
+                android:layout_width="331dp"
+                android:layout_height="52dp"
+                android:layout_gravity="center"
+                android:background="@drawable/normal_login"
+                android:layout_margin="10dp"
+                >
+
+            </ImageButton>
 
 
             <ImageView
@@ -105,18 +110,18 @@
                 android:src="@drawable/kakao_login_text" />
 
             <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnLogin"
-            android:layout_width="331dp"
-            android:layout_height="52dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/login_kakao"
-            android:paddingVertical="14dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView"
-            app:layout_constraintVertical_bias="0.23000002" />
+                android:id="@+id/btnLogin"
+                android:layout_width="331dp"
+                android:layout_height="52dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/login_kakao"
+                android:paddingVertical="14dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView"
+                app:layout_constraintVertical_bias="0.23000002" />
 
         </LinearLayout>
 

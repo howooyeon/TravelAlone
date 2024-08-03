@@ -36,14 +36,13 @@ class ProEdit_Activity : AppCompatActivity() {
     private val storage = FirebaseStorage.getInstance()
     private val storageRef = storage.reference
 
-    lateinit var introduce: EditText
-    private var nickname = ""
-    private var profileImageUrl = ""
-    private var member_introduce = ""
-    private var editnickname = ""
-    private var imageUri: Uri? = null
+    private var nickname = ""  //유저 본명
+    private var profileImageUrl = "" //유저 프로필 경로
+    private var member_introduce = "" //유저 소개글
+    private var editnickname = "" //유저 닉네임
+    private var imageUri: Uri? = null //갤러리 사진 가져온 경로
 
-    // 갤러리 open
+    // 갤러리 접근 권한 요청 런처
     private val requestPermissionLauncher: ActivityResultLauncher<String> =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
@@ -53,7 +52,7 @@ class ProEdit_Activity : AppCompatActivity() {
             }
         }
 
-    // 가져온 사진 보여주기
+    // 갤러리에서 사진 가져오기 런처
     private val pickImageLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
@@ -70,26 +69,22 @@ class ProEdit_Activity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
 
-        introduce = findViewById(R.id.Introduce)
-
-        Log.d("ProEdit_Activity", "onCreate called")
-
-        // 사용자 정보 요청
+        // 카카오 로그인 시 사용자 정보 요청
         try {
             UserApiClient.instance.me { user, error ->
                 if (error != null) {
                     Log.e(Constants.TAG, "사용자 정보 요청 실패 $error")
                 } else if (user != null) {
                     Log.d(Constants.TAG, "사용자 정보 요청 성공 : $user")
-                    nickname = user.kakaoAccount?.profile?.nickname ?: ""
-                    profileImageUrl = user.kakaoAccount?.profile?.profileImageUrl ?: ""
-                    member_introduce = introduce.text.toString()
+                    nickname = user.kakaoAccount?.profile?.nickname ?: "" // 카카오에 저장된 유저 본명
+                    profileImageUrl = user.kakaoAccount?.profile?.profileImageUrl ?: "" // 카카오 프로필 사진 경로
+                    member_introduce = binding.Introduce.text.toString() // 소개글 가져오기
 
-                    binding.txtNickName.hint = nickname
+                    binding.txtNickName.hint = nickname // 유저 본명을 닉네임 힌트로 설정
                     if (profileImageUrl.isNotEmpty()) {
                         Glide.with(this)
                             .load(profileImageUrl)
-                            .into(binding.kakaoPro)
+                            .into(binding.kakaoPro) // 기본적으로 카카오 프로필을 유저의 프로필로 설정
                     }
                 }
             }
@@ -97,6 +92,7 @@ class ProEdit_Activity : AppCompatActivity() {
             Log.e(Constants.TAG, "사용자 정보 요청 중 예외 발생", e)
         }
 
+        // 플러스 버튼 클릭 시 갤러리 열기
         binding.plusBtn.setOnClickListener {
             if (ContextCompat.checkSelfPermission(
                     this,
@@ -109,7 +105,7 @@ class ProEdit_Activity : AppCompatActivity() {
             }
         }
 
-        // Save button 클릭 리스너 설정
+        // 저장 버튼 클릭 시 프로필 저장
         binding.saveButton.setOnClickListener {
             editnickname = binding.txtNickName.text.toString().trim()
             member_introduce = binding.Introduce.text.toString().trim()
@@ -119,21 +115,21 @@ class ProEdit_Activity : AppCompatActivity() {
                 CoroutineScope(Dispatchers.Main).launch {
                     try {
                         if (imageUri == null && profileImageUrl.isNotEmpty()) {
-                            Log.d("ProEdit_Activity", "Uploading Kakao profile image to storage")
+                            Log.d("ProEdit_Activity", "스토리지에 카카오 프로필 업로드 중")
                             profileImageUrl = withContext(Dispatchers.IO) {
                                 uploadImageUrlToStorage(profileImageUrl)
                             }
                         } else if (imageUri != null) {
-                            Log.d("ProEdit_Activity", "Uploading local image to storage")
+                            Log.d("ProEdit_Activity", "로컬 이미지를 프로필에 업로드 중")
                             profileImageUrl = withContext(Dispatchers.IO) {
                                 uploadImageToStorage(imageUri!!)
                             }
                         }
-                        saveUserProfile()
+                        saveUserProfile() // 프로필 데이터베이스에 저장
                         val intent = Intent(this@ProEdit_Activity, Home_Activity::class.java)
                         startActivity(intent)
                     } catch (e: Exception) {
-                        Log.e("ProEdit_Activity", "Error saving profile", e)
+                        Log.e("ProEdit_Activity", "프로필 저장 중 오류", e)
                         Toast.makeText(
                             this@ProEdit_Activity,
                             "프로필 저장 중 오류가 발생했습니다.",
@@ -148,11 +144,13 @@ class ProEdit_Activity : AppCompatActivity() {
     }
 
 
+    //갤러리 접근
     private fun openGallery() {
         val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
         pickImageLauncher.launch(gallery)
     }
 
+    //스토리지에 사진 업로드
     private suspend fun uploadImageToStorage(uri: Uri): String {
         return withContext(Dispatchers.IO) {
             try {
@@ -161,11 +159,12 @@ class ProEdit_Activity : AppCompatActivity() {
                 riversRef.putFile(uri).await()
                 riversRef.downloadUrl.await().toString()
             } catch (e: Exception) {
-                Log.e("ProEdit_Activity", "Error uploading image to storage", e)
+                Log.e("ProEdit_Activity", "스토리지에 사진 업로드 오류", e)
                 throw e
             }
         }
     }
+
 
     private suspend fun uploadImageUrlToStorage(imageUrl: String): String {
         return withContext(Dispatchers.IO) {
@@ -181,22 +180,23 @@ class ProEdit_Activity : AppCompatActivity() {
                 val fileUri = Uri.fromFile(tempFile)
                 uploadImageToStorage(fileUri)
             } catch (e: Exception) {
-                Log.e("ProEdit_Activity", "Error downloading image from URL", e)
+                Log.e("ProEdit_Activity", "url로 부터 이미지 다운 실패", e)
                 throw e
             }
         }
     }
 
+    //프로필 저장
     private suspend fun saveUserProfile() {
         val memberId = CounterHelper.getNextMemberId()
-        val member = Member(memberId, nickname, editnickname, profileImageUrl, introduce.text.toString())
+        val member = Member(memberId, nickname, editnickname, profileImageUrl, binding.Introduce.text.toString())
         db.collection("members").document(memberId.toString())
             .set(member)
             .addOnSuccessListener {
-                Log.d("Firestore", "DocumentSnapshot successfully written!")
+                Log.d("Firestore", "프로필 저장 성공")
             }
             .addOnFailureListener { e ->
-                Log.w("Firestore", "Error writing document", e)
+                Log.w("Firestore", "프로필 저장 실패", e)
             }
     }
 }

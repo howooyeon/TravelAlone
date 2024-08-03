@@ -13,6 +13,7 @@ data class Transaction(
     val type: TransactionType
 )
 
+//충전 / 지출 두 종류로 나뉨
 enum class TransactionType {
     CHARGE, SPEND
 }

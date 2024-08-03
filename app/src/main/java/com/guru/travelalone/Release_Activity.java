@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.security.MessageDigest;
 
+//APK 추출 후 카카오 API 사용 위해 등록할 릴리즈 키 확인하는 용도
 public class Release_Activity extends AppCompatActivity {
 
     private TextView textView;
@@ -40,7 +41,7 @@ public class Release_Activity extends AppCompatActivity {
                 textView.setText(keyHash);
             }
         } catch (Exception e) {
-            Log.e("name not found", e.toString());
+            Log.e("못찾음", e.toString());
         }
     }
 }

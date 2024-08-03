@@ -81,6 +81,8 @@
                 android:textColor="@color/black"
                 android:textSize="30dp"
                 android:textStyle="normal"
+                android:singleLine="true"
+                android:maxLines="1"
                 app:layout_constraintTop_toTopOf="parent"
                 android:fontFamily="@font/inter_medium"/>
 
@@ -91,6 +93,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="20dp"
+                android:singleLine="true"
+                android:maxLines="1"
                 android:hint="나를 대표하는 소개를 입력해 주세요"
                 android:fontFamily="@font/inter_medium"
                 android:gravity="center"

@@ -93,6 +93,8 @@
                     android:background="@android:color/transparent"
                     android:gravity="center"
                     android:hint="입력하세요"
+                    android:singleLine="true"
+                    android:maxLines="1"
                     android:textSize="17dp" />
 
             </LinearLayout>

@@ -40,12 +40,14 @@ class Login_Activity : AppCompatActivity() {
         when (v?.id) {
             binding.btnLogin.id -> {
                 if (UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
+                    //카카오톡이 깔려 있으면 카톡 앱으로 이동
                     UserApiClient.instance.loginWithKakaoTalk(this) { token, error ->
                         if (error != null) {
                             Log.e(TAG, "로그인 실패 $error")
                             if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
                                 return@loginWithKakaoTalk
                             } else {
+                                //카톡 앱이 없으면 브라우저로 입력
                                 UserApiClient.instance.loginWithKakaoAccount(
                                     this,
                                     callback = mCallback
@@ -94,8 +96,10 @@ class Login_Activity : AppCompatActivity() {
             }
         }
 
+        //카톡 회원가입/로그인 버튼 눌렀을 때
         binding.btnLogin.setOnClickListener(onClickListener)
 
+        //기본 회원가입/로그인 버튼 눌렀을 때
         binding.emailLoginBtn.setOnClickListener {
             email_login()
         }
@@ -104,6 +108,7 @@ class Login_Activity : AppCompatActivity() {
     // 사용자 프로필 확인
     private fun checkUserProfile() {
         UserApiClient.instance.me { user, error ->
+            //카톡 계정의 본명 가져오기
             val targetNickname = user?.kakaoAccount?.profile?.nickname
 
             if (error != null) {
@@ -113,10 +118,12 @@ class Login_Activity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             } else {
+                //members 도큐먼트에 있는 것들 중에 targetNickname과 동일한 유저 가져옴
                 db.collection("members")
                     .whereEqualTo("nickname", targetNickname)
                     .get()
                     .addOnSuccessListener { result ->
+                        //결과가 없으면 신규 유저! 프로필 등록하기 페이지(ProEdit_Activity)로 이동
                         if (result.isEmpty) {
                             Log.d("NoMatch", "닉네임이 일치하는 문서가 없음: $targetNickname")
                             val intent = Intent(this, ProEdit_Activity::class.java)
@@ -124,6 +131,7 @@ class Login_Activity : AppCompatActivity() {
                             startActivity(intent)
                             finish()
                         } else {
+                            //결과가 있으면 기존에 프로필을 등록한 유저! 바로 홈화면으로 이동
                             for (document in result) {
                                 Log.d("DocumentID", document.id)
                                 val intent = Intent(this, Home_Activity::class.java)
@@ -157,7 +165,7 @@ class Login_Activity : AppCompatActivity() {
                     // 이메일로 성공적으로 계정을 만들었을 경우
                     moveProEditPage(task.result?.user)
                 } else if (task.exception?.message.isNullOrEmpty()) {
-                    Toast.makeText(this, task.exception?.message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "회원가입에 실패하였습니다.", Toast.LENGTH_SHORT).show()
                 } else {
                     // 이메일의 계정이 이미 존재하는 경우
                     sigininEmail()
@@ -173,7 +181,7 @@ class Login_Activity : AppCompatActivity() {
                     // 로그인 성공
                     moveHomePage(task.result?.user)
                 } else {
-                    Toast.makeText(this, task.exception?.message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this,"로그인에 실패하였습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
     }
