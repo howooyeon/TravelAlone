@@ -24,9 +24,10 @@ class Community_Detail_Activity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private var isBookmarked: Boolean = false
     private var currentUser: FirebaseUser? = null
-    private var currentKakaoUserId: String? = null // 카카오 사용자 ID 저장 변수
-    private var currentFirebaseUserId: String? = null // Firebase 사용자 ID 저장 변수
+    private var currentKakaoUserId: String? = null
+    private var currentFirebaseUserId: String? = null
     private var isKakaoUser: Boolean = false
+    private var currentUserNickname: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,7 +72,7 @@ class Community_Detail_Activity : AppCompatActivity() {
                         post?.let {
                             nameTextView.text = it.nickname
                             dateTextView.text = it.date
-                            timeTextView.text = it.createdAt // Set the creation time here
+                            timeTextView.text = it.createdAt
                             titleTextView.text = it.title
                             contentTextView.text = it.content
 
@@ -98,7 +99,8 @@ class Community_Detail_Activity : AppCompatActivity() {
 
                             checkIfBookmarked(postId)
 
-                            if (it.userId == currentKakaoUserId || it.userId == currentFirebaseUserId) {
+                            // Show edit and delete buttons only if the nicknames match
+                            if (it.nickname == currentUserNickname) {
                                 textView2.visibility = View.VISIBLE
                                 deleteButton.visibility = View.VISIBLE
                             } else {
@@ -179,6 +181,10 @@ class Community_Detail_Activity : AppCompatActivity() {
         currentUser?.let { user ->
             // Firebase 로그인 유저 정보 가져오기
             currentFirebaseUserId = user.uid
+            firestore.collection("members").document(user.uid).get()
+                .addOnSuccessListener { document ->
+                    currentUserNickname = document.getString("nickname") // Assuming 'nickname' is stored in user document
+                }
         } ?: run {
             // Kakao 로그인 유저 정보 가져오기
             UserApiClient.instance.me { user, error ->
@@ -187,6 +193,7 @@ class Community_Detail_Activity : AppCompatActivity() {
                 } else if (user != null) {
                     currentKakaoUserId = user.id.toString()
                     isKakaoUser = true
+                    currentUserNickname = user.kakaoAccount?.profile?.nickname // Assuming Kakao API provides the nickname
                 }
             }
         }
