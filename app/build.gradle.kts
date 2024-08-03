@@ -70,12 +70,17 @@ android {
 
 
 dependencies {
-    implementation("com.squareup.okhttp3:okhttp:4.10.0")
+    // 파이어베이스 연결
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore")
     implementation ("com.google.firebase:firebase-storage")
+
     implementation(libs.kakao.sdk)
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
+
+
+    // 글라이더 사용
     implementation("com.github.bumptech.glide:glide:4.16.0")
 
     // TabLayout 사용을 위한 의존성
@@ -107,14 +112,19 @@ dependencies {
 
     implementation (libs.circleimageview) //Circle ImageView
 
-    //카카오 api 맵
+    //카카오 api 맵, 현재 위치
     implementation("com.kakao.maps.open:android:2.6.0")
     implementation("com.google.android.gms:play-services-location:21.1.0")
     implementation("com.kakao.sdk:v2-common:2.7.0")
     implementation("com.kakao.sdk:v2-talk:2.7.0")
 
+    // 프레그먼트 이용
     implementation("androidx.fragment:fragment:1.5.7")
+
+    //피카소 이용
     implementation("com.squareup.picasso:picasso:2.71828")
+
+    //코일 사용
     implementation("io.coil-kt:coil:2.4.0")
 }
 

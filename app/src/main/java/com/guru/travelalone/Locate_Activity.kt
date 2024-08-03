@@ -49,17 +49,11 @@ import java.util.Locale
 
 class Locate_Activity : AppCompatActivity() {
 
+    // 카카오 맵
     lateinit var mapView: MapView
     lateinit var kakaoMap: KakaoMap
 
-    // 하단바 ----------
-    lateinit var homeButton: ImageButton
-    lateinit var locateButton: ImageButton
-    lateinit var travbotButton: ImageButton
-    lateinit var mypageButton: ImageButton
-    lateinit var communityButton: ImageButton
-    // 하단바 ----------
-
+    // location 가져오기
     private val LOCATION_PERMISSION_REQUEST_CODE = 1001
     private val locationPermissions = arrayOf(
         Manifest.permission.ACCESS_FINE_LOCATION,
@@ -73,12 +67,21 @@ class Locate_Activity : AppCompatActivity() {
     private lateinit var centerLabel: Label
     private var requestingLocationUpdates = false
 
+    // location 표시하기
     private lateinit var addressTextView: TextView
     private lateinit var latitudeTextView: TextView
     private lateinit var longitudeTextView: TextView
 
+    // 공유 버튼
     private lateinit var kakaoButton: ImageButton
     private lateinit var messageButton: ImageButton
+
+    // 하단바 ----------
+    lateinit var homeButton: ImageButton
+    lateinit var locateButton: ImageButton
+    lateinit var travbotButton: ImageButton
+    lateinit var mypageButton: ImageButton
+    lateinit var communityButton: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,7 +93,6 @@ class Locate_Activity : AppCompatActivity() {
             insets
         }
 
-        // Initialize TextViews
         addressTextView = findViewById(R.id.addressTextView)
         latitudeTextView = findViewById(R.id.latitudeTextView)
         longitudeTextView = findViewById(R.id.longitudeTextView)
@@ -156,15 +158,15 @@ class Locate_Activity : AppCompatActivity() {
         // Kakao map api
         mapView = findViewById(R.id.map_view)
 
-        // progressBar 초기화 - 수정된 부분
+        // progressBar
         progressBar = findViewById(R.id.progressBar)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        // 현재 위치가 너무 자주 업데이트되는 관계로, 30초마다 업데이트 되도록 설정
+        // 현재 위치가 너무 자주 업데이트 되는 관계로, 30초마다 업데이트 되도록 설정
         locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 30000L).build()  // 30초 간격으로 위치 업데이트
 
-        // LocationCallback 내에서 Label 이동 및 초기화 - 수정된 부분
+        // LocationCallback 내에서 Label 이동 및 초기화
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 for (location in locationResult.locations) {
@@ -175,6 +177,7 @@ class Locate_Activity : AppCompatActivity() {
             }
         }
 
+        // 접근 권한 허용시, 주소 가져오기
         if (ContextCompat.checkSelfPermission(
                 this,
                 locationPermissions[0]
@@ -193,10 +196,11 @@ class Locate_Activity : AppCompatActivity() {
             )
         }
 
-        // Initialize Kakao SDK
+        // Kakao SDK 초기화
         KakaoSdk.init(this, BuildConfig.KAKAO_API_KEY)
     }
 
+    // 카카오톡으로 위치 공유하기
     private fun shareLocationViaKakao() {
         val address = addressTextView.text.toString()
         val latitude = latitudeTextView.text.toString().split(":")[1].trim()
@@ -211,10 +215,11 @@ class Locate_Activity : AppCompatActivity() {
             intent.putExtra(Intent.EXTRA_TEXT, message)
             startActivity(Intent.createChooser(intent, "카카오톡으로 공유"))
         } catch (e: ActivityNotFoundException) {
-            Toast.makeText(this, "카카오톡이 설치되어 있지 않습니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "카카오톡이 설치되어 있지 않습니다.", Toast.LENGTH_SHORT).show() // 예외 처리
         }
     }
 
+    // 메시지로 위치 공유하기
     private fun shareLocationViaMessage() {
         val address = addressTextView.text.toString()
         val latitude = latitudeTextView.text.toString().split(":")[1].trim()
@@ -224,14 +229,15 @@ class Locate_Activity : AppCompatActivity() {
 
         try {
             val intent = Intent(Intent.ACTION_SENDTO)
-            intent.data = Uri.parse("smsto:") // This ensures only SMS apps respond
+            intent.data = Uri.parse("smsto:")
             intent.putExtra("sms_body", message)
             startActivity(intent)
-        } catch (e: ActivityNotFoundException) {
+        } catch (e: ActivityNotFoundException) { // 예외처리
             Toast.makeText(this, "메시지 앱을 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
         }
     }
 
+    // 현재 위치 정보 업데이트하는 코드
     private fun updateLocationInfo(location: Location) {
         val latitude = location.latitude
         val longitude = location.longitude
@@ -305,7 +311,7 @@ class Locate_Activity : AppCompatActivity() {
                             val layer = kakaoMap.labelManager?.layer
                             if (layer != null) {
 
-                                // 마커 스케일링
+                                // 현재 위치 마커 스케일링
                                 val scaledBitmap = getScaledBitmap(R.drawable.red_dot_marker, 0.7f)
                                 val customLabelStyle = LabelStyle.from(scaledBitmap)
                                     .setAnchorPoint(0.5f, 0.5f)
@@ -324,7 +330,7 @@ class Locate_Activity : AppCompatActivity() {
                             return startPosition ?: LatLng.from(
                                 37.5665,
                                 126.9780
-                            )  // Default to Seoul if no location
+                            )  // Default 값
                         }
 
                         override fun getZoomLevel(): Int {
@@ -341,6 +347,7 @@ class Locate_Activity : AppCompatActivity() {
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())
     }
 
+    // 권한 요청 결과
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
@@ -352,6 +359,7 @@ class Locate_Activity : AppCompatActivity() {
         }
     }
 
+    // 권한 거부시 다이얼로그
     private fun showPermissionDeniedDialog() {
         AlertDialog.Builder(this)
             .setMessage("위치 권한 거부시 앱을 사용할 수 없습니다.")

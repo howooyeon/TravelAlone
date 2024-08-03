@@ -16,6 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!--현재 위치 표시-->
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
@@ -26,6 +27,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!--현재 위치 정보 표시-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/locationInfoContainer"
         android:layout_width="0dp"
@@ -39,6 +41,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <!--현재 주소 표시-->
         <TextView
             android:id="@+id/addressTextView"
             android:layout_width="300dp"
@@ -51,6 +54,7 @@
             app:layout_constraintTop_toTopOf="parent"
             android:gravity="center"/>
 
+        <!--현재 위도 표시-->
         <TextView
             android:id="@+id/latitudeTextView"
             android:layout_width="wrap_content"
@@ -63,6 +67,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/addressTextView" />
 
+        <!--현재 경도 표시-->
         <TextView
             android:id="@+id/longitudeTextView"
             android:layout_width="wrap_content"
@@ -77,6 +82,7 @@
             android:gravity="center"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!--하단바-->
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="428dp"
@@ -164,7 +170,7 @@
         app:srcCompat="@drawable/nav_commu_size"
         tools:ignore="SpeakableTextPresentCheck" />
 
-    <!-- Modified messageButton placement -->
+    <!-- 메시지 공유 버튼 -->
     <ImageButton
         android:id="@+id/messageButton"
         android:layout_width="wrap_content"
@@ -180,6 +186,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:srcCompat="@drawable/message_share" />
 
+    <!-- 카카오톡 공유 버튼 -->
     <ImageButton
         android:id="@+id/kakaoButton"
         android:layout_width="wrap_content"
@@ -194,5 +201,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:srcCompat="@drawable/kakao_share" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
