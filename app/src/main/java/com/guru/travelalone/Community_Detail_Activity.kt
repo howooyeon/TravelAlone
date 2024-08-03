@@ -107,9 +107,26 @@ class Community_Detail_Activity : AppCompatActivity() {
         }
         textView2.setOnClickListener {
             postId?.let { id ->
-
-                // Start the edit activity
-                openEditPostActivity(id)
+                // Fetch the current post data
+                firestore.collection("posts").document(id).get()
+                    .addOnSuccessListener { document ->
+                        if (document != null) {
+                            val post = document.toObject(CommunityPostListItem::class.java)
+                            post?.let {
+                                if (it.imageUrl == "android.resource://com.guru.travelalone/drawable/sample_image_placeholder") {
+                                    // Update the imageUrl to null if it matches the placeholder
+                                    updatePostImageUrlToNull(id)
+                                } else {
+                                    // If imageUrl does not match placeholder, no need to update
+                                    openEditPostActivity(id)
+                                }
+                            }
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        // Handle the error
+                        Log.e("Community_Detail", "Error fetching post: ", exception)
+                    }
             }
         }
 
@@ -136,6 +153,19 @@ class Community_Detail_Activity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun updatePostImageUrlToNull(postId: String) {
+        val postRef = firestore.collection("posts").document(postId)
+        postRef.update("imageUrl", null)
+            .addOnSuccessListener {
+                // Successfully updated the document, now open the edit activity
+                openEditPostActivity(postId)
+            }
+            .addOnFailureListener { exception ->
+                // Handle the error
+                Log.e("Community_Detail", "Error updating imageUrl: ", exception)
+            }
     }
 
     private fun loadUserProfile() {
