@@ -64,10 +64,11 @@ class Community_Detail_Activity : AppCompatActivity() {
         }
 
         // Load post details
+// Load post details
         postId?.let {
             firestore.collection("posts").document(it).get()
                 .addOnSuccessListener { document ->
-                    if (document != null) {
+                    if (document != null && document.exists()) {
                         val post = document.toObject(CommunityPostListItem::class.java)
                         post?.let {
                             nameTextView.text = it.nickname
@@ -99,31 +100,27 @@ class Community_Detail_Activity : AppCompatActivity() {
 
                             checkIfBookmarked(postId)
 
-                            // Hide edit and delete buttons if the current user is not the author
-//                            if (isKakaoUser) {
-//                                if (it.nickname == currentUserEditnickname) {
-//                                    textView2.visibility = View.VISIBLE
-//                                    deleteButton.visibility = View.VISIBLE
-//                                } else {
-//                                    textView2.visibility = View.GONE
-//                                    deleteButton.visibility = View.GONE
-//                                }
-//                            } else {
-                                if (it.userId == currentUser?.uid) {
-                                    textView2.visibility = View.VISIBLE
-                                    deleteButton.visibility = View.VISIBLE
-                                } else {
-                                    textView2.visibility = View.GONE
-                                    deleteButton.visibility = View.GONE
-                                }
+                            if (it.userId == currentUser?.uid) {
+                                textView2.visibility = View.VISIBLE
+                                deleteButton.visibility = View.VISIBLE
+                            } else {
+                                textView2.visibility = View.GONE
+                                deleteButton.visibility = View.GONE
                             }
-//                        }
+                        }
+                    } else {
+                        showPostNotFoundMessage()
                     }
                 }
                 .addOnFailureListener { exception ->
                     // Handle the error
+                    Log.e("Community_Detail", "Error fetching post: ", exception)
+                    showPostNotFoundMessage()
                 }
+        } ?: run {
+            showPostNotFoundMessage()
         }
+
         textView2.setOnClickListener {
             postId?.let { id ->
                 // Fetch the current post data
@@ -174,6 +171,11 @@ class Community_Detail_Activity : AppCompatActivity() {
         }
     }
 
+    private fun showPostNotFoundMessage() {
+        Toast.makeText(this, "존재하지 않는 게시물입니다.", Toast.LENGTH_SHORT).show()
+        finish() // Close the activity and return to the previous one
+    }
+    
     private fun updatePostImageUrlToNull(postId: String) {
         val postRef = firestore.collection("posts").document(postId)
         postRef.update("imageUrl", null)
