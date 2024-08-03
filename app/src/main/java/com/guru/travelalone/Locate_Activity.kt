@@ -202,9 +202,7 @@ class Locate_Activity : AppCompatActivity() {
         val latitude = latitudeTextView.text.toString().split(":")[1].trim()
         val longitude = longitudeTextView.text.toString().split(":")[1].trim()
 
-        val message = "$address\n위도: $latitude\n경도: $longitude"
-        // 나중에 이런식으로 바꿔도 될 듯
-        // val message = "User의 위치를 확인해보세요! 또는 User는 지금 $address\n(위도: $latitude\n경도: $longitude)에서 여행 중~이에요"
+        val message = "현재 '$address (위도: $latitude\n, 경도: $longitude)'에서 여행 중이에요!"
 
         try {
             val intent = Intent(Intent.ACTION_SEND)
@@ -222,7 +220,7 @@ class Locate_Activity : AppCompatActivity() {
         val latitude = latitudeTextView.text.toString().split(":")[1].trim()
         val longitude = longitudeTextView.text.toString().split(":")[1].trim()
 
-        val message = "$address\n위도: $latitude\n경도: $longitude"
+        val message = "현재 '$address (위도: $latitude\n, 경도: $longitude)'에서 여행 중이에요!"
 
         try {
             val intent = Intent(Intent.ACTION_SENDTO)

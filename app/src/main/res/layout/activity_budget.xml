@@ -24,7 +24,7 @@
                 android:orientation="horizontal">
 
                 <ImageButton
-                    android:id = "@+id/backbtn"
+                    android:id="@+id/backbtn"
                     android:layout_width="20dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
@@ -39,6 +39,14 @@
                     android:layout_marginLeft="20dp"
                     android:textColor="@color/black"
                     android:textSize="20sp" />
+
+                <ImageButton
+                    android:id="@+id/resetbtn"
+                    android:layout_width="match_parent"
+                    android:layout_height = "30dp"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/budget_reset_size"/>
+
 
             </LinearLayout>
 
@@ -105,9 +113,12 @@
                             android:fontFamily="@font/inter_bold"
                             android:gravity="center"
                             android:padding="10dp"
-                            android:text="10000원"
                             android:textColor="@color/black"
-                            android:textSize="27sp" />
+                            android:textSize="27sp"
+                            android:autoSizeTextType="uniform"
+                            android:autoSizeMinTextSize="10sp"
+                            android:autoSizeMaxTextSize="27sp"
+                            android:autoSizeStepGranularity="1sp" />
 
                         <TextView
                             android:id="@+id/leftmoney"
@@ -121,10 +132,12 @@
                             android:fontFamily="@font/inter_bold"
                             android:gravity="center"
                             android:padding="10dp"
-                            android:text="10000원"
                             android:textColor="@color/black"
-                            android:textSize="27sp" />
-
+                            android:textSize="27sp"
+                            android:autoSizeTextType="uniform"
+                            android:autoSizeMinTextSize="10sp"
+                            android:autoSizeMaxTextSize="27sp"
+                            android:autoSizeStepGranularity="1sp" />
                     </LinearLayout>
 
                 </RelativeLayout>

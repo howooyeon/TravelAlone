@@ -17,7 +17,7 @@ class Start_Activity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_start)
 
-        // 일정 시간(예: 2초) 후에 Login_Activity로 이동
+        // 일정 시간 후에 Login_Activity로 이동
         Handler(Looper.getMainLooper()).postDelayed({
             val intent = Intent(this, Login_Activity::class.java)
             val options = ActivityOptions.makeCustomAnimation(this, R.anim.fade_in, R.anim.fade_out)

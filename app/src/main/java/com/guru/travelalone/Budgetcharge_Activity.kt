@@ -48,12 +48,14 @@ class Budgetcharge_Activity : AppCompatActivity() {
 
         loadUserProfile()
 
+        //지출 버튼 클릭 시
         binding.spendbtn.setOnClickListener {
             val intent = Intent(this@Budgetcharge_Activity, Budgetspend_Activity::class.java)
             startActivity(intent)
             finish()
         }
 
+        //저장하기 버튼 클릭시
         binding.saveButton.setOnClickListener {
             val chargeMoney = binding.chargeMoney.text.toString()
             val chargeMemo = binding.chargeMemo.text.toString()
@@ -75,6 +77,7 @@ class Budgetcharge_Activity : AppCompatActivity() {
         }
     }
 
+    //충전 생성
     private suspend fun createCharge(chargeMoney: String, chargeMemo: String) {
         val currentUser = auth.currentUser
         var userId: String = ""
@@ -94,9 +97,8 @@ class Budgetcharge_Activity : AppCompatActivity() {
             }
         }
         val id = CounterHelper.getChargeId()
-        val budgetId = 123L // 예산 ID를 적절히 설정
+        val budgetId = 123L // 예산 ID 임의 설정 ( 테스트 용 )
         val currentDate = Date()
-//        val formattedDate = getFormattedDate(currentDate)
 
         val budgetCharge = BudgetCharge(
             id = id,
@@ -121,6 +123,7 @@ class Budgetcharge_Activity : AppCompatActivity() {
         }
     }
 
+    //현재 유저 정보 가져오기
     private fun loadUserProfile() {
         if (currentUser != null) {
             // Firebase 로그인 유저 정보 가져오기
@@ -131,17 +134,9 @@ class Budgetcharge_Activity : AppCompatActivity() {
                 if (error != null) {
                     Log.e("Kakao", "사용자 정보 요청 실패", error)
                 } else if (user != null) {
-                    val nickname = user.kakaoAccount?.profile?.nickname
                     userUid = user.id.toString()
                 }
             }
         }
     }
-
-    fun getFormattedDate(timestamp: Date): String {
-        val sdf = SimpleDateFormat("yyyy.MM.dd.HH.mm", Locale.getDefault())
-        return sdf.format(timestamp)
-    }
-
-
 }

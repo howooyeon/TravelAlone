@@ -48,13 +48,69 @@ class Budget_Activity : AppCompatActivity() {
         // 유저 프로필 로드 후 예산 정보 로드
         loadUserProfile()
 
+        // 충전/지출 페이지로 넘어가는 플로팅 버튼
         binding.budgetFab.setOnClickListener {
             val intent = Intent(this@Budget_Activity, Budgetcharge_Activity::class.java)
             startActivity(intent)
             finish()
         }
+
+        // 유저의 예산 초기화 버튼
+        binding.resetbtn.setOnClickListener {
+            resetUserBudgetData()
+        }
     }
 
+
+    //현재 로그인한 유저의 충전/지출 초기화 로직
+    private fun resetUserBudgetData() {
+        userUid?.let { uid ->
+            // 충전 데이터 삭제
+            db.collection("budget_charges")
+                .whereEqualTo("user_uid", uid)
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        db.collection("budget_charges").document(document.id).delete()
+                            .addOnSuccessListener {
+                                Log.d("Budget_Activity", "충전 데이터 삭제 성공: ${document.id}")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w("Budget_Activity", "충전 데이터 삭제 실패: ${document.id}", e)
+                            }
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Log.w("Budget_Activity", "충전 데이터 가져오기 실패", e)
+                }
+
+            // 지출 데이터 삭제
+            db.collection("budget_spends")
+                .whereEqualTo("user_uid", uid)
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        db.collection("budget_spends").document(document.id).delete()
+                            .addOnSuccessListener {
+                                Log.d("Budget_Activity", "지출 데이터 삭제 성공: ${document.id}")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w("Budget_Activity", "지출 데이터 삭제 실패: ${document.id}", e)
+                            }
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Log.w("Budget_Activity", "지출 데이터 가져오기 실패", e)
+                }
+        }
+
+        // 초기화 후 화면 갱신
+        transactionList.clear()
+        transactionAdapter.notifyDataSetChanged()
+        updateBudgetUI(0, 0)
+    }
+
+    //예산 확인
     private fun loadBudget(uid: String) {
         Log.d("Budget_Activity", "현재 사용자 UID: $uid")
 
@@ -129,6 +185,7 @@ class Budget_Activity : AppCompatActivity() {
             }
     }
 
+    //예산 ui 업데이트 ( 화면 하단의 뷰들 불러옴)
     private fun updateBudgetUI(usedAmount: Int, remainingAmount: Int) {
         val numberFormat = NumberFormat.getInstance(Locale.getDefault())
         val formattedUsedAmount = numberFormat.format(usedAmount)
