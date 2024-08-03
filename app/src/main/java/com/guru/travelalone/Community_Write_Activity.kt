@@ -244,8 +244,32 @@ class Community_Write_Activity : AppCompatActivity() {
         val title = titleEditText.text.toString()
         val content = contentEditText.text.toString()
         val isPublic = publicSwitch.isChecked
-        val userId = currentUser?.uid
-        val userEmail = currentUser?.email
+        var userId : String =""
+        var userEmail : String = ""
+
+
+        // Firebase Auth 초기화
+        auth = FirebaseAuth.getInstance()
+        currentUser = auth.currentUser
+
+        //파이어 베이스 로그인 유저인 경우
+        if (currentUser != null) {
+            // Firebase 로그인 유저 정보 가져오기
+            userId = currentUser?.uid.toString()
+            userEmail = currentUser?.email.toString()
+        }
+            else {
+            // Kakao 로그인 유저 정보 가져오기
+            UserApiClient.instance.me { user, error ->
+                if (error != null) {
+                    Log.e("Kakao", "사용자 정보 요청 실패", error)
+                } else if (user != null) {
+                    userId = user.id.toString()
+                    Log.d("Check", "카카오 유저 확인: $userId")
+                }
+            }
+        }
+
 
         val currentTime = System.currentTimeMillis()
         val sdf = SimpleDateFormat("yy.MM.dd HH:mm", Locale.getDefault())
