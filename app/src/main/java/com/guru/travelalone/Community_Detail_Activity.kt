@@ -69,14 +69,16 @@ class Community_Detail_Activity : AppCompatActivity() {
                             titleTextView.text = it.title
                             contentTextView.text = it.content
 
-                            if (!it.imageUrl.isNullOrEmpty()) {
+                            // Check if the imageUrl equals the placeholder URL
+                            if (it.imageUrl == "android.resource://com.guru.travelalone/drawable/sample_image_placeholder") {
+                                imageView.visibility = View.GONE
+                            } else {
+                                imageView.visibility = View.VISIBLE
                                 Glide.with(this)
                                     .load(it.imageUrl)
                                     .placeholder(R.drawable.sample_image_placeholder)
                                     .error(R.drawable.sample_image_placeholder)
                                     .into(imageView)
-                            } else {
-                                imageView.setImageResource(R.color.gray)
                             }
 
                             if (!it.profileImageUrl.isNullOrEmpty()) {
