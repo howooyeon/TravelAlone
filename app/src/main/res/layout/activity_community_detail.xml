@@ -8,39 +8,42 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="702dp"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:orientation="horizontal">
+            android:layout_height="?attr/actionBarSize"
+            android:orientation="horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
 
             <ImageButton
                 android:id="@+id/back"
-                android:layout_width="12dp"
-                android:layout_height="24dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="60dp"
+                android:layout_width="30dp"
+                android:layout_height="40dp"
                 android:background="#00ff0000"
                 android:scaleType="fitCenter"
+                android:layout_gravity="center_vertical"
+                android:padding="8dp"
                 android:src="@drawable/btn_back" />
-
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                />
             <ImageView
                 android:id="@+id/bookmark"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="330dp"
-                android:layout_marginTop="55dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center_vertical"
                 android:src="@drawable/bookmark" />
         </LinearLayout>
 
         <ImageView
             android:id="@+id/image"
             android:layout_width="match_parent"
-            android:layout_height="368dp"
+            android:layout_height="280dp"
             android:scaleType="centerCrop"
             android:src="@color/gray"
             android:visibility="visible" />
@@ -51,9 +54,7 @@
             android:layout_height="80dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
-            android:src="@color/gray"
-            app:civ_border_color="#FFFFFF"
-            app:civ_border_width="3dp" />
+            android:src="@color/gray" />
 
         <TextView
             android:id="@+id/name"
@@ -80,7 +81,7 @@
 
         <TextView
             android:id="@+id/time"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_marginTop="-70dp"
@@ -129,14 +130,14 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="20dp">
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="71dp"
             android:text="수정"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -147,7 +148,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
-            android:layout_marginBottom="70dp"
             android:text="삭제"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
