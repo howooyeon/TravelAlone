@@ -8,7 +8,7 @@
     tools:context=".MainActivity"
     android:background="#ffffff">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -143,11 +143,11 @@
                 <FrameLayout
                     android:id="@+id/frame"
                     android:layout_width="match_parent"
-                    android:layout_height="1500dp">
+                    android:layout_height="wrap_content">
                 </FrameLayout>
             </LinearLayout>
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <!-- 하단 네비게이션 바 -->
     <androidx.constraintlayout.widget.ConstraintLayout
