@@ -264,7 +264,9 @@ class Community_Write_Activity : AppCompatActivity() {
         }?.addOnFailureListener {
             savePostToFirestore(title, content, isPublic, null, userId, userEmail, date, location, nickname, profileImageUrl, currentTime)
         } ?: run {
-            savePostToFirestore(title, content, isPublic, null, userId, userEmail, date, location, nickname, profileImageUrl, currentTime)
+            // If no image is selected, use the placeholder image URL
+            val placeholderUrl = "android.resource://com.guru.travelalone/drawable/sample_image_placeholder"
+            savePostToFirestore(title, content, isPublic, placeholderUrl, userId, userEmail, date, location, nickname, profileImageUrl, currentTime)
         }
     }
 
