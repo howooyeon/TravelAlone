@@ -23,7 +23,7 @@ import java.util.Locale
 
 class Community_Activity : AppCompatActivity() {
 
-    // Firebase Firestore instance
+    // Firebase Firestore 인스턴스
     private lateinit var firestore: FirebaseFirestore
 
     // 하단바 ----------
@@ -32,9 +32,8 @@ class Community_Activity : AppCompatActivity() {
     lateinit var travbotButton: ImageButton
     lateinit var mypageButton: ImageButton
     lateinit var communityButton: ImageButton
-    // 하단바 ----------
 
-    // Spinner 추가
+    // Spinner
     lateinit var regionSpinner: Spinner
 
     lateinit var communitypostlistview: ListView
@@ -49,7 +48,7 @@ class Community_Activity : AppCompatActivity() {
             insets
         }
 
-        // Initialize Firestore
+        // Firestore 초기화
         firestore = FirebaseFirestore.getInstance()
 
         // 하단바 ----------
@@ -58,6 +57,7 @@ class Community_Activity : AppCompatActivity() {
         travbotButton = findViewById(R.id.travbotButton)
         mypageButton = findViewById(R.id.mypageButton)
         communityButton = findViewById(R.id.commuButton)
+
         // Spinner 초기화
         regionSpinner = findViewById(R.id.location_spinner)
 
@@ -72,7 +72,7 @@ class Community_Activity : AppCompatActivity() {
 
         communitypostlistview = findViewById(R.id.communitypostlistview)
 
-        // Load posts from Firestore based on selected region
+        // 지역에 따라 Firestore 에서 post 가져오기
         regionSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val selectedRegion = parent.getItemAtPosition(position).toString()
@@ -117,10 +117,11 @@ class Community_Activity : AppCompatActivity() {
     }
 
     private fun loadPosts(selectedRegion: String) {
+        // 전체 게시글 가져오기
         val query = if (selectedRegion == "전체") {
             firestore.collection("posts")
                 .whereEqualTo("isPublic", true)
-        } else {
+        } else { // 선택 지역에 따라 공개된 게시글만 가져오기
             firestore.collection("posts")
                 .whereEqualTo("isPublic", true)
                 .whereEqualTo("location", selectedRegion)
@@ -131,10 +132,10 @@ class Community_Activity : AppCompatActivity() {
                 val communityPostList = arrayListOf<CommunityPostListItem>()
                 for (document: QueryDocumentSnapshot in result) {
                     val post = document.toObject(CommunityPostListItem::class.java)
-                    post.id = document.id // Set the Firestore document ID
+                    post.id = document.id
                     communityPostList.add(post)
                 }
-                // Sort the list by createdAt field
+                // 작성 시간(dd.MM.yy HH:mm)에 따라 최신순으로 정렬
                 communityPostList.sortWith(compareByDescending {
                     it.createdAt?.let { it1 -> parseDateString(it1) }
                 })
@@ -142,7 +143,7 @@ class Community_Activity : AppCompatActivity() {
                     this,
                     communityPostList
                 ) { post ->
-                    // Handle item click
+                    // post 클릭시
                     val intent = Intent(this, Community_Detail_Activity::class.java).apply {
                         putExtra("POST_ID", post.id) // Pass the post ID
                     }
@@ -151,11 +152,10 @@ class Community_Activity : AppCompatActivity() {
                 communitypostlistview.adapter = communitypostadapter
             }
             .addOnFailureListener { exception ->
-                // Handle the error
             }
     }
 
-    // Helper function to parse the date string
+    // date 파싱
     private fun parseDateString(dateString: String): Long {
         val dateFormat = SimpleDateFormat("dd.MM.yy HH:mm", Locale.getDefault())
         return try {

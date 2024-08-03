@@ -40,6 +40,7 @@ import kotlin.coroutines.resumeWithException
 
 class Community_Write_Activity : AppCompatActivity() {
 
+    // 뷰 화면
     private lateinit var imageButton: ImageButton
     private lateinit var cardView: CardView
     private lateinit var selectedImageView: ImageView
@@ -49,6 +50,7 @@ class Community_Write_Activity : AppCompatActivity() {
     private lateinit var submitButton: Button
     private var selectedImageUri: Uri? = null
 
+    // 유저 관련
     private lateinit var auth: FirebaseAuth
     private var currentUser: FirebaseUser? = null
     private var userNickname: String? = null
@@ -63,6 +65,7 @@ class Community_Write_Activity : AppCompatActivity() {
         }
     }
 
+    // 여행 일정 및 게시글
     private var postId: String? = null
     private var date: String? = null
     private var location: String? = null
@@ -80,14 +83,17 @@ class Community_Write_Activity : AppCompatActivity() {
 
         postId = intent.getStringExtra("postId")
 
+        // 기존 post일 때
         if (postId != null) {
             fetchPostData(postId!!)
         }
 
+        // intent로 가져오기
         val title = intent.getStringExtra("title")
         date = intent.getStringExtra("date")
         location = intent.getStringExtra("location")
 
+        // fragment로 데이터 가져오기
         if (savedInstanceState == null) {
             val fragment = CommunityWriteFragment.newInstance(title, date, location)
             supportFragmentManager.beginTransaction()
@@ -108,6 +114,7 @@ class Community_Write_Activity : AppCompatActivity() {
 
         fetchUserProfile()
 
+        // 이미지 버튼 클릭시
         imageButton.setOnClickListener {
             if (ContextCompat.checkSelfPermission(
                     this,
@@ -124,10 +131,12 @@ class Community_Write_Activity : AppCompatActivity() {
             }
         }
 
+        // 등록하기 버튼 클릭시
         submitButton.setOnClickListener {
             val title = titleEditText.text.toString()
             val content = contentEditText.text.toString()
 
+            // 제목과 내용 둘 중 하나라도 채워지지 않았을 때
             if (title.isBlank() || content.isBlank()) {
                 Toast.makeText(this, "제목과 내용을 모두 입력해 주세요.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -139,6 +148,7 @@ class Community_Write_Activity : AppCompatActivity() {
         }
     }
 
+    // 갤러기 권한 관련
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -154,6 +164,7 @@ class Community_Write_Activity : AppCompatActivity() {
         }
     }
 
+    // 게시글 수정시
     private fun fetchPostData(postId: String) {
         FirebaseFirestore.getInstance().collection("posts").document(postId)
             .get()
@@ -235,6 +246,7 @@ class Community_Write_Activity : AppCompatActivity() {
         }
     }
 
+    // 카카오 로그인 시 유저 id가져오기
     private suspend fun getKakaoUserId(): String? = suspendCancellableCoroutine { continuation ->
         UserApiClient.instance.me { user, error ->
             if (error != null) {
@@ -284,6 +296,7 @@ class Community_Write_Activity : AppCompatActivity() {
         }
     }
 
+    // 수정했을 때
     private fun processPostSubmission(
         title: String,
         content: String,
@@ -314,6 +327,7 @@ class Community_Write_Activity : AppCompatActivity() {
         }
     }
 
+    // 파이어 스토어에 post를 저장하기
     private fun savePostToFirestore(
         title: String,
         content: String,

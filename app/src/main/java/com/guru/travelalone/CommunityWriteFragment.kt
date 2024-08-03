@@ -28,7 +28,7 @@ class CommunityWriteFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+        // fragment를 위한 layout
         val view = inflater.inflate(R.layout.fragment_community_write, container, false)
 
         // 데이터 설정

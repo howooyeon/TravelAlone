@@ -34,18 +34,18 @@ class Community_Detail_Activity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_community_detail)
 
-        // Initialize Firestore and FirebaseAuth
+        //  Firestore와 FirebaseAuth 초기화
         firestore = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
         currentUser = auth.currentUser
 
-        // Load user profile and get user ID if necessary
+        // 로그인한 user profile과 userID 가져오기
         loadUserProfile()
 
-        // Get post ID from intent
+        // intent로부터 postID 가져오기
         val postId = intent.getStringExtra("POST_ID")
 
-        // Find views
+        // views 관련
         val backButton: ImageButton = findViewById(R.id.back)
         val imageView: ImageView = findViewById(R.id.image)
         val profileImageView: de.hdodenhof.circleimageview.CircleImageView = findViewById(R.id.image_profile)
@@ -58,13 +58,12 @@ class Community_Detail_Activity : AppCompatActivity() {
         val deleteButton: TextView = findViewById(R.id.textView3)
         val bookmarkImageView: ImageView = findViewById(R.id.bookmark)
 
-        // Set click listener for back button
+        // 뒤로가기 버튼 클릭시
         backButton.setOnClickListener {
-            finish() // Close the current activity and return to the previous one
+            finish() // 이전 화면으로 돌아가기
         }
 
-        // Load post details
-// Load post details
+        // post detail load하기
         postId?.let {
             firestore.collection("posts").document(it).get()
                 .addOnSuccessListener { document ->
@@ -77,9 +76,10 @@ class Community_Detail_Activity : AppCompatActivity() {
                             titleTextView.text = it.title
                             contentTextView.text = it.content
 
+                            // 첨부된 이미지가 없어, sample_image_placeholder값이 저장 되어 있으면, 안 보이게 처리
                             if (it.imageUrl == "android.resource://com.guru.travelalone/drawable/sample_image_placeholder") {
                                 imageView.visibility = View.GONE
-                            } else {
+                            } else { // 첨부된 이미지가 있으면 글라이더를 이용해 가져오기
                                 imageView.visibility = View.VISIBLE
                                 Glide.with(this)
                                     .load(it.imageUrl)
@@ -100,6 +100,7 @@ class Community_Detail_Activity : AppCompatActivity() {
 
                             checkIfBookmarked(postId)
 
+                            // 로그인한 유저와 작성자의 정보가 같은지 판별 후, 수정 삭제 권한 부여
                             if (isKakaoUser) {
                                 if (it.userId == currentKakaoUserId) {
                                     textView2.visibility = View.VISIBLE
@@ -123,7 +124,6 @@ class Community_Detail_Activity : AppCompatActivity() {
                     }
                 }
                 .addOnFailureListener { exception ->
-                    // Handle the error
                     Log.e("Community_Detail", "Error fetching post: ", exception)
                     showPostNotFoundMessage()
                 }
@@ -133,37 +133,36 @@ class Community_Detail_Activity : AppCompatActivity() {
 
         textView2.setOnClickListener {
             postId?.let { id ->
-                // Fetch the current post data
+                // post 수정하기
                 firestore.collection("posts").document(id).get()
                     .addOnSuccessListener { document ->
                         if (document != null) {
                             val post = document.toObject(CommunityPostListItem::class.java)
                             post?.let {
                                 if (it.imageUrl == "android.resource://com.guru.travelalone/drawable/sample_image_placeholder") {
-                                    // Update the imageUrl to null if it matches the placeholder
+                                    // placeholder 사진 값일 경우, imageUrl 초기화
                                     updatePostImageUrlToNull(id)
                                 } else {
-                                    // If imageUrl does not match placeholder, no need to update
+                                    // 이미지 존재할 경우, 초기화 미진행
                                     openEditPostActivity(id)
                                 }
                             }
                         }
                     }
                     .addOnFailureListener { exception ->
-                        // Handle the error
                         Log.e("Community_Detail", "Error fetching post: ", exception)
                     }
             }
         }
 
+        // 삭제 버튼 클릭시
         deleteButton.setOnClickListener {
             postId?.let { id ->
-                // Show confirmation dialog
                 showDeleteConfirmationDialog(id)
             }
         }
 
-        // Set click listener for bookmark image view
+        // 북마크 아이콘 클릭시
         bookmarkImageView.setOnClickListener {
             postId?.let { id ->
                 if (isKakaoUser || currentUser != null) {
@@ -181,20 +180,19 @@ class Community_Detail_Activity : AppCompatActivity() {
         }
     }
 
+    // 삭제된 게시물 클릭할 경우, 예외처리
     private fun showPostNotFoundMessage() {
         Toast.makeText(this, "존재하지 않는 게시물입니다.", Toast.LENGTH_SHORT).show()
-        finish() // Close the activity and return to the previous one
+        finish()
     }
     
     private fun updatePostImageUrlToNull(postId: String) {
         val postRef = firestore.collection("posts").document(postId)
         postRef.update("imageUrl", null)
             .addOnSuccessListener {
-                // Successfully updated the document, now open the edit activity
                 openEditPostActivity(postId)
             }
             .addOnFailureListener { exception ->
-                // Handle the error
                 Log.e("Community_Detail", "Error updating imageUrl: ", exception)
             }
     }
@@ -236,7 +234,6 @@ class Community_Detail_Activity : AppCompatActivity() {
                     }
                 }
                 .addOnFailureListener { exception ->
-                    // Handle the error
                 }
         }
     }
@@ -248,10 +245,9 @@ class Community_Detail_Activity : AppCompatActivity() {
             val bookmarkRef = firestore.collection("scrap").document(bookmarkId)
             bookmarkRef.set(mapOf("userId" to id, "postId" to postId))
                 .addOnSuccessListener {
-                    // Successfully added the bookmark
+                    // 북마크 성공적으로 추가
                 }
                 .addOnFailureListener { exception ->
-                    // Handle the error
                 }
         }
     }
@@ -263,20 +259,21 @@ class Community_Detail_Activity : AppCompatActivity() {
             val bookmarkRef = firestore.collection("scrap").document(bookmarkId)
             bookmarkRef.delete()
                 .addOnSuccessListener {
-                    // Successfully removed the bookmark
+                    // 북마크 성공적으로 추가
                 }
                 .addOnFailureListener { exception ->
-                    // Handle the error
                 }
         }
     }
 
+    // 게시글 수정하러 가기
     private fun openEditPostActivity(postId: String) {
         val intent = Intent(this, Community_Write_Activity::class.java)
         intent.putExtra("postId", postId)
         startActivity(intent)
     }
 
+    // 삭제 확인 다이얼로그
     private fun showDeleteConfirmationDialog(postId: String) {
         AlertDialog.Builder(this)
             .setTitle("삭제 확인")
@@ -294,19 +291,16 @@ class Community_Detail_Activity : AppCompatActivity() {
             val bookmarkId = "${id}_$postId"
             firestore.collection("scrap").document(bookmarkId).delete()
                 .addOnSuccessListener {
-                    // Successfully removed the bookmark
-                    // Now delete the post
+                    // 북마크 제거 성공
+                    // post 삭제
                     firestore.collection("posts").document(postId).delete()
                         .addOnSuccessListener {
-                            // Successfully deleted the document
-                            finish() // Close the activity
+                            finish()
                         }
                         .addOnFailureListener { exception ->
-                            // Handle the error
                         }
                 }
                 .addOnFailureListener { exception ->
-                    // Handle the error
                 }
         }
     }

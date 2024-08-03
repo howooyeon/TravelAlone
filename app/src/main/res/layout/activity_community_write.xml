@@ -24,21 +24,6 @@
                 android:text="어떤 여행을 하셨나요?"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
-
-<!--            <com.google.android.material.textfield.TextInputLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:padding="8dp">-->
-
-<!--                <com.google.android.material.textfield.TextInputEditText-->
-<!--                    android:id="@+id/titleEditText"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="66dp"-->
-<!--                    android:background="@drawable/rounded_background"-->
-<!--                    android:hint="제목"-->
-<!--                    android:padding="16dp"-->
-<!--                    android:textColorHint="@color/black" />-->
-<!--            </com.google.android.material.textfield.TextInputLayout>-->
             <EditText
                 android:id="@+id/titleEditText"
                 android:layout_marginTop="20dp"
@@ -50,23 +35,6 @@
                 android:hint="제목을 입력해주세요"
                 android:textSize="15dp"
                 android:textColorHint="@color/black"/>
-
-<!--            <com.google.android.material.textfield.TextInputLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="16dp"-->
-<!--                android:padding="8dp">-->
-
-<!--                <com.google.android.material.textfield.TextInputEditText-->
-<!--                    android:id="@+id/contentEditText"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="204dp"-->
-<!--                    android:background="@drawable/rounded_background"-->
-<!--                    android:hint="내용"-->
-<!--                    android:padding="16dp"-->
-<!--                    android:textColorHint="@color/black" />-->
-<!--            </com.google.android.material.textfield.TextInputLayout>-->
-
             <EditText
                 android:id="@+id/contentEditText"
                 android:layout_marginTop="15dp"
@@ -98,6 +66,7 @@
                     android:visibility="gone"
                     android:layout_marginRight="20sp">
 
+                    <!-- 선택된 이미지 뷰-->
                     <ImageView
                         android:id="@+id/selectedImageView"
                         android:layout_width="match_parent"
@@ -124,24 +93,8 @@
                     android:scaleType="centerCrop"
                     app:srcCompat="@drawable/gallery"
                     android:background="@android:color/transparent"/>
-
-<!--                &lt;!&ndash; 선택된 이미지를 표시하는 ImageView &ndash;&gt;-->
-<!--                <ImageView-->
-<!--                    android:id="@+id/selectedImageView"-->
-<!--                    android:layout_width="149dp"-->
-<!--                    android:layout_height="137dp"-->
-<!--                    android:adjustViewBounds="true"-->
-<!--                    android:contentDescription="Selected Image"-->
-<!--                    android:scaleType="centerCrop"-->
-<!--                    android:visibility="gone"-->
-<!--                    android:src="@drawable/m_gyeongju"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintStart_toEndOf="@+id/imageButton"-->
-<!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
-
-
             </LinearLayout>
+            <!-- 공개, 비공개 커스텀 -->
             <Switch
                 android:layout_gravity="right"
                 android:switchMinWidth="10dp"
@@ -155,8 +108,6 @@
                 android:checked="true"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />
         </LinearLayout>
-
-
 
         <!-- 게시글 등록 버튼 -->
         <android.widget.Button
