@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -44,6 +45,7 @@ class Community_Detail_Activity : AppCompatActivity() {
         val postId = intent.getStringExtra("POST_ID")
 
         // Find views
+        val backButton: ImageButton = findViewById(R.id.back)
         val imageView: ImageView = findViewById(R.id.image)
         val profileImageView: de.hdodenhof.circleimageview.CircleImageView = findViewById(R.id.image_profile)
         val nameTextView: TextView = findViewById(R.id.name)
@@ -54,6 +56,11 @@ class Community_Detail_Activity : AppCompatActivity() {
         val textView2: TextView = findViewById(R.id.textView2)
         val deleteButton: TextView = findViewById(R.id.textView3)
         val bookmarkImageView: ImageView = findViewById(R.id.bookmark)
+
+        // Set click listener for back button
+        backButton.setOnClickListener {
+            finish() // Close the current activity and return to the previous one
+        }
 
         // Load post details
         postId?.let {
