@@ -157,26 +157,47 @@ class Community_Write_Activity : AppCompatActivity() {
 
     private fun fetchUserProfile() {
         if (currentUser != null) {
+            // Handle general login members
             val email = currentUser?.email
             FirebaseFirestore.getInstance().collection("members")
                 .whereEqualTo("login_id", email)
                 .get()
                 .addOnSuccessListener { documents ->
-                    for (document in documents) {
-                        userNickname = document.getString("editnickname") ?: "닉네임 없음"
-                        userProfileImageUrl = document.getString("profileImageUrl") ?: ""
+                    if (documents.isEmpty) {
+                        Toast.makeText(this, "프로필 정보가 존재하지 않습니다.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        for (document in documents) {
+                            userNickname = document.getString("editnickname") ?: "닉네임 없음"
+                            userProfileImageUrl = document.getString("profileImageUrl") ?: ""
+                        }
                     }
                 }
                 .addOnFailureListener { e ->
                     Toast.makeText(this, "프로필 정보 가져오기 실패", Toast.LENGTH_SHORT).show()
                 }
         } else {
+            // Handle Kakao login members
             UserApiClient.instance.me { user, error ->
                 if (error != null) {
                     Toast.makeText(this, "Kakao 로그인 실패", Toast.LENGTH_SHORT).show()
                 } else if (user != null) {
-                    userNickname = user.kakaoAccount?.profile?.nickname ?: "닉네임 없음"
-                    // Kakao SDK에는 프로필 이미지 URL을 제공하지 않으므로 별도의 처리 필요
+                    val kakaoNickname = user.kakaoAccount?.profile?.nickname
+                    FirebaseFirestore.getInstance().collection("members")
+                        .whereEqualTo("editnickname", kakaoNickname)
+                        .get()
+                        .addOnSuccessListener { documents ->
+                            if (documents.isEmpty) {
+                                Toast.makeText(this, "프로필 정보가 존재하지 않습니다.", Toast.LENGTH_SHORT).show()
+                            } else {
+                                for (document in documents) {
+                                    userNickname = document.getString("editnickname") ?: "닉네임 없음"
+                                    userProfileImageUrl = document.getString("profileImageUrl") ?: ""
+                                }
+                            }
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(this, "프로필 정보 가져오기 실패", Toast.LENGTH_SHORT).show()
+                        }
                 }
             }
         }
@@ -197,27 +218,44 @@ class Community_Write_Activity : AppCompatActivity() {
                 }
                 userId = user?.id.toString()
                 userEmail = user?.kakaoAccount?.email
-                savePostToFirestore(title, content, isPublic, selectedImageUri?.toString(), userId, userEmail, date, location, userNickname, userProfileImageUrl)
+                processPostSubmission(title, content, isPublic, selectedImageUri, userId, userEmail, date, location, userNickname, userProfileImageUrl)
             }
             return
         }
 
-        Toast.makeText(this, "게시글 등록 중, 잠시 기다려주세요.", Toast.LENGTH_SHORT).show()
+        processPostSubmission(title, content, isPublic, selectedImageUri, userId, userEmail, date, location, userNickname, userProfileImageUrl)
+    }
 
-        if (selectedImageUri != null) {
-            val storageReference = FirebaseStorage.getInstance().reference.child("images/${UUID.randomUUID()}")
-            storageReference.putFile(selectedImageUri!!)
-                .addOnSuccessListener { taskSnapshot ->
-                    taskSnapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener { uri ->
-                        val imageUrl = uri.toString()
-                        savePostToFirestore(title, content, isPublic, imageUrl, userId, userEmail, date, location, userNickname, userProfileImageUrl)
-                    }
-                }
-                .addOnFailureListener {
-                    Toast.makeText(this, "이미지 업로드 실패", Toast.LENGTH_SHORT).show()
-                }
+    private fun processPostSubmission(
+        title: String,
+        content: String,
+        isPublic: Boolean,
+        imageUri: Uri?,
+        userId: String?,
+        userEmail: String?,
+        date: String?,
+        location: String?,
+        nickname: String?,
+        profileImageUrl: String?
+    ) {
+        val storageReference = FirebaseStorage.getInstance().reference.child("images/${UUID.randomUUID()}")
+
+        val uploadTask = if (imageUri != null) {
+            storageReference.putFile(imageUri)
         } else {
-            savePostToFirestore(title, content, isPublic, null, userId, userEmail, date, location, userNickname, userProfileImageUrl)
+            null
+        }
+
+        uploadTask?.addOnSuccessListener { taskSnapshot ->
+            taskSnapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener { uri ->
+                val imageUrl = uri.toString()
+                savePostToFirestore(title, content, isPublic, imageUrl, userId, userEmail, date, location, nickname, profileImageUrl)
+            }
+        }?.addOnFailureListener {
+            Toast.makeText(this, "이미지 업로드 실패", Toast.LENGTH_SHORT).show()
+        } ?: run {
+            // If no imageUri, continue without uploading an image
+            savePostToFirestore(title, content, isPublic, null, userId, userEmail, date, location, nickname, profileImageUrl)
         }
     }
 
