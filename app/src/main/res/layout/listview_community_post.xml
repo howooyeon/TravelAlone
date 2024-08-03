@@ -36,9 +36,6 @@
                     android:scaleType="centerCrop"
                     android:src="@color/gray"/>
             </LinearLayout>
-
-
-
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image_profile"
                 android:layout_marginTop="-40dp"

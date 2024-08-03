@@ -2,6 +2,7 @@
     <string name="app_name">TravelAlone</string>
     <string name="kakao_app_key">${KAKAO_API_KEY}</string>
     <string-array name="region_list">
+        <item>전체</item>
         <item>서울</item>
         <item>가평/양평</item>
         <item>춘천/홍천</item>
