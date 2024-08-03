@@ -120,9 +120,6 @@ class Community_Write_Activity : AppCompatActivity() {
             }
         }
 
-        publicSwitch.setOnCheckedChangeListener { _, isChecked ->
-            publicSwitch.text = if (isChecked) "공개" else "비공개"
-        }
 
         submitButton.setOnClickListener {
             val title = titleEditText.text.toString()
