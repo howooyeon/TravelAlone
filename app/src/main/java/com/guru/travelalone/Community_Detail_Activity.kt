@@ -100,15 +100,15 @@ class Community_Detail_Activity : AppCompatActivity() {
                             checkIfBookmarked(postId)
 
                             // Hide edit and delete buttons if the current user is not the author
-                            if (isKakaoUser) {
-                                if (it.nickname == currentUserNickname) {
-                                    textView2.visibility = View.VISIBLE
-                                    deleteButton.visibility = View.VISIBLE
-                                } else {
-                                    textView2.visibility = View.GONE
-                                    deleteButton.visibility = View.GONE
-                                }
-                            } else {
+//                            if (isKakaoUser) {
+//                                if (it.nickname == currentUserEditnickname) {
+//                                    textView2.visibility = View.VISIBLE
+//                                    deleteButton.visibility = View.VISIBLE
+//                                } else {
+//                                    textView2.visibility = View.GONE
+//                                    deleteButton.visibility = View.GONE
+//                                }
+//                            } else {
                                 if (it.userId == currentUser?.uid) {
                                     textView2.visibility = View.VISIBLE
                                     deleteButton.visibility = View.VISIBLE
@@ -117,7 +117,7 @@ class Community_Detail_Activity : AppCompatActivity() {
                                     deleteButton.visibility = View.GONE
                                 }
                             }
-                        }
+//                        }
                     }
                 }
                 .addOnFailureListener { exception ->
