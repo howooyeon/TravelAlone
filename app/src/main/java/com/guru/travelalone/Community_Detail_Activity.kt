@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -23,9 +24,10 @@ class Community_Detail_Activity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private var isBookmarked: Boolean = false
     private var currentUser: FirebaseUser? = null
-    private var currentKakaoUserId: String? = null // 카카오 사용자 ID 저장 변수
-    private var currentFirebaseUserId: String? = null // Firebase 사용자 ID 저장 변수
+    private var currentKakaoUserId: String? = null
+    private var currentFirebaseUserId: String? = null
     private var isKakaoUser: Boolean = false
+    private var currentUserNickname: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +46,7 @@ class Community_Detail_Activity : AppCompatActivity() {
         val postId = intent.getStringExtra("POST_ID")
 
         // Find views
+        val backButton: ImageButton = findViewById(R.id.back)
         val imageView: ImageView = findViewById(R.id.image)
         val profileImageView: de.hdodenhof.circleimageview.CircleImageView = findViewById(R.id.image_profile)
         val nameTextView: TextView = findViewById(R.id.name)
@@ -55,6 +58,11 @@ class Community_Detail_Activity : AppCompatActivity() {
         val deleteButton: TextView = findViewById(R.id.textView3)
         val bookmarkImageView: ImageView = findViewById(R.id.bookmark)
 
+        // Set click listener for back button
+        backButton.setOnClickListener {
+            finish() // Close the current activity and return to the previous one
+        }
+
         // Load post details
         postId?.let {
             firestore.collection("posts").document(it).get()
@@ -62,14 +70,12 @@ class Community_Detail_Activity : AppCompatActivity() {
                     if (document != null) {
                         val post = document.toObject(CommunityPostListItem::class.java)
                         post?.let {
-                            // Set the data to the views
                             nameTextView.text = it.nickname
                             dateTextView.text = it.date
                             timeTextView.text = it.createdAt
                             titleTextView.text = it.title
                             contentTextView.text = it.content
 
-                            // Check if the imageUrl equals the placeholder URL
                             if (it.imageUrl == "android.resource://com.guru.travelalone/drawable/sample_image_placeholder") {
                                 imageView.visibility = View.GONE
                             } else {
@@ -91,16 +97,25 @@ class Community_Detail_Activity : AppCompatActivity() {
                                 profileImageView.setImageResource(R.drawable.samplepro)
                             }
 
-                            // Check if the post is already bookmarked
                             checkIfBookmarked(postId)
 
-                            // Show or hide edit and delete buttons based on user ID match
-                            if (it.userId == currentKakaoUserId || it.userId == currentFirebaseUserId) {
-                                textView2.visibility = View.VISIBLE
-                                deleteButton.visibility = View.VISIBLE
+                            // Hide edit and delete buttons if the current user is not the author
+                            if (isKakaoUser) {
+                                if (it.nickname == currentUserNickname) {
+                                    textView2.visibility = View.VISIBLE
+                                    deleteButton.visibility = View.VISIBLE
+                                } else {
+                                    textView2.visibility = View.GONE
+                                    deleteButton.visibility = View.GONE
+                                }
                             } else {
-                                textView2.visibility = View.GONE
-                                deleteButton.visibility = View.GONE
+                                if (it.userId == currentUser?.uid) {
+                                    textView2.visibility = View.VISIBLE
+                                    deleteButton.visibility = View.VISIBLE
+                                } else {
+                                    textView2.visibility = View.GONE
+                                    deleteButton.visibility = View.GONE
+                                }
                             }
                         }
                     }
@@ -109,14 +124,28 @@ class Community_Detail_Activity : AppCompatActivity() {
                     // Handle the error
                 }
         }
-
         textView2.setOnClickListener {
             postId?.let { id ->
-                // Update the post to set image URLs to null
-                updatePostImagesToNull(id)
-
-                // Start the edit activity
-                openEditPostActivity(id)
+                // Fetch the current post data
+                firestore.collection("posts").document(id).get()
+                    .addOnSuccessListener { document ->
+                        if (document != null) {
+                            val post = document.toObject(CommunityPostListItem::class.java)
+                            post?.let {
+                                if (it.imageUrl == "android.resource://com.guru.travelalone/drawable/sample_image_placeholder") {
+                                    // Update the imageUrl to null if it matches the placeholder
+                                    updatePostImageUrlToNull(id)
+                                } else {
+                                    // If imageUrl does not match placeholder, no need to update
+                                    openEditPostActivity(id)
+                                }
+                            }
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        // Handle the error
+                        Log.e("Community_Detail", "Error fetching post: ", exception)
+                    }
             }
         }
 
@@ -145,10 +174,27 @@ class Community_Detail_Activity : AppCompatActivity() {
         }
     }
 
+    private fun updatePostImageUrlToNull(postId: String) {
+        val postRef = firestore.collection("posts").document(postId)
+        postRef.update("imageUrl", null)
+            .addOnSuccessListener {
+                // Successfully updated the document, now open the edit activity
+                openEditPostActivity(postId)
+            }
+            .addOnFailureListener { exception ->
+                // Handle the error
+                Log.e("Community_Detail", "Error updating imageUrl: ", exception)
+            }
+    }
+
     private fun loadUserProfile() {
         currentUser?.let { user ->
             // Firebase 로그인 유저 정보 가져오기
             currentFirebaseUserId = user.uid
+            firestore.collection("members").document(user.uid).get()
+                .addOnSuccessListener { document ->
+                    currentUserNickname = document.getString("nickname") // Assuming 'nickname' is stored in user document
+                }
         } ?: run {
             // Kakao 로그인 유저 정보 가져오기
             UserApiClient.instance.me { user, error ->
@@ -157,6 +203,7 @@ class Community_Detail_Activity : AppCompatActivity() {
                 } else if (user != null) {
                     currentKakaoUserId = user.id.toString()
                     isKakaoUser = true
+                    currentUserNickname = user.kakaoAccount?.profile?.nickname // Assuming Kakao API provides the nickname
                 }
             }
         }
@@ -216,19 +263,6 @@ class Community_Detail_Activity : AppCompatActivity() {
         val intent = Intent(this, Community_Write_Activity::class.java)
         intent.putExtra("postId", postId)
         startActivity(intent)
-    }
-
-    private fun updatePostImagesToNull(postId: String) {
-        val postRef = firestore.collection("posts").document(postId)
-        postRef.update(
-            mapOf(
-                "imageUrl" to null,
-            )
-        ).addOnSuccessListener {
-            // Successfully updated the document
-        }.addOnFailureListener { exception ->
-            // Handle the error
-        }
     }
 
     private fun showDeleteConfirmationDialog(postId: String) {

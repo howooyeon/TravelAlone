@@ -88,6 +88,7 @@
                 android:layout_marginTop="16dp">
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     app:cardBackgroundColor="@color/black"

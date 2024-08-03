@@ -11,9 +11,6 @@
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="Mypage_Activity">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="Home_Activity">
         <option name="selectionMode" value="DROPDOWN" />
         <DropdownSelection timestamp="2024-08-03T05:18:11.487688Z">
