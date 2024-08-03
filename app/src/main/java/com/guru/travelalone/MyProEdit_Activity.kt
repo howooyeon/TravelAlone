@@ -147,28 +147,10 @@ class MyProEdit_Activity : AppCompatActivity() {
             }
         }
 
-        // 로그아웃 버튼 클릭 리스너
-        binding.logoutbtn2.setOnClickListener {
-            // Firebase 로그아웃
-            FirebaseAuth.getInstance().signOut()
 
-            // Kakao 로그아웃
-            UserApiClient.instance.logout { error ->
-                if (error != null) {
-                    Log.e("KakaoLogout", "카카오 로그아웃 실패", error)
-                } else {
-                    Log.i("KakaoLogout", "카카오 로그아웃 성공")
-                }
-            }
-
-            val intent = Intent(this@MyProEdit_Activity, Login_Activity::class.java)
-            startActivity(intent)
-            finish()
-        }
-
-        // 예산 관리 페이지로 이동 버튼 클릭 리스너
-        binding.budget.setOnClickListener {
-            val intent = Intent(this@MyProEdit_Activity, Budget_Activity::class.java)
+        //뒤로 가기 버튼 클릭 리스너
+        binding.back.setOnClickListener {
+            val intent = Intent(this@MyProEdit_Activity, Mypage_Activity::class.java)
             startActivity(intent)
             finish()
         }

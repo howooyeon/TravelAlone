@@ -66,6 +66,26 @@ class Mypage_Activity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // 로그아웃 버튼 클릭 리스너
+        binding.logout.setOnClickListener {
+
+                // Firebase 로그아웃
+                FirebaseAuth.getInstance().signOut()
+
+                // Kakao 로그아웃
+                UserApiClient.instance.logout { error ->
+                    if (error != null) {
+                        Log.e("KakaoLogout", "카카오 로그아웃 실패", error)
+                    } else {
+                        Log.i("KakaoLogout", "카카오 로그아웃 성공")
+                    }
+                }
+
+                val intent = Intent(this@Mypage_Activity, Login_Activity::class.java)
+                startActivity(intent)
+                finish()
+            }
+
         // 사용자 프로필 정보 가져오기
         fetchUserProfile()
 
