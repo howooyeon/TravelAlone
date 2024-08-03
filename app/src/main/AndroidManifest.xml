@@ -4,13 +4,14 @@
     <!-- 인터넷 사용 권한 설정 -->
     <uses-permission android:name="android.permission.INTERNET" /> <!-- 위치 정보 사용 권한을 선언 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- 유저 갤러리에서 사진 가져올 때 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!-- Android 14에서 추가된 사진/동영상의 일부 접근 권한 대응-->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
     <uses-permission
         android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED"
         tools:node="remove" />
+    <!-- Sdk 32 이하에서 STORAGE 접근 권한 허용-->
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
@@ -97,19 +98,18 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data
                     android:host="oauth"
                     android:scheme="kakao${KAKAO_API_KEY}" />
             </intent-filter>
         </activity>
-
+        <!-- kakao.vectormap api 사용-->
         <meta-data
             android:name="com.kakao.vectormap.APP_KEY"
             android:value="${KAKAO_API_KEY}" />
+        <!-- kakao sdk api 사용-->
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="${KAKAO_API_KEY}" />
