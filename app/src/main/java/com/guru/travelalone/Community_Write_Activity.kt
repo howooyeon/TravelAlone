@@ -213,7 +213,7 @@ class Community_Write_Activity : AppCompatActivity() {
                 } else if (user != null) {
                     val kakaoNickname = user.kakaoAccount?.profile?.nickname
                     FirebaseFirestore.getInstance().collection("members")
-                        .whereEqualTo("editnickname", kakaoNickname)
+                        .whereEqualTo("nickname", kakaoNickname)
                         .get()
                         .addOnSuccessListener { documents ->
                             if (documents.isEmpty) {
