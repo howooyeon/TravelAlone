@@ -125,7 +125,16 @@ class Community_Write_Activity : AppCompatActivity() {
         }
 
         submitButton.setOnClickListener {
-            // Display the Toast message
+            val title = titleEditText.text.toString()
+            val content = contentEditText.text.toString()
+
+            // 제목과 내용이 모두 입력되었는지 확인
+            if (title.isBlank() || content.isBlank()) {
+                Toast.makeText(this, "제목과 내용을 모두 입력해 주세요.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // 게시글 등록 진행 중 Toast 메시지 표시
             Toast.makeText(this, "게시글 등록 중, 잠시 기다려주세요.", Toast.LENGTH_SHORT).show()
 
             // Proceed with submitting the post
