@@ -91,6 +91,7 @@ class Community_Write_Activity : AppCompatActivity() {
         contentEditText = findViewById(R.id.contentEditText)
         publicSwitch = findViewById(R.id.switch2)
         submitButton = findViewById(R.id.bt_reg)
+        cardView = findViewById(R.id.cardView) // Ensure cardView is initialized
 
         auth = FirebaseAuth.getInstance()
         currentUser = auth.currentUser
@@ -123,6 +124,21 @@ class Community_Write_Activity : AppCompatActivity() {
         }
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openGalleryLauncher.launch("image/*")
+            } else {
+                Toast.makeText(this, "권한이 거부되었습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     private fun fetchPostData(postId: String) {
         FirebaseFirestore.getInstance().collection("posts").document(postId)
             .get()
@@ -135,10 +151,17 @@ class Community_Write_Activity : AppCompatActivity() {
                     location = document.getString("location")
                     val imageUrl = document.getString("imageUrl")
                     if (imageUrl != null && imageUrl.isNotEmpty()) {
-                        selectedImageView.visibility = View.VISIBLE
-                        imageButton.visibility = View.GONE
-                        selectedImageView.setImageURI(Uri.parse(imageUrl))
-                        cardView.visibility = View.VISIBLE
+                        try {
+                            val uri = Uri.parse(imageUrl)
+                            selectedImageView.setImageURI(uri)
+                            selectedImageView.visibility = View.VISIBLE
+                            imageButton.visibility = View.GONE
+                            cardView.visibility = View.VISIBLE
+                        } catch (e: Exception) {
+                            Log.e("Community_Write_Activity", "Error parsing image URL", e)
+                            selectedImageView.setImageResource(R.drawable.sample_image_placeholder)
+                            cardView.visibility = View.GONE
+                        }
                     } else {
                         selectedImageView.setImageResource(R.drawable.sample_image_placeholder)
                         cardView.visibility = View.GONE
