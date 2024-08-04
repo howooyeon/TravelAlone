@@ -87,7 +87,7 @@
                 android:id="@+id/sub"
                 android:gravity="left"
                 android:layout_width="wrap_content"
-                android:layout_height="35dp"
+                android:layout_height="36dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="10dp"
