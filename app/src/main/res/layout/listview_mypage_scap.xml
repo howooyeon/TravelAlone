@@ -24,7 +24,7 @@
             android:id="@+id/sub"
             android:text="sub"
             android:layout_width="match_parent"
-            android:layout_height="55sp"
+            android:layout_height="58sp"
             android:textColor="@color/black"
             android:textSize="14sp" />
     </LinearLayout>
