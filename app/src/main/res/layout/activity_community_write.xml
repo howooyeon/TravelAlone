@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp"
+            android:orientation="vertical"
+            tools:layout_editor_absoluteX="20dp">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="어떤 여행을 하셨나요?"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+            <EditText
+                android:id="@+id/titleEditText"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:background="@drawable/rectangle_design"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:hint="제목을 입력해주세요"
+                android:textSize="15dp"
+                android:textColorHint="@color/black"/>
+            <EditText
+                android:id="@+id/contentEditText"
+                android:layout_marginTop="15dp"
+                android:padding="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:background="@drawable/rectangle_design"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:hint="내용을 입력 해주세요"
+                android:gravity="top"
+                android:textSize="15dp"
+                android:textColorHint="@color/black"/>
+
+            <LinearLayout
+                android:id="@+id/imageLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    app:cardBackgroundColor="@color/black"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    android:visibility="gone"
+                    android:layout_marginRight="20sp">
+
+                    <!-- 선택된 이미지 뷰-->
+                    <ImageView
+                        android:id="@+id/selectedImageView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:contentDescription="Selected Image"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/m_gyeongju"
+                        app:tint="#20000000"
+                        android:tintMode="src_atop"/>
+                </androidx.cardview.widget.CardView>
+
+
+                <!-- 갤러리 열기 버튼 -->
+                <ImageButton
+                    android:id="@+id/imageButton"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:contentDescription="Open Gallery"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/selectedImageView"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/gallery"
+                    android:background="@android:color/transparent"/>
+            </LinearLayout>
+            <!-- 공개, 비공개 커스텀 -->
+            <Switch
+                android:layout_gravity="right"
+                android:switchMinWidth="10dp"
+                android:id="@+id/switch2"
+                android:layout_width="90dp"
+                android:layout_height="10dp"
+                android:track="@drawable/bg_track"
+                android:thumb="@drawable/thumb"
+                android:scaleX="0.8"
+                android:scaleY="0.6"
+                android:checked="true"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
+        </LinearLayout>
+
+        <!-- 게시글 등록 버튼 -->
+        <android.widget.Button
+            android:id="@+id/bt_reg"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:background="@drawable/btn_round_main"
+            android:text="게시글 등록하기"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Fragment를 포함할 FrameLayout -->
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+</RelativeLayout>

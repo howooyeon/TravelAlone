@@ -1,0 +1,120 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NormalPro_Activity"
+    android:fitsSystemWindows="true"
+    android:background="@color/white">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        android:layout_above="@+id/saveButton">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="20sp">
+
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="프로필 등록"
+                android:fontFamily="@font/inter_medium"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+                <!-- 프로필 이미지 -->
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/kakaoPro"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    app:civ_border_color="@color/deepblue"
+                    android:src="@drawable/samplepro" />
+
+                <ImageButton
+                    android:id="@+id/plusBtn"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="bottom|end"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/plus_btnsize" />
+
+            </FrameLayout>
+
+
+            <EditText
+                android:id="@+id/txtNickName"
+                style="@style/underline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="20dp"
+                android:gravity="center"
+                android:hint="닉네임"
+                android:textColor="@color/black"
+                android:textSize="30dp"
+                android:textStyle="normal"
+                app:layout_constraintTop_toTopOf="parent"
+                android:fontFamily="@font/inter_medium"/>
+
+            <EditText
+                android:id="@+id/Introduce"
+                style="@style/underline"
+                android:layout_width="312dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="20dp"
+                android:hint="나를 대표하는 소개를 입력해 주세요"
+                android:fontFamily="@font/inter_medium"
+                android:gravity="center"
+                android:maxLength="20"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="예) 은퇴하고 세계여행 다니는 서퍼"
+                android:textColor="@color/hintgray"
+                android:layout_gravity="center"
+                android:fontFamily="@font/inter_medium"/>
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="로또 1등 당첨돼서 여행다니는 개발자"
+                android:textColor="@color/hintgray"
+                android:layout_gravity="center"
+                android:fontFamily="@font/inter_medium"/>
+
+
+
+        </LinearLayout>
+    </ScrollView>
+
+    <android.widget.Button
+        android:id="@+id/saveButton"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:background="@drawable/btn_round_main"
+        android:text="프로필 등록"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        android:layout_alignParentBottom="true" />
+</RelativeLayout>

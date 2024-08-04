@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
-    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 인터넷 사용 권한 설정 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 위치 정보 사용 권한을 선언 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- 유저 갤러리에서 사진 가져올 때 -->
+    <!-- Android 14에서 추가된 사진/동영상의 일부 접근 권한 대응-->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission
+        android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED"
+        tools:node="remove" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
 
     <application
         android:allowBackup="true"
@@ -13,16 +24,59 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TravelAlone"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".Release_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Budgetcharge_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Budgetspend_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Budget_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".MyProEdit_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".NormalPro_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Start_Activity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ProEdit_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Login_Activity"
+            android:exported="true" />
         <activity
             android:name=".Mypage_Activity"
             android:exported="false" />
         <activity
             android:name=".Community_Activity"
-            android:exported="false" />
+            android:exported="true" />
+        <activity
+            android:name=".Community_Write_Activity"
+            android:exported="true" />
+        <activity
+            android:name=".Community_Detail_Activity"
+            android:exported="true" />
+        <activity
+            android:name=".Community_Select_Activity"
+            android:exported="true" />
         <activity
             android:name=".Locate_Activity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Travbot_activity"
             android:exported="false" />
@@ -33,14 +87,32 @@
             android:name=".layout_activity"
             android:exported="false" />
         <activity
+            android:name=".TripDate_Activity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
+            android:exported="true" />
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.VIEW" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="oauth"
+                    android:scheme="kakao${KAKAO_API_KEY}" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="com.kakao.vectormap.APP_KEY"
+            android:value="${KAKAO_API_KEY}" />
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="${KAKAO_API_KEY}" />
     </application>
 
 </manifest>

@@ -2,6 +2,12 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="gray">#E9E9E9</color>
+    <color name="gray">#EEEEEE</color>
     <color name="babyblue">#75C2F6</color>
+    <color name="deepblue">#1D5D9B</color>
+    <color name="hintgray">#B3B3B3</color>
+    <color name="midnightblue">#1D5D9B</color>
+    <color name="deepblue_transparent">#80123456</color>
+    <color name="pink">#F98A8A</color>
+    <color name="green">#9AE026</color>
 </resources>

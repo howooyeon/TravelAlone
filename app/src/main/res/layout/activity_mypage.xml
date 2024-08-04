@@ -4,26 +4,149 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="#ffffff">
+
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:fillViewport="true"
         android:scrollbars="none">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_margin="20sp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="마이페이지"
-                android:textSize="20sp"
-                android:textColor="@color/black" />
-            <!-- 밑에서 부터 LinearLayout 추가해서 코드 작성하시면 됩니다 -->
+            android:orientation="vertical" >
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:layout_margin="20dp"
+                    android:id="@+id/textView"
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="마이페이지"
+                    android:fontFamily="@font/inter_medium"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    />
+
+                <android.widget.Button
+                    android:stateListAnimator="@null"
+                    android:id="@+id/logout"
+                    android:layout_marginTop="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#FFFFFF"
+                    android:text="로그아웃"
+                    android:textSize="13sp"
+                    android:textColor="#55000000"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/kakaoPro"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_gravity="center"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/ic_launcher_background" />
+
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/nickname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="닉네임"
+                    android:textSize="20sp"
+                    android:gravity="center"
+                    android:layout_marginTop="5sp"
+                    android:fontFamily="@font/inter_bold" />
+
+                <TextView
+                    android:id="@+id/introduction"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="나를 대표하는 소개를 입력해주세요"
+                    android:gravity="center" />
+
+                <android.widget.Button
+                    android:layout_marginTop="15sp"
+                    android:stateListAnimator="@null"
+                    android:id="@+id/editButton"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:background="@drawable/rectangle_design"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:text="프로필 수정"
+                    android:textSize="13dp"
+                    android:layout_toEndOf="@+id/textView"
+                    android:textColor="@color/black"/>
+
+                <com.google.android.material.tabs.TabLayout
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/tabLayoutContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/gray"
+                    app:tabSelectedTextColor="#1D5D9B"
+                    app:tabIndicatorColor="#1D5D9B"
+                    app:tabRippleColor="#111D5D9B"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="내 게시물" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="내 여행" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="저장됨" />
+
+                </com.google.android.material.tabs.TabLayout>
+
+                <FrameLayout
+                    android:id="@+id/frame"
+                    android:layout_width="match_parent"
+                    android:layout_height="2000dp">
+                </FrameLayout>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
@@ -31,17 +154,18 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="428dp"
             android:layout_height="83dp"
-            android:importantForAccessibility="no"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.529"
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/nav_background"
-            tools:ignore="SpeakableTextPresentCheck" />
+            tools:ignore="SpeakableTextPresentCheck"
+            android:importantForAccessibility="no"/>
 
         <ImageButton
             android:id="@+id/locateButton"
@@ -50,15 +174,15 @@
             android:layout_marginStart="32dp"
             android:layout_marginBottom="4dp"
             android:background="@android:color/transparent"
-            android:importantForAccessibility="no"
-            android:minWidth="48dp"
-            android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView3"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toEndOf="@+id/imageView3"
             app:layout_constraintStart_toStartOf="@+id/imageView3"
             app:srcCompat="@drawable/nav_locate_size"
-            tools:ignore="SpeakableTextPresentCheck" />
+            tools:ignore="SpeakableTextPresentCheck"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:importantForAccessibility="no"/>
 
         <ImageButton
             android:id="@+id/travbotButton"
@@ -67,13 +191,13 @@
             android:layout_marginStart="112dp"
             android:layout_marginBottom="4dp"
             android:background="@android:color/transparent"
-            android:importantForAccessibility="no"
             android:minWidth="48dp"
             android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView3"
             app:layout_constraintStart_toStartOf="@+id/imageView3"
             app:srcCompat="@drawable/nav_travbot_size"
-            tools:ignore="SpeakableTextPresentCheck" />
+            tools:ignore="SpeakableTextPresentCheck"
+            android:importantForAccessibility="no"/>
 
         <ImageButton
             android:id="@+id/homeButton"
@@ -82,13 +206,13 @@
             android:layout_marginStart="192dp"
             android:layout_marginBottom="4dp"
             android:background="@android:color/transparent"
-            android:importantForAccessibility="no"
             android:minWidth="48dp"
             android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView3"
             app:layout_constraintStart_toStartOf="@+id/imageView3"
             app:srcCompat="@drawable/nav_home_size"
-            tools:ignore="SpeakableTextPresentCheck" />
+            tools:ignore="SpeakableTextPresentCheck"
+            android:importantForAccessibility="no"/>
 
         <ImageButton
             android:id="@+id/mypageButton"
@@ -97,13 +221,13 @@
             android:layout_marginEnd="32dp"
             android:layout_marginBottom="4dp"
             android:background="@android:color/transparent"
-            android:importantForAccessibility="no"
-            android:minWidth="48dp"
-            android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView3"
             app:layout_constraintEnd_toEndOf="@+id/imageView3"
             app:srcCompat="@drawable/nav_mypage_blue_size"
-            tools:ignore="SpeakableTextPresentCheck" />
+            tools:ignore="SpeakableTextPresentCheck"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:importantForAccessibility="no"/>
 
         <ImageButton
             android:id="@+id/commuButton"
@@ -112,13 +236,13 @@
             android:layout_marginEnd="112dp"
             android:layout_marginBottom="4dp"
             android:background="@android:color/transparent"
-            android:importantForAccessibility="no"
             android:minWidth="48dp"
             android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView3"
             app:layout_constraintEnd_toEndOf="@+id/imageView3"
             app:srcCompat="@drawable/nav_commu_size"
-            tools:ignore="SpeakableTextPresentCheck" />
+            tools:ignore="SpeakableTextPresentCheck"
+            android:importantForAccessibility="no"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>
