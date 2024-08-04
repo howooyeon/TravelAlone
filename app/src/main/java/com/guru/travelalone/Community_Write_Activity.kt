@@ -21,6 +21,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import coil.load
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -183,6 +184,7 @@ class Community_Write_Activity : AppCompatActivity() {
                     }
 
                     if (selectedImageUri != null) {
+                        selectedImageView.load(selectedImageUri)
                         selectedImageView.visibility = View.VISIBLE
                         cardView.visibility = View.VISIBLE
                     } else {
