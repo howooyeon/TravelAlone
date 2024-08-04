@@ -66,7 +66,7 @@
                 android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="-20dp"
+                android:layout_marginTop="-22dp"
                 android:layout_marginRight="10dp"
                 android:text="date"
                 android:textColor="@color/black"
@@ -85,8 +85,9 @@
 
             <TextView
                 android:id="@+id/sub"
+                android:gravity="left"
                 android:layout_width="wrap_content"
-                android:layout_height="32dp"
+                android:layout_height="35dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="10dp"
