@@ -1,5 +1,6 @@
 package com.guru.travelalone
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -48,6 +49,19 @@ class Fragment3 : Fragment() {
                     loadKakaoUserData(kakaoUserId, mypagePostScrapList, mypagePostScrapAdapter)
                 }
             }
+        }
+
+        // ListView 아이템 클릭 리스너 추가
+        mypagePostScrapListView.setOnItemClickListener { _, _, position, _ ->
+            val selectedPost = mypagePostScrapList[position]
+            val postId = selectedPost.postId
+            val formattedPostId = "${auth.currentUser?.uid}_$postId"
+
+            // 상세보기 화면으로 이동
+            val intent = Intent(requireContext(), Community_Detail_Activity::class.java)
+            println(formattedPostId)
+            intent.putExtra("POST_ID", postId)
+            startActivity(intent)
         }
 
         return view
@@ -122,11 +136,13 @@ class Fragment3 : Fragment() {
             .whereIn(FieldPath.documentId(), postIds)
             .get()
             .addOnSuccessListener { result ->
+                mypagePostScrapList.clear()
                 for (document in result) {
                     val str_title = document.getString("title") ?: ""
                     val str_content = document.getString("content") ?: ""
                     val str_image = document.getString("imageUrl") ?: ""
-                    mypagePostScrapList.add(MypagePostScrapListItem(str_image, str_title, str_content))
+                    val postId = document.id
+                    mypagePostScrapList.add(MypagePostScrapListItem(postId, str_image, str_title, str_content))
                 }
                 Log.d("Firestore", "Fetched posts: $mypagePostScrapList")
                 mypagePostScrapAdapter.notifyDataSetChanged()
