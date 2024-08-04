@@ -66,7 +66,7 @@
         <TextView
             android:id="@+id/name"
             android:layout_width="174dp"
-            android:layout_height="wrap_content"
+            android:layout_height="28dp"
             android:layout_marginLeft="100dp"
             android:layout_marginTop="-70dp"
             android:gravity="left"
@@ -104,6 +104,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="80dp"
+            android:layout_marginRight="20dp"
             android:text="Title"
             android:textColor="@color/black"
             android:textSize="16sp"

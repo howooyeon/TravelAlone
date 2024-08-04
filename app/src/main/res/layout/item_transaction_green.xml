@@ -54,10 +54,10 @@
 
                 <TextView
                     android:id="@+id/greenDetail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="280dp"
+                    android:layout_height="20dp"
                     android:fontFamily="@font/inter_bold"
-                    android:text="1차 충전"
+                    android:text="충전"
                     android:layout_marginBottom="4dp"
                     android:layout_marginLeft="30dp"
                     android:textSize="15sp"
