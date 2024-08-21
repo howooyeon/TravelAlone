@@ -23,7 +23,7 @@
 
 - Android Studio Koala (2024.1.1)
     - https://developer.android.com/studio
-    - https://android-developers.googleblog.com/2022/09/android-studio-dolphin.html
+    - https://androidstudio.googleblog.com/2024/04/android-studio-koala-202411-canary-5.html
 - Android SDK 33
     - https://developer.android.com/about/versions/13/setup-sdk
 - Java 17
@@ -32,6 +32,10 @@
     - https://developers.kakao.com/docs/latest/ko/kakaologin/rest-api
 - OpenAI API
     - https://openai.com/chatgpt
+
+## 🏆 Awards
+
+2024학년도 여름방학 SW사관학교 Programming GURU 대상
 
 ## 🙋 Contributors
 
